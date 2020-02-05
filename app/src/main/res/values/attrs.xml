@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TextInput">
+        <attr name="inputType" format="string" />
+        <attr name="title" format="string" localization="suggested" />
+        <attr name="inputTheme" format="string"/>
+    </declare-styleable>
+
+    <declare-styleable name="HLButton">
+        <attr name="android:text" format="string" localization="suggested"/>
+        <attr name="buttonTheme" format="string"/>
+        <attr name="android:onClick" format="string"/>
+    </declare-styleable>
+
+</resources>
