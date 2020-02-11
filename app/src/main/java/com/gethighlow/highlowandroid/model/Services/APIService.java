@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 import androidx.core.util.Consumer;
@@ -54,9 +55,11 @@ public class APIService implements APIConfig {
     public void authenticate(AuthResponse response) {
         accessToken = response.access();
         refreshToken = response.refresh();
+        String uid = response.uid();
 
         sharedPrefEditor.putString("access", accessToken);
         sharedPrefEditor.putString("refresh", refreshToken);
+        sharedPrefEditor.putString("uid", uid);
         sharedPrefEditor.apply();
 
         mainActivity.switchToMain();
@@ -121,6 +124,8 @@ public class APIService implements APIConfig {
             completeUrl = base_url + url;
         }
 
+        Log.w("Debug", completeUrl);
+
         StringRequest request = new StringRequest(method, completeUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -160,7 +165,7 @@ public class APIService implements APIConfig {
                 mainActivity.switchToAuth();
             } else {
                 accessToken = authResponse.access();
-                sharedPrefEditor.putString("access",accessToken);
+                sharedPrefEditor.putString("access", accessToken);
                 sharedPrefEditor.apply();
 
                 //Retry request
@@ -181,10 +186,11 @@ public class APIService implements APIConfig {
             completeUrl = base_url + url;
         }
 
+        Log.w("Debug", completeUrl);
+
         StringRequest request = new StringRequest(method, completeUrl, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
                 Gson gson = new Gson();
                 GenericResponse genericResponse = gson.fromJson(response, GenericResponse.class);
 

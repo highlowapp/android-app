@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="High"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/chalkboard_se"
+        android:id="@+id/highLabel"
+        android:layout_marginBottom="10dp"/>
+
+    <com.gethighlow.highlowandroid.CustomViews.HLButton
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        custom:buttonTheme="plain"
+        custom:buttonIcon="add"
+        android:text=""
+        android:id="@+id/addHigh"
+        android:onClick="addHigh"
+        />
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/highImage"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        app:riv_corner_radius="10dp"
+        android:background="@drawable/transparent_roundrect"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:id="@+id/high"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:text="No content provided"
+        android:id="@+id/highNotGiven"
+        />
+
+
+
+    <ImageView
+        android:layout_height="50dp"
+        android:layout_width="50dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/logo_light"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Low"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/chalkboard_se"
+        android:id="@+id/lowLabel"/>
+
+    <com.gethighlow.highlowandroid.CustomViews.HLButton
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        custom:buttonTheme="plain"
+        custom:buttonIcon="add"
+        android:text=""
+        android:id="@+id/addLow"
+        android:onClick="addLow"
+        />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lowImage"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:id="@+id/low"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray"
+        android:layout_marginTop="10dp"
+        android:textSize="20sp"
+        android:text="No content provided"
+        android:id="@+id/lowNotGiven"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/privateSwitch"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="5dp"
+            android:textSize="20sp"
+            android:text="Private"
+            android:textColor="@color/black"/>
+        <androidx.appcompat.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/likeFlag"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_flag_grayed"
+            android:layout_alignParentLeft="true"
+            android:id="@+id/flagButton"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="20sp"
+                android:layout_marginRight="5dp"
+                android:id="@+id/likeCount"
+                android:textColor="@color/colorPrimary"/>
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_like_outline"
+                android:id="@+id/likeButton"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_grey"
+        android:layout_marginTop="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/comments"
+        android:orientation="vertical">
+    </LinearLayout>
+
+</merge>

@@ -1,5 +1,8 @@
 package com.gethighlow.highlowandroid.model.Services;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.gethighlow.highlowandroid.model.Responses.AuthResponse;
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.google.gson.Gson;
@@ -13,8 +16,20 @@ public class AuthService {
     public static AuthService shared() { return ourInstance; }
 
     private Gson gson = new Gson();
+    private String uid;
+    private Context context;
+
+    public String getUid() {
+        return uid;
+    }
 
     public AuthService() {}
+
+    public void attachToContext(Context context) {
+        this.context = context;
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.gethighlow.SharedPref", Context.MODE_PRIVATE);
+        uid = sharedPreferences.getString("uid", null);
+    }
 
     public void signIn(String email, String password, Consumer<AuthResponse> onSuccess, Consumer<String> onError) {
         Map<String, String> params = new HashMap<String, String>() {{
@@ -32,6 +47,7 @@ public class AuthService {
             else {
 
                 APIService.shared().authenticate(authResponse);
+                uid = authResponse.uid();
 
                 onSuccess.accept(authResponse);
 
@@ -60,7 +76,7 @@ public class AuthService {
             else {
 
                 APIService.shared().authenticate(authResponse);
-
+                uid = authResponse.uid();
                 onSuccess.accept(authResponse);
 
             }
@@ -116,7 +132,7 @@ public class AuthService {
             else {
 
                 APIService.shared().authenticate(authResponse);
-
+                uid = authResponse.uid();
                 onSuccess.accept(authResponse);
 
             }

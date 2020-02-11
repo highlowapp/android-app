@@ -3,13 +3,11 @@ package com.gethighlow.highlowandroid.CustomViews;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
-import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,6 +22,7 @@ public class HLButton extends RelativeLayout implements View.OnClickListener {
     private TextView textView;
     private ProgressBar progressBar;
     private Button button;
+    private ImageView icon;
 
     public HLButton(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -48,11 +47,20 @@ public class HLButton extends RelativeLayout implements View.OnClickListener {
             inflater.inflate(layout, this, true);
             textView = findViewById(R.id.textView);
             progressBar = findViewById(R.id.progressBar);
+            icon = findViewById(R.id.icon);
+            icon.setVisibility(View.INVISIBLE);
             button = findViewById(R.id.button);
             button.setOnClickListener(this);
             String title = a.getString(R.styleable.HLButton_android_text);
+            if (title != null) {
+                textView.setText(title);
+            }
 
-            textView.setText(title);
+            String iconStr = a.getString(R.styleable.HLButton_buttonIcon);
+            if (iconStr != null) {
+                icon.setVisibility(View.VISIBLE);
+            }
+
             switch(theme) {
                 case "pink":
                     this.setBackgroundResource(R.drawable.plain_button_background);

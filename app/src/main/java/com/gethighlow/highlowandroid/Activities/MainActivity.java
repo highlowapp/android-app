@@ -14,6 +14,7 @@ import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
 import com.gethighlow.highlowandroid.model.Managers.ImageManager;
 import com.gethighlow.highlowandroid.model.Managers.UserManager;
 import com.gethighlow.highlowandroid.model.Services.APIService;
+import com.gethighlow.highlowandroid.model.Services.AuthService;
 
 public class MainActivity extends Activity {
     @Override
@@ -22,6 +23,7 @@ public class MainActivity extends Activity {
 
         //Attach the shared APIService to the context
         APIService.shared().attachToContext(this);
+        AuthService.shared().attachToContext(this);
         UserManager.shared().attachToContext(this);
         HighLowManager.shared().attachToContext(this);
         ImageManager.shared().attachToContext(this);

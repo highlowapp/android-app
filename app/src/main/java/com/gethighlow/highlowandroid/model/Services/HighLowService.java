@@ -1,6 +1,7 @@
 package com.gethighlow.highlowandroid.model.Services;
 
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Resources.HighLow;
@@ -186,9 +187,9 @@ public class HighLowService {
     public void getDate(String date, Consumer<HighLow> onSuccess, Consumer<String> onError) {
         Map<String, String> params = new HashMap<>();
         params.put("date", date);
+
         APIService.shared().authenticatedRequest("/highlow/get/date", 1, params, (response) -> {
             HighLow highLow = gson.fromJson(response, HighLow.class);
-
             String error = highLow.getError();
             if (error != null) {
                 onError.accept(error);

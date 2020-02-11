@@ -4,16 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.Fragments.HomeViewLayout">
-
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Blank"
-        android:id="@+id/fragment_date"/>
-
+        android:layout_height="match_parent">
+        <com.gethighlow.highlowandroid.CustomViews.HighLowView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:id="@+id/highlowview"
+            android:paddingBottom="100dp"
+            />
+    </ScrollView>
 </merge>

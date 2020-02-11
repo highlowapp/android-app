@@ -44,6 +44,7 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
         frameLayout = findViewById(R.id.fragments);
 
         home = new Home();
+        home.setAppCompatActivity(this);
         profile = new Profile();
         current = home;
 

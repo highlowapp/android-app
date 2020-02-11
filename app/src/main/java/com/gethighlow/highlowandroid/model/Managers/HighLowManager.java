@@ -2,8 +2,10 @@ package com.gethighlow.highlowandroid.model.Managers;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.util.Log;
 
 import com.gethighlow.highlowandroid.model.Managers.Caches.HighLowCache;
+import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
 import com.gethighlow.highlowandroid.model.Resources.HighLow;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
 
@@ -19,7 +21,9 @@ public class HighLowManager {
 
     private HighLowCache cache;
 
-    private Map<String, HighLow> cachedHighLows = new HashMap<>();
+    private Map<String, HighLowLiveData> cachedHighLows = new HashMap<>();
+    private Map<String, HighLowLiveData> dateHighLows = new HashMap<>();
+    private HighLowLiveData today;
 
     private Context context;
 
@@ -30,16 +34,16 @@ public class HighLowManager {
         int maxKb = am.getMemoryClass() * 1024;
         int limitKb = maxKb / 16;
 
-        cache = new HighLowCache(0);
     }
 
-    public void getHighLow(String highlowid, Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLow highLow = cachedHighLows.getOrDefault(cachedHighLows, null);
+    public void getHighLow(String highlowid, Consumer<HighLowLiveData> onSuccess, Consumer<String> onError) {
+        HighLowLiveData highLow = cachedHighLows.getOrDefault(highlowid, null);
 
         if (highLow == null) {
             HighLowService.shared().get(highlowid, (newHighLow) -> {
-                cachedHighLows.put(highlowid, newHighLow);
-                onSuccess.accept(newHighLow);
+                HighLowLiveData liveDataObject = new HighLowLiveData(newHighLow);
+                cachedHighLows.put(highlowid, liveDataObject);
+                onSuccess.accept(liveDataObject);
             }, onError);
         } else {
             onSuccess.accept(highLow);
@@ -47,61 +51,46 @@ public class HighLowManager {
     }
 
     public void saveHighLow(String highlowid, HighLow highLow) {
-        cachedHighLows.put(highlowid, highLow);
+        cachedHighLows.put(highlowid, new HighLowLiveData(highLow));
     }
 
     public void saveHighLow(HighLow highLow) {
-        cachedHighLows.put(highLow.getHighlowid(), highLow);
+        cachedHighLows.put(highLow.getHighlowid(), new HighLowLiveData(highLow));
     }
 
-    public void getHighLowByDate(String date, Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLow highLow = null;
-        for (String key: cachedHighLows.keySet()) {
-            HighLow curr = cachedHighLows.get(key);
-            if (curr.getDate().equals(date)) {
-                highLow = curr;
-                break;
-            }
-        }
+    public void getHighLowByDate(String date, Consumer<HighLowLiveData> onSuccess, Consumer<String> onError) {
+        HighLowLiveData highLow = dateHighLows.getOrDefault(date, null);
         if (highLow == null) {
             HighLowService.shared().getDate(date, (newHighLow) -> {
-                cachedHighLows.put(newHighLow.getHighlowid(), newHighLow);
-                onSuccess.accept(newHighLow);
+                HighLowLiveData liveData = new HighLowLiveData(newHighLow);
+                dateHighLows.put(newHighLow.getDate(), liveData);
+                onSuccess.accept(liveData);
             }, onError);
         } else {
             onSuccess.accept(highLow);
         }
     }
 
-    public void getToday(Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLow highLow = null;
+    public void getToday(Consumer<HighLowLiveData> onSuccess, Consumer<String> onError) {
         LocalDate today = LocalDate.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String dateStr = formatter.format(today);
 
-        for (String key: cachedHighLows.keySet()) {
-            HighLow curr = cachedHighLows.get(key);
-            if (curr.getDate().equals(dateStr)) {
-                highLow = curr;
-                break;
-            }
-        }
-
-        if (highLow == null) {
+        if (today == null) {
             HighLowService.shared().getToday((newHighLow) -> {
-                cachedHighLows.put(newHighLow.getHighlowid(), newHighLow);
-                onSuccess.accept(newHighLow);
+                this.today = new HighLowLiveData(newHighLow);
+                onSuccess.accept(this.today);
             }, onError);
         } else {
-            onSuccess.accept(highLow);
+            onSuccess.accept(this.today);
         }
     }
 
     public void saveHighLowForDate(String date, HighLow highLow) {
-        cachedHighLows.put(highLow.getHighlowid(), highLow);
+        dateHighLows.put(date, new HighLowLiveData(highLow));
     }
 
     public void saveTodayHighLow(HighLow highLow) {
-        cachedHighLows.put(highLow.getHighlowid(), highLow);
+        today = new HighLowLiveData(highLow);
     }
 }

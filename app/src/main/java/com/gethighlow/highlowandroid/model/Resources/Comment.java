@@ -2,6 +2,7 @@ package com.gethighlow.highlowandroid.model.Resources;
 
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.function.Consumer;
 
@@ -14,7 +15,30 @@ public class Comment {
 
     private String message;
 
+    @SerializedName("_timestamp")
     private String timestamp;
+
+    private String firstname;
+
+    private String lastname;
+
+    private String profileimage;
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public String getName() {
+        return firstname + " " + lastname;
+    }
+
+    public String getProfileimage() {
+        return profileimage;
+    }
 
     public String getUid() {
         return uid;

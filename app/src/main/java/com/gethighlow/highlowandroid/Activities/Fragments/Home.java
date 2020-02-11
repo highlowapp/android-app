@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -22,9 +23,14 @@ public class Home extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private InfiniteViewPager viewPager;
+    private AppCompatActivity appCompatActivity;
 
     public Home() {
         // Required empty public constructor
+    }
+
+    public void setAppCompatActivity(AppCompatActivity activity) {
+        appCompatActivity = activity;
     }
 
     @Override
@@ -39,7 +45,7 @@ public class Home extends Fragment {
         super.onViewCreated(v, savedInstanceState);
 
         viewPager = getView().findViewById(R.id.viewpager);
-        HomePagerAdapter homePagerAdapter = new HomePagerAdapter(getContext(), LocalDate.now());
+        HomePagerAdapter homePagerAdapter = new HomePagerAdapter(this, LocalDate.now());
         viewPager.setAdapter(homePagerAdapter);
 
     }

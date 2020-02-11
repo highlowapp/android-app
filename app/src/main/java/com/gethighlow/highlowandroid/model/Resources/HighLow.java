@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 
 import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -17,8 +18,10 @@ public class HighLow {
 
     private String low;
 
+    @SerializedName("high_image")
     private String highImage;
 
+    @SerializedName("low_image")
     private String lowImage;
 
     private Integer total_likes;
@@ -29,20 +32,26 @@ public class HighLow {
 
     private List<Comment> comments;
 
+    @SerializedName("_timestamp")
     private String timestamp;
 
+    @SerializedName("_date")
     private String date;
 
-    private Boolean isPrivate;
+    private Integer isPrivate;
 
     private String error;
+
+    public String toString() {
+        return "{\n\thigh: " + (high == null ? "null":high) + "\n\tlow: " + (low == null ? "null":low) + "\n\thighlowid: " + (highlowid == null ? "null": highlowid) + "\n\tuid: " + (uid == null ? "null":uid) + "\n\tdate: " + (date == null ? "null": date);
+    }
 
     public String getError() {
         return error;
     }
 
     public Boolean getPrivate() {
-        return isPrivate;
+        return isPrivate == 1;
     }
 
     public Integer getTotal_likes() {
@@ -86,10 +95,12 @@ public class HighLow {
     }
 
     public Boolean getFlagged() {
+        if (flagged == null) return false;
         return flagged;
     }
 
     public Boolean getLiked() {
+        if (liked == null) return false;
         return liked;
     }
 

@@ -1,11 +1,13 @@
 package com.gethighlow.highlowandroid.Activities.Fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -23,12 +25,12 @@ import java.util.List;
 import static java.time.temporal.ChronoUnit.DAYS;
 
 public class HomePagerAdapter extends InfinitePagerAdapter<LocalDate> {
-    private Context context;
+    private Fragment fragment;
 
-    public HomePagerAdapter(Context context, LocalDate current) {
+    public HomePagerAdapter(Fragment fragment, LocalDate current) {
         super(current);
 
-        this.context = context;
+        this.fragment = fragment;
     }
 
     public LocalDate getNextIndicator() {
@@ -44,7 +46,7 @@ public class HomePagerAdapter extends InfinitePagerAdapter<LocalDate> {
 
     public ViewGroup instantiateItem(LocalDate indicator) {
         LinearLayout.LayoutParams newLayoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        HomeViewLayout homeViewLayout = new HomeViewLayout(context, null, indicator);
+        HomeViewLayout homeViewLayout = new HomeViewLayout(fragment, null, indicator);
         homeViewLayout.setLayoutParams(newLayoutParams);
         homeViewLayout.setDate(indicator);
         return homeViewLayout;
