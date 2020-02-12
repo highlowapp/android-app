@@ -1,6 +1,7 @@
 package com.gethighlow.highlowandroid.CustomViews;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -9,15 +10,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TableLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 
 import com.gethighlow.highlowandroid.R;
 import com.gethighlow.highlowandroid.model.Managers.ImageManager;
+import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
 import com.gethighlow.highlowandroid.model.Resources.Comment;
 import com.gethighlow.highlowandroid.model.Resources.HighLow;
 import com.gethighlow.highlowandroid.model.Services.AuthService;
@@ -34,11 +38,12 @@ public class HighLowView extends LinearLayout implements HLButtonDelegate {
     private TextView lowNotGiven;
     private boolean editable = false;
     private LinearLayout privateSwitch;
-    private HighLow highLow;
+    private HighLowLiveData highLow;
     private ImageView flagButton;
     private ImageView likeButton;
     private TextView likeCount;
     private boolean showAllComments = false;
+    private LifecycleOwner lifecycleOwner;
     private LinearLayout comments;
 
     public HighLowViewDelegate delegate;
@@ -116,24 +121,69 @@ public class HighLowView extends LinearLayout implements HLButtonDelegate {
     public View.OnClickListener flag = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (delegate != null) {
-                delegate.willFlag(highLow.getHighlowid());
-            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle(R.string.flag_title)
+                    .setMessage(R.string.flag_message)
+            .setPositiveButton(R.string.flag_confirmation, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    flagButton.setImageResource(R.drawable.ic_flag);
+                    highLow.flag(newHighLow -> {
+                        Log.w("Debug", "Success");
+                    }, error -> {
+                        Log.w("Debug", "Failure");
+                    });
+                }
+            }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            }).setCancelable(true);
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
     };
 
     public View.OnClickListener unFlag = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (delegate != null) {
-                delegate.willUnFlag(highLow.getHighlowid());
-            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle(R.string.unflag_title)
+                    .setMessage(R.string.unflag_message)
+                    .setPositiveButton(R.string.flag_confirmation, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            flagButton.setImageResource(R.drawable.ic_flag_grayed);
+                            highLow.unFlag(newHighLow -> {
+                            }, error -> {
+                                Log.w("Debug", "Failure");
+                            });
+                        }
+                    }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            }).setCancelable(true);
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
         }
     };
 
-    public void loadHighLow(HighLow newHighLow) {
-        highLow = newHighLow;
+    public void attachToLiveData(LifecycleOwner lifecycleOwner, HighLowLiveData liveData) {
+        this.lifecycleOwner = lifecycleOwner;
+        highLow = liveData;
+        highLow.observe(this.lifecycleOwner, onHighLowUpdate);
+        if (highLow.getValue() != null) {
+            loadHighLow(highLow.getValue());
+        }
+    }
 
+    public void loadHighLow(HighLow highLow) {
+        Log.w("Debug", highLow.toString());
         if (highLow.getUid().equals(AuthService.shared().getUid())) {
             editable = true;
         } else {
@@ -267,4 +317,11 @@ public class HighLowView extends LinearLayout implements HLButtonDelegate {
             }
         }
     }
+
+    private final Observer<HighLow> onHighLowUpdate = new Observer<HighLow>() {
+        @Override
+        public void onChanged(HighLow highLow) {
+            loadHighLow(highLow);
+        }
+    };
 }

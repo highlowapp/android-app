@@ -63,7 +63,9 @@ public class HighLowManager {
         if (highLow == null) {
             HighLowService.shared().getDate(date, (newHighLow) -> {
                 HighLowLiveData liveData = new HighLowLiveData(newHighLow);
-                dateHighLows.put(newHighLow.getDate(), liveData);
+                if (newHighLow.getDate() != null) {
+                    dateHighLows.put(newHighLow.getDate(), liveData);
+                }
                 onSuccess.accept(liveData);
             }, onError);
         } else {

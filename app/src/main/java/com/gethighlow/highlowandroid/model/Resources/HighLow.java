@@ -1,6 +1,7 @@
 package com.gethighlow.highlowandroid.model.Resources;
 
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
@@ -38,12 +39,12 @@ public class HighLow {
     @SerializedName("_date")
     private String date;
 
-    private Integer isPrivate;
+    private Boolean isPrivate;
 
     private String error;
 
     public String toString() {
-        return "{\n\thigh: " + (high == null ? "null":high) + "\n\tlow: " + (low == null ? "null":low) + "\n\thighlowid: " + (highlowid == null ? "null": highlowid) + "\n\tuid: " + (uid == null ? "null":uid) + "\n\tdate: " + (date == null ? "null": date);
+        return "{\n\thigh: " + (high == null ? "null":high) + "\n\tlow: " + (low == null ? "null":low) + "\n\thighlowid: " + (highlowid == null ? "null": highlowid) + "\n\tuid: " + (uid == null ? "null":uid) + "\n\tdate: " + (date == null ? "null": date) + "\n\tflagged: " + (flagged == null ? "null": flagged);
     }
 
     public String getError() {
@@ -51,7 +52,8 @@ public class HighLow {
     }
 
     public Boolean getPrivate() {
-        return isPrivate == 1;
+        if (isPrivate == null) return true;
+        return isPrivate;
     }
 
     public Integer getTotal_likes() {
@@ -105,52 +107,50 @@ public class HighLow {
     }
 
     public void update(String key, Object value) {
-        Object id = this.error;
+        Log.w("Debug", key);
+        if (value == null) return;
         switch(key) {
             case "highlowid":
-                id = this.highlowid;
+                this.highlowid = value.toString();
                 break;
             case "uid":
-                id = this.uid;
+                this.uid = value.toString();
                 break;
             case "high":
-                id = this.high;
+                this.high = value.toString();
                 break;
             case "low":
-                id = this.low;
+                this.low = value.toString();
                 break;
             case "highImage":
-                id = this.highImage;
+                this.highImage = value.toString();
                 break;
             case "lowImage":
-                id = this.lowImage;
+                this.lowImage = value.toString();
                 break;
             case "total_likes":
-                id = this.total_likes;
+                this.total_likes = (Integer) value;
                 break;
             case "comments":
-                id = this.comments;
+                this.comments = (List<Comment>) value;
                 break;
             case "timestamp":
-                id = this.timestamp;
+                this.timestamp = value.toString();
                 break;
             case "date":
-                id = this.date;
+                this.date = value.toString();
+                break;
             case "isPrivate":
-                id = this.isPrivate;
+                this.isPrivate = (Boolean) value;
                 break;
             case "flagged":
-                id = this.flagged;
+                this.flagged = (Boolean) value;
                 break;
             case "liked":
-                id = this.liked;
+                this.liked = (Boolean) value;
                 break;
             default:
                 break;
-        }
-
-        if (value != null && !id.equals(value)) {
-            id = value;
         }
     }
 

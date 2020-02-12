@@ -1,0 +1,7 @@
+<resources>
+    <string name="unflag_title">Confirm Unflag?</string>
+    <string name="flag_title">Confirm Flag?</string>
+    <string name="unflag_message">Are you sure you want to unflag this High/Low?</string>
+    <string name="flag_message">Are you sure you want to flag this High/Low?</string>
+    <string name="flag_confirmation" translatable="false">Confirm</string>
+</resources>
