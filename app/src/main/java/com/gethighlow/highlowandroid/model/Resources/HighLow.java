@@ -1,9 +1,11 @@
 package com.gethighlow.highlowandroid.model.Resources;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
+import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
 import com.google.gson.annotations.SerializedName;
 
@@ -39,9 +41,14 @@ public class HighLow {
     @SerializedName("_date")
     private String date;
 
+    @SerializedName("private")
     private Boolean isPrivate;
 
     private String error;
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public String toString() {
         return "{\n\thigh: " + (high == null ? "null":high) + "\n\tlow: " + (low == null ? "null":low) + "\n\thighlowid: " + (highlowid == null ? "null": highlowid) + "\n\tuid: " + (uid == null ? "null":uid) + "\n\tdate: " + (date == null ? "null": date) + "\n\tflagged: " + (flagged == null ? "null": flagged);
@@ -52,7 +59,6 @@ public class HighLow {
     }
 
     public Boolean getPrivate() {
-        if (isPrivate == null) return true;
         return isPrivate;
     }
 
@@ -170,16 +176,16 @@ public class HighLow {
         update("liked", highLow.getLiked());
     }
 
-    public void setHigh(String high, String date, Boolean isPrivate, Drawable image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLowService.shared().setHigh(this.highlowid, high, date, isPrivate, image, (highLow) -> {
+    public void setHigh(String high, String date, Boolean isPrivate, Bitmap image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        HighLowService.shared().setHigh(high, date, isPrivate, image, (highLow) -> {
             updateWithHighLow(highLow);
             HighLowManager.shared().saveHighLow(this);
             onSuccess.accept(highLow);
         }, onError);
     }
 
-    public void setLow(String low, String date, Boolean isPrivate, Drawable image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLowService.shared().setLow(this.highlowid, low, date, isPrivate, image, (highLow) -> {
+    public void setLow(String low, String date, Boolean isPrivate, Bitmap image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        HighLowService.shared().setLow(low, date, isPrivate, image, (highLow) -> {
             updateWithHighLow(highLow);
             HighLowManager.shared().saveHighLow(this);
             onSuccess.accept(highLow);

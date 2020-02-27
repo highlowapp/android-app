@@ -41,7 +41,7 @@
             android:textColor="#FFFFFF"
             android:textSize="25dp"/>
 
-        <com.gethighlow.highlowandroid.CustomViews.TextInput
+        <com.gethighlow.highlowandroid.CustomViews.BaseComponents.TextInput
             android:layout_width="250dp"
             android:layout_height="50dp"
             custom:title="First Name"
@@ -49,7 +49,7 @@
             custom:inputTheme="plain"
             android:layout_marginTop="10dp"
             android:id="@+id/firstName"/>
-        <com.gethighlow.highlowandroid.CustomViews.TextInput
+        <com.gethighlow.highlowandroid.CustomViews.BaseComponents.TextInput
             android:layout_width="250dp"
             android:layout_height="50dp"
             custom:title="Last Name"
@@ -57,7 +57,7 @@
             custom:inputTheme="plain"
             android:layout_marginTop="10dp"
             android:id="@+id/lastName"/>
-        <com.gethighlow.highlowandroid.CustomViews.TextInput
+        <com.gethighlow.highlowandroid.CustomViews.BaseComponents.TextInput
             android:layout_width="250dp"
             android:layout_height="50dp"
             custom:title="Email"
@@ -65,7 +65,7 @@
             custom:inputTheme="plain"
             android:layout_marginTop="10dp"
             android:id="@+id/email"/>
-        <com.gethighlow.highlowandroid.CustomViews.TextInput
+        <com.gethighlow.highlowandroid.CustomViews.BaseComponents.TextInput
             android:layout_width="250dp"
             android:layout_height="50dp"
             custom:title="Password"
@@ -73,7 +73,7 @@
             custom:inputTheme="plain"
             android:layout_marginTop="10dp"
             android:id="@+id/password"/>
-        <com.gethighlow.highlowandroid.CustomViews.TextInput
+        <com.gethighlow.highlowandroid.CustomViews.BaseComponents.TextInput
             android:layout_width="250dp"
             android:layout_height="50dp"
             custom:title="Confirm Password"
@@ -81,7 +81,7 @@
             custom:inputTheme="plain"
             android:layout_marginTop="10dp"
             android:id="@+id/confirm_password"/>
-        <com.gethighlow.highlowandroid.CustomViews.HLButton
+        <com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButton
             android:layout_width="240dp"
             android:layout_height="50dp"
             custom:buttonTheme="pink"

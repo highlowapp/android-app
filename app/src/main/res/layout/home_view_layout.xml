@@ -3,14 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Fragments.HomeViewLayout">
+    tools:context=".Activities.Tabs.Fragments.HomeViewLayout">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <com.gethighlow.highlowandroid.CustomViews.HighLowView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
             android:id="@+id/highlowview"
             android:paddingBottom="100dp"
             />

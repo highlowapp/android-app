@@ -1,12 +1,17 @@
 package com.gethighlow.highlowandroid.model.Managers.LiveDataModels;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.gethighlow.highlowandroid.model.Resources.Comment;
 import com.gethighlow.highlowandroid.model.Resources.HighLow;
+import com.gethighlow.highlowandroid.model.Services.HighLowService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class HighLowLiveData extends MutableLiveData<HighLow> {
@@ -22,7 +27,22 @@ public class HighLowLiveData extends MutableLiveData<HighLow> {
         return this.getValue();
     }
 
-    public void setHigh(String high, String date, Boolean isPrivate, Drawable image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
+    public void update() {
+        HighLow highLow = getValue();
+        if (highLow == null) {
+            return;
+        }
+
+        if (highLow.getHighlowid() != null) {
+            HighLowService.shared().get(highLow.getHighlowid(), this::setValue, error -> {
+
+            });
+        } else if (highLow.getDate() != null) {
+            HighLowService.shared().getDate(highLow.getDate(), this::setValue, error -> {});
+        }
+    }
+
+    public void setHigh(String high, String date, Boolean isPrivate, Bitmap image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
         HighLow highLow = getValue();
         if (highLow == null) {
             onError.accept("does-not-exist");
@@ -33,7 +53,7 @@ public class HighLowLiveData extends MutableLiveData<HighLow> {
         }, onError);
     }
 
-    public void setLow(String low, String date, Boolean isPrivate, Drawable image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
+    public void setLow(String low, String date, Boolean isPrivate, Bitmap image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
         HighLow highLow = getValue();
         if (highLow == null) {
             onError.accept("does-not-exist");
@@ -133,6 +153,17 @@ public class HighLowLiveData extends MutableLiveData<HighLow> {
         }, onError);
     }
 
+    public List<CommentLiveData> getComments() {
+        HighLow highLow = getValue();
+        List<CommentLiveData> comments = new ArrayList<>();
+
+        for (Comment comment: highLow.getComments()) {
+            comments.add(new CommentLiveData(comment));
+        }
+
+        return comments;
+    }
+
     public String getHighlowid() {
         HighLow highLow = getValue();
         if (highLow == null) return null;
@@ -184,6 +215,7 @@ public class HighLowLiveData extends MutableLiveData<HighLow> {
     public Boolean getPrivate() {
         HighLow highLow = getValue();
         if (highLow == null) return false;
+        Log.w("Debug", (highLow.getPrivate() == null) ? "NULL": highLow.getPrivate().toString());
         return highLow.getPrivate();
     }
 

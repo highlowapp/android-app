@@ -1,10 +1,14 @@
 package com.gethighlow.highlowandroid.CustomViews;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -12,10 +16,14 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.gethighlow.highlowandroid.R;
+import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
 import com.gethighlow.highlowandroid.model.Managers.ImageManager;
+import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.CommentLiveData;
 import com.gethighlow.highlowandroid.model.Resources.Comment;
+import com.gethighlow.highlowandroid.model.Services.HighLowService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,6 +34,10 @@ public class CommentView extends RelativeLayout {
     private ImageView profileImage;
     private TextView timestamp;
     private TextView message;
+    private ImageView moreButton;
+    private CommentLiveData comment;
+    private String commentId;
+    private CommentViewDelegate delegate;
 
     public CommentView(Context context, @Nullable AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -39,9 +51,79 @@ public class CommentView extends RelativeLayout {
         profileImage = findViewById(R.id.profile_image);
         timestamp = findViewById(R.id.timestamp);
         message = findViewById(R.id.message);
+        moreButton = findViewById(R.id.moreButton);
+
+        moreButton.setOnClickListener(moreOptions);
+    }
+
+    public void attachToLiveData(CommentLiveData commentLiveData) {
+        this.comment = commentLiveData;
+        loadComment(this.comment.getValue());
+    }
+
+
+    private void alert(String title, String message) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        alertDialog.setTitle(title);
+        alertDialog.setMessage(message);
+        alertDialog.setCancelable(true);
+        alertDialog.setPositiveButton("OK", null);
+        alertDialog.show();
+    }
+
+    public View.OnClickListener moreOptions = view -> {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Choose an action to perform on this comment");
+
+        String[] options = {"Edit", "Delete", "Cancel"};
+
+        builder.setItems(options, (dialogInterface, i) -> {
+            Log.w("Debug", Integer.toString(i));
+            if (i == 0) {
+                edit();
+            } else if (i == 1) {
+                delete();
+            }
+
+        });
+        builder.setCancelable(false);
+        builder.create().show();
+    };
+
+    private void edit() {
+        if (comment != null) {
+            Intent editComment = new Intent(getContext(), EditCommentActivity.class);
+            editComment.putExtra("commentId", comment.getCommentid());
+            editComment.putExtra("highlowid", comment.getHighlowid());
+            editComment.putExtra("prevMessage", comment.getMessage());
+            getContext().startActivity(editComment);
+        } else {
+            alert("An error occurred", "Please try again");
+        }
+    }
+
+    private void delete() {
+        if (comment == null) {
+            alert("An error occurred", "Please try again");
+            return;
+        }
+
+        String commentId = comment.getCommentid();
+
+        if (commentId == null) {
+            alert("An error occurred", "Please try again");
+            return;
+        }
+
+        HighLowService.shared().deleteComment(commentId, genericResponse -> {
+            Intent newIntent = new Intent("highlow-updated");
+            newIntent.putExtra("highlowid", comment.getHighlowid());
+            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(newIntent);
+        }, error -> {});
     }
 
     public void loadComment(Comment comment) {
+        commentId = comment.getCommentid();
         name.setText(comment.getName());
         String url = comment.getProfileimage();
         if (!url.startsWith("http")) {

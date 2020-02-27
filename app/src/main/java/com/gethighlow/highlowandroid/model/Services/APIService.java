@@ -218,6 +218,7 @@ public class APIService implements APIConfig {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.w("Debug", error.toString());
                 onError.accept("network-error");
             }
         }) {
@@ -236,12 +237,11 @@ public class APIService implements APIConfig {
         requestQueue.add(request);
     }
 
-    public void makeMultipartRequest(String url, int method, Map<String, String> params, Drawable image, Consumer<String> onSuccess, Consumer<String> onError) {
+    public void makeMultipartRequest(String url, int method, Map<String, String> params, Bitmap image, Consumer<String> onSuccess, Consumer<String> onError) {
         VolleyMultipartRequest request = new VolleyMultipartRequest(method, base_url + url, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
                 String json = new String(response.data);
-
                 Gson gson = new Gson();
                 GenericResponse genericResponse = gson.fromJson(json, GenericResponse.class);
 
@@ -283,10 +283,14 @@ public class APIService implements APIConfig {
             @Override
             protected Map<String, DataPart> getByteData() {
                 Map<String, DataPart> params = new HashMap<>();
-                params.put("file", new DataPart("file.jpg", getFileDataFromDrawable(context, image), "image/jpeg"));
+                if (image != null) {
+                    params.put("file", new DataPart("file.jpg", getFileDataFromBitmap(context, image), "image/jpeg"));
+                }
                 return params;
             }
         };
+
+        requestQueue.add(request);
     }
 
 
@@ -316,6 +320,12 @@ public class APIService implements APIConfig {
      */
     public static byte[] getFileDataFromDrawable(Context context, Drawable drawable) {
         Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    public static byte[] getFileDataFromBitmap(Context context, Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, byteArrayOutputStream);
         return byteArrayOutputStream.toByteArray();

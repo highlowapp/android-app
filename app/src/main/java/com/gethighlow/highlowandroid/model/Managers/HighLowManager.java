@@ -50,12 +50,30 @@ public class HighLowManager {
         }
     }
 
-    public void saveHighLow(String highlowid, HighLow highLow) {
-        cachedHighLows.put(highlowid, new HighLowLiveData(highLow));
+
+
+    public HighLowLiveData saveHighLow(String highlowid, HighLow highLow) {
+        if (cachedHighLows.containsKey(highlowid)) {
+            HighLowLiveData liveData = cachedHighLows.get(highlowid);
+            liveData.setValue(highLow);
+            return liveData;
+        } else {
+            HighLowLiveData liveData = new HighLowLiveData(highLow);
+            cachedHighLows.put(highlowid, liveData);
+            return liveData;
+        }
     }
 
-    public void saveHighLow(HighLow highLow) {
-        cachedHighLows.put(highLow.getHighlowid(), new HighLowLiveData(highLow));
+    public HighLowLiveData saveHighLow(HighLow highLow) {
+        if (cachedHighLows.containsKey(highLow.getDate())) {
+            HighLowLiveData liveData = cachedHighLows.get(highLow.getDate());
+            liveData.setValue(highLow);
+            return liveData;
+        } else {
+            HighLowLiveData liveData = new HighLowLiveData(highLow);
+            cachedHighLows.put(highLow.getDate(), liveData);
+            return liveData;
+        }
     }
 
     public void getHighLowByDate(String date, Consumer<HighLowLiveData> onSuccess, Consumer<String> onError) {
@@ -69,6 +87,7 @@ public class HighLowManager {
                 onSuccess.accept(liveData);
             }, onError);
         } else {
+            Log.w("Debug", "USED_CACHE");
             onSuccess.accept(highLow);
         }
     }
@@ -88,11 +107,25 @@ public class HighLowManager {
         }
     }
 
-    public void saveHighLowForDate(String date, HighLow highLow) {
-        dateHighLows.put(date, new HighLowLiveData(highLow));
+    public HighLowLiveData saveHighLowForDate(String date, HighLow highLow) {
+        if (cachedHighLows.containsKey(date)) {
+            HighLowLiveData liveData = cachedHighLows.get(date);
+            liveData.setValue(highLow);
+            return liveData;
+        } else {
+            HighLowLiveData liveData = new HighLowLiveData(highLow);
+            cachedHighLows.put(date, liveData);
+            return liveData;
+        }
     }
 
-    public void saveTodayHighLow(HighLow highLow) {
-        today = new HighLowLiveData(highLow);
+    public HighLowLiveData saveTodayHighLow(HighLow highLow) {
+        if (today != null) {
+            today.setValue(highLow);
+            return today;
+        }
+        HighLowLiveData liveData = new HighLowLiveData(highLow);
+        today = liveData;
+        return liveData;
     }
 }

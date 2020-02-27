@@ -1,25 +1,19 @@
-package com.gethighlow.highlowandroid.Activities.Fragments;
+package com.gethighlow.highlowandroid.Activities.Tabs.Fragments;
 
 
-import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.os.Bundle;
+import android.content.Intent;
+import android.content.IntentFilter;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.ViewPager;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import android.speech.tts.TextToSpeech;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,9 +22,6 @@ import com.gethighlow.highlowandroid.CustomViews.HighLowViewDelegate;
 import com.gethighlow.highlowandroid.R;
 import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
-import com.gethighlow.highlowandroid.model.Resources.HighLow;
-
-import org.w3c.dom.Text;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -38,7 +29,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeViewLayout extends LinearLayout implements HighLowViewDelegate {
+public class HomeViewLayout extends LinearLayout {
     private HighLowLiveData highLow;
     private Fragment fragment;
     private TextView textView;
@@ -57,7 +48,6 @@ public class HomeViewLayout extends LinearLayout implements HighLowViewDelegate 
         this.setOrientation(LinearLayout.VERTICAL);
         this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
         highLowView = findViewById(R.id.highlowview);
-        highLowView.delegate = this;
     }
 
     private String prettyFormat(LocalDate localDate) {
@@ -72,32 +62,5 @@ public class HomeViewLayout extends LinearLayout implements HighLowViewDelegate 
             }, error -> {
             Log.w("ERROR", error);
         });
-    }
-
-
-
-    public  void willAddHigh(String highlowid) {
-        Log.w("Debug", "Adding High");
-    }
-    public void willAddLow(String highlowid) {
-
-    }
-    public void willEditHigh(String highlowid) {
-
-    }
-    public void willEditLow(String highlowid) {
-
-    }
-    public void willLike(String highlowid) {
-        Log.w("Debug", "Like");
-    }
-    public void willUnLike(String highlowid) {
-
-    }
-    public void willFlag(String highlowid) {
-
-    }
-    public void willUnFlag(String highlowid) {
-
     }
 }

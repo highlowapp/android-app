@@ -51,4 +51,12 @@
         android:id="@+id/message"
         android:width="0dp"
        />
+
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:id="@+id/moreButton"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/comment_more"/>
 </merge>

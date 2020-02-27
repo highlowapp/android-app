@@ -1,4 +1,4 @@
-package com.gethighlow.highlowandroid.Activities.Fragments;
+package com.gethighlow.highlowandroid.Activities.Tabs.Fragments;
 
 import android.content.Context;
 import android.util.AttributeSet;

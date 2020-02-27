@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Fragments.Home">
+    tools:context=".Activities.Tabs.Fragments.Home">
 
     <com.gethighlow.highlowandroid.thehayro.view.InfiniteViewPager
         android:layout_width="match_parent"

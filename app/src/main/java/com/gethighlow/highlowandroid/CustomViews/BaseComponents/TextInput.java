@@ -1,4 +1,4 @@
-package com.gethighlow.highlowandroid.CustomViews;
+package com.gethighlow.highlowandroid.CustomViews.BaseComponents;
 
 import android.content.Context;
 import android.content.res.TypedArray;

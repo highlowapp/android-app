@@ -1,9 +1,11 @@
 package com.gethighlow.highlowandroid.model.Resources;
 
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
 import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
+import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
 import com.gethighlow.highlowandroid.model.Managers.UserManager;
 import com.gethighlow.highlowandroid.model.Responses.FeedResponse;
 import com.gethighlow.highlowandroid.model.Responses.FriendSuggestionsResponse;
@@ -16,6 +18,8 @@ import com.gethighlow.highlowandroid.model.Responses.UserHighLowsResponse;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
 import com.gethighlow.highlowandroid.model.Services.UserService;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -57,7 +61,7 @@ public class User {
         return "Name: " + name();
     }
 
-    public void setProfile(String firstname, String lastname, String email, String bio, Drawable profileimage, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
+    public void setProfile(String firstname, String lastname, String email, String bio, Bitmap profileimage, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
         UserService.shared().setProfile(firstname, lastname, email, bio, profileimage, (response) -> {
 
             this.firstname = firstname;
@@ -100,16 +104,16 @@ public class User {
         }, onError);
     }
 
-    public void getHighLows(int page, Consumer<UserHighLowsResponse> onSuccess, Consumer<String> onError) {
+    public void getHighLows(int page, Consumer<List<HighLowLiveData>> onSuccess, Consumer<String> onError) {
         HighLowService.shared().getHighLowsForUser(this.uid, page, (response) -> {
 
             List<HighLow> highLows = response.getHighlows();
-
+            List<HighLowLiveData> liveDataList = new ArrayList<>();
             for (HighLow highLow: highLows) {
-                HighLowManager.shared().saveHighLow(highLow);
+                liveDataList.add( HighLowManager.shared().saveHighLow(highLow) );
             }
 
-            onSuccess.accept(response);
+            onSuccess.accept(liveDataList);
 
         }, onError);
     }

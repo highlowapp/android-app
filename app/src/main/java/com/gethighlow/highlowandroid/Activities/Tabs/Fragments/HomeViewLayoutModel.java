@@ -1,6 +1,5 @@
-package com.gethighlow.highlowandroid.Activities.Fragments;
+package com.gethighlow.highlowandroid.Activities.Tabs.Fragments;
 
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;

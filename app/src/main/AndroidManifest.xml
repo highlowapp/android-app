@@ -2,6 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gethighlow.highlowandroid">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,6 +12,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.gethighlow.highlowandroid.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
 
         <activity android:name="com.gethighlow.highlowandroid.Activities.MainActivity">
             <intent-filter>
@@ -23,6 +34,8 @@
         <activity android:name="com.gethighlow.highlowandroid.Activities.Authentication.CreateAccountActivity"/>
         <activity android:name=".Activities.Authentication.ForgotPasswordActivity"/>
         <activity android:name=".Activities.TabActivity"/>
+        <activity android:name=".Activities.Tabs.EditHLActivity" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".CustomViews.EditCommentActivity" android:theme="@style/AppTheme.NoActionBar"/>
 
     </application>
 </manifest>

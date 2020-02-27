@@ -60,6 +60,10 @@ public class Comment {
         return message;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public void update(String message, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
         HighLowService.shared().updateComment(this.commentid, message, genericResponse -> {
             this.message = message;

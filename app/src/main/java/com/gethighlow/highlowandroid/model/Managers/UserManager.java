@@ -5,9 +5,12 @@ import android.content.Context;
 import android.util.LruCache;
 
 import com.gethighlow.highlowandroid.model.Managers.Caches.UserCache;
+import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.UserLiveData;
 import com.gethighlow.highlowandroid.model.Resources.User;
 import com.gethighlow.highlowandroid.model.Services.UserService;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class UserManager {
@@ -16,27 +19,21 @@ public class UserManager {
     public static UserManager shared() { return ourInstance; }
 
     private Context context;
-    private UserCache cache;
+    private Map<String, UserLiveData> userCache = new HashMap<>();
 
     public void attachToContext(Context context) {
         this.context = context;
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-
-        int maxKb = am.getMemoryClass() * 1024;
-        int limitKb = maxKb / 16;
-
-        cache = new UserCache(limitKb);
     }
 
-    public void getUser(String uid, Consumer<User> onSuccess, Consumer<String> onError) {
-        User user = cache.get(uid);
+    public void getUser(String uid, Consumer<UserLiveData> onSuccess, Consumer<String> onError) {
+        UserLiveData user = userCache.get(uid);
         if (user == null) {
 
             UserService.shared().getUser(uid, (newUser) -> {
-
-                cache.put(uid, newUser);
-                onSuccess.accept(newUser);
-
+                UserLiveData liveData = new UserLiveData(newUser);
+                userCache.put(uid, liveData);
+                onSuccess.accept(liveData);
             }, (error) -> {
                 onError.accept(error);
             });
@@ -46,11 +43,15 @@ public class UserManager {
         }
     }
 
-    public void saveUser(String uid, User user) {
-        cache.put(uid, user);
+    public UserLiveData saveUser(String uid, User user) {
+        UserLiveData liveData = new UserLiveData(user);
+        userCache.put(uid, liveData);
+        return liveData;
     }
 
-    public void saveUser(User user) {
-        cache.put(user.uid(), user);
+    public UserLiveData saveUser(User user) {
+        UserLiveData liveData = new UserLiveData(user);
+        userCache.put(user.uid(), liveData);
+        return liveData;
     }
 }

@@ -3,7 +3,6 @@ package com.gethighlow.highlowandroid.Activities;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -14,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.gethighlow.highlowandroid.Activities.Fragments.Home;
+import com.gethighlow.highlowandroid.Activities.Tabs.Fragments.Home;
 import com.gethighlow.highlowandroid.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 

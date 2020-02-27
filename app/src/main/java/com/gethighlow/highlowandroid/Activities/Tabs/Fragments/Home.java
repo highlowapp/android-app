@@ -1,4 +1,4 @@
-package com.gethighlow.highlowandroid.Activities.Fragments;
+package com.gethighlow.highlowandroid.Activities.Tabs.Fragments;
 
 import android.content.Context;
 import android.net.Uri;
@@ -6,18 +6,15 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.gethighlow.highlowandroid.R;
-import com.gethighlow.highlowandroid.thehayro.view.InfinitePagerAdapter;
 import com.gethighlow.highlowandroid.thehayro.view.InfiniteViewPager;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public class Home extends Fragment {
 

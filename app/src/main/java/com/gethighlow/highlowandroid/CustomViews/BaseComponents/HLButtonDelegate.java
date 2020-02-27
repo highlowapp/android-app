@@ -1,4 +1,4 @@
-package com.gethighlow.highlowandroid.CustomViews;
+package com.gethighlow.highlowandroid.CustomViews.BaseComponents;
 
 import android.view.View;
 

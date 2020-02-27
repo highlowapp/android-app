@@ -1,21 +1,19 @@
 package com.gethighlow.highlowandroid.Activities.Authentication;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.gethighlow.highlowandroid.CustomViews.HLButton;
-import com.gethighlow.highlowandroid.CustomViews.HLButtonDelegate;
-import com.gethighlow.highlowandroid.CustomViews.TextInput;
-import com.gethighlow.highlowandroid.CustomViews.TextInputDelegate;
+import com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButton;
+import com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButtonDelegate;
+import com.gethighlow.highlowandroid.CustomViews.BaseComponents.TextInput;
+import com.gethighlow.highlowandroid.CustomViews.BaseComponents.TextInputDelegate;
 import com.gethighlow.highlowandroid.R;
 import com.gethighlow.highlowandroid.model.Services.AuthService;
 

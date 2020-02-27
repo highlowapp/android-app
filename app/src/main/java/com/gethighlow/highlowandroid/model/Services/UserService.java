@@ -1,7 +1,9 @@
 package com.gethighlow.highlowandroid.model.Services;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 
+import com.android.volley.Request;
 import com.gethighlow.highlowandroid.model.Responses.FeedResponse;
 import com.gethighlow.highlowandroid.model.Responses.FriendSuggestionsResponse;
 import com.gethighlow.highlowandroid.model.Responses.FriendsResponse;
@@ -31,7 +33,7 @@ public class UserService {
             params.put("uid", uid);
         }
 
-        APIService.shared().authenticatedRequest("/user/get", 0, params, (response) -> {
+        APIService.shared().authenticatedRequest("/user/get", Request.Method.POST, params, (response) -> {
 
             User user = gson.fromJson(response, User.class);
 
@@ -54,7 +56,7 @@ public class UserService {
         getUser(null, onSuccess, onError);
     }
 
-    public void setProfile(String firstname, String lastname, String email, String bio, Drawable profileImage, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
+    public void setProfile(String firstname, String lastname, String email, String bio, Bitmap profileImage, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
         Map<String, String> params = new HashMap<String, String>() {{
             put("firstname", firstname);
             put("lastname", lastname);

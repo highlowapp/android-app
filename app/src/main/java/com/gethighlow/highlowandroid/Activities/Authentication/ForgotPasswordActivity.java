@@ -7,9 +7,9 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.gethighlow.highlowandroid.CustomViews.HLButton;
-import com.gethighlow.highlowandroid.CustomViews.HLButtonDelegate;
-import com.gethighlow.highlowandroid.CustomViews.TextInput;
+import com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButton;
+import com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButtonDelegate;
+import com.gethighlow.highlowandroid.CustomViews.BaseComponents.TextInput;
 import com.gethighlow.highlowandroid.R;
 import com.gethighlow.highlowandroid.model.Services.AuthService;
 

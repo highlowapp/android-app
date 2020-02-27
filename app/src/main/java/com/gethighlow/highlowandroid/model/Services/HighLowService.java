@@ -1,14 +1,19 @@
 package com.gethighlow.highlowandroid.model.Services;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
+import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
+import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.CommentLiveData;
+import com.gethighlow.highlowandroid.model.Resources.Comment;
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Resources.HighLow;
 import com.gethighlow.highlowandroid.model.Responses.UserHighLowsResponse;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -19,7 +24,7 @@ public class HighLowService {
 
     private Gson gson = new Gson();
 
-    public void setHigh(String highlowid, String high, String date, Boolean isPrivate, Drawable image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
+    public void setHigh(String high, String date, Boolean isPrivate, Bitmap image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
         Map<String, String> params = new HashMap<>();
         params.put("high", high);
         params.put("private", (isPrivate) ? "true": "false");
@@ -28,7 +33,7 @@ public class HighLowService {
         }
 
         APIService.shared().makeMultipartRequest("/highlow/set/high", 1, params, image, (response) -> {
-
+            Log.w("Debug", response);
             HighLow highLow = gson.fromJson(response, HighLow.class);
 
             String error = highLow.getError();
@@ -43,7 +48,7 @@ public class HighLowService {
         });
     }
 
-    public void setLow(String highlowid, String low, String date, Boolean isPrivate, Drawable image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
+    public void setLow(String low, String date, Boolean isPrivate, Bitmap image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
         Map<String, String> params = new HashMap<>();
         params.put("low", low);
         params.put("private", (isPrivate) ? "true": "false");
@@ -177,6 +182,9 @@ public class HighLowService {
             if (error != null) {
                 onError.accept(error);
             } else {
+                for (Comment comment: highLow.getComments()) {
+                    Log.w("Debug", comment.getMessage());
+                }
                 onSuccess.accept(highLow);
             }
         }, (error) -> {
