@@ -3,6 +3,7 @@ package com.gethighlow.highlowandroid.model.Managers;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.gethighlow.highlowandroid.model.Managers.Caches.ImageCache;
 
@@ -21,19 +22,18 @@ public class ImageManager {
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 
         int maxKb = am.getMemoryClass() * 1024;
-        int limitKb = maxKb / 16;
-
+        int limitKb = maxKb / 8;
         cache = new ImageCache(limitKb);
     }
 
     public void getImage(String url, Consumer<Bitmap> onSuccess, Consumer<String> onError) {
         Bitmap img = cache.get(url);
-
         if (img == null) {
             DownloadImageTask task = new DownloadImageTask((image) -> {
                 if (image == null) {
                     onError.accept("no-image");
                 } else {
+                    cache.put(url, image);
                     onSuccess.accept(image);
                 }
             });

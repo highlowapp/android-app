@@ -60,7 +60,6 @@ public class HomeViewLayout extends LinearLayout {
             highLow = highLowLiveData;
             highLowView.attachToLiveData(fragment, highLowLiveData);
             }, error -> {
-            Log.w("ERROR", error);
         });
     }
 }

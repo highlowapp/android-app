@@ -114,7 +114,6 @@ public class HighLowLiveData extends MutableLiveData<HighLow> {
             onError.accept("does-not-exist");
         }
         highLow.flag((newHighLow) -> {
-            Log.w("Debug", "UPDATED: " + highLow.toString());
             this.setValue(highLow);
             onSuccess.accept(highLow);
         }, onError);
@@ -215,7 +214,6 @@ public class HighLowLiveData extends MutableLiveData<HighLow> {
     public Boolean getPrivate() {
         HighLow highLow = getValue();
         if (highLow == null) return false;
-        Log.w("Debug", (highLow.getPrivate() == null) ? "NULL": highLow.getPrivate().toString());
         return highLow.getPrivate();
     }
 

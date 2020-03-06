@@ -113,7 +113,6 @@ public class HighLow {
     }
 
     public void update(String key, Object value) {
-        Log.w("Debug", key);
         if (value == null) return;
         switch(key) {
             case "highlowid":

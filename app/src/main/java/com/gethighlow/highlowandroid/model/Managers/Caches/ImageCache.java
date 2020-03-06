@@ -8,6 +8,6 @@ public class ImageCache extends LruCache<String, Bitmap> {
 
     @Override
     protected int sizeOf(String key, Bitmap value) {
-        return value.getByteCount();
+        return value.getByteCount() / 1024;
     }
 }

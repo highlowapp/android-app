@@ -2,6 +2,7 @@ package com.gethighlow.highlowandroid.Activities;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
@@ -10,8 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentController;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import com.gethighlow.highlowandroid.Activities.Tabs.Fragments.Home;
 import com.gethighlow.highlowandroid.R;
@@ -22,6 +27,11 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
     private Home home;
     private Profile profile;
     private Fragment current;
+    private Feed feed;
+    private Fragment.SavedState homeState;
+    private Fragment.SavedState profileState;
+    private Fragment.SavedState feedState;
+
     private ActionBar actionBar;
 
     private FragmentManager fragmentManager;
@@ -40,11 +50,12 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
 
         setContentView(R.layout.tab_activity);
 
-        frameLayout = findViewById(R.id.fragments);
 
         home = new Home();
         home.setAppCompatActivity(this);
         profile = new Profile();
+        feed = new Feed();
+
         current = home;
 
         fragmentManager = getSupportFragmentManager();
@@ -61,8 +72,22 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
         actionBar.setTitle("Home");
     }
 
-    private void setTab(Fragment fragment) {
-        current = fragment;
+    private void setTab(String tab) {
+        switch (tab) {
+            case "home":
+                current = home;
+                current.setInitialSavedState(homeState);
+                break;
+            case "profile":
+                current = profile;
+                current.setInitialSavedState(profileState);
+                break;
+            case "feed":
+                current = feed;
+                current.setInitialSavedState(feedState);
+                break;
+        }
+
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragments, current);
         fragmentTransaction.commit();
@@ -73,13 +98,31 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch(item.getItemId()) {
                 case R.id.navigation_home:
-                    setTab(home);
+                    if (current == profile) {
+                        profileState = fragmentManager.saveFragmentInstanceState(profile);
+                    } else if (current == feed) {
+                        feedState = fragmentManager.saveFragmentInstanceState(feed);
+                    }
+                    setTab("home");
                     actionBar.setTitle("Home");
                     break;
                 case R.id.navigation_profile:
-                    setTab(profile);
+                    if (current == home) {
+                        homeState = fragmentManager.saveFragmentInstanceState(home);
+                    } else if (current == feed) {
+                        feedState = fragmentManager.saveFragmentInstanceState(feed);
+                    }
+                    setTab("profile");
                     actionBar.setTitle("Profile");
                     break;
+                case R.id.navigation_feed:
+                    if (current == profile) {
+                        profileState = fragmentManager.saveFragmentInstanceState(profile);
+                    } else if (current == home) {
+                        homeState = fragmentManager.saveFragmentInstanceState(home);
+                    }
+                    setTab("feed");
+                    actionBar.setTitle("Feed");
             }
 
             return true;

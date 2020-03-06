@@ -33,7 +33,6 @@ public class HighLowService {
         }
 
         APIService.shared().makeMultipartRequest("/highlow/set/high", 1, params, image, (response) -> {
-            Log.w("Debug", response);
             HighLow highLow = gson.fromJson(response, HighLow.class);
 
             String error = highLow.getError();
@@ -182,9 +181,6 @@ public class HighLowService {
             if (error != null) {
                 onError.accept(error);
             } else {
-                for (Comment comment: highLow.getComments()) {
-                    Log.w("Debug", comment.getMessage());
-                }
                 onSuccess.accept(highLow);
             }
         }, (error) -> {

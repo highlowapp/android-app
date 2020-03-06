@@ -1,6 +1,7 @@
 package com.gethighlow.highlowandroid.model.Managers.LiveDataModels;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -33,20 +34,16 @@ public class UserLiveData extends MutableLiveData<User> {
     public void setProfile(String firstname, String lastname, String email, String bio, Bitmap profileimage, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
         User user = getValue();
         if (user == null) { onError.accept("does-not-exist"); }
-        user.setProfile(firstname, lastname, email, bio, profileimage, onSuccess, onError);
+        user.setProfile(firstname, lastname, email, bio, profileimage, genericResponse -> {
+            this.setValue(user);
+            onSuccess.accept(genericResponse);
+        }, onError);
     }
 
-    public void getFriends(Consumer<FriendsResponse> onSuccess, Consumer<String> onError) {
+    public void getFriends(Consumer<List<UserLiveData>> onSuccess, Consumer<String> onError) {
         User user = getValue();
         if (user == null) { onError.accept("does-not-exist"); }
-        user.getFriends(friendsResponse -> {
-            List<User> users = friendsResponse.getFriends();
-            for (User thisUser: users) {
-                UserManager.shared().saveUser(thisUser);
-            }
-
-            onSuccess.accept(friendsResponse);
-        }, onError);
+        user.getFriends(onSuccess, onError);
     }
 
     public void requestFriendship(Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
@@ -67,16 +64,10 @@ public class UserLiveData extends MutableLiveData<User> {
         user.unFriend(onSuccess, onError);
     }
 
-    public void getPendingFriendships(Consumer<PendingFriendshipsResponse> onSuccess, Consumer<String> onError) {
+    public void getPendingFriendships(Consumer<List<UserLiveData>> onSuccess, Consumer<String> onError) {
         User user = getValue();
         if (user == null) { onError.accept("does-not-exist"); }
-        user.getPendingFriendships(pendingFriendshipsResponse -> {
-            List<User> requests = pendingFriendshipsResponse.getRequests();
-            for (User thisUser: requests) {
-                UserManager.shared().saveUser(thisUser);
-            }
-            onSuccess.accept(pendingFriendshipsResponse);
-        }, onError);
+        user.getPendingFriendships(onSuccess, onError);
     }
 
     public void getHighLows(int page, Consumer<List<HighLowLiveData>> onSuccess, Consumer<String> onError) {
@@ -85,16 +76,8 @@ public class UserLiveData extends MutableLiveData<User> {
         user.getHighLows(page, onSuccess, onError);
     }
 
-    public void getFeed(int page, Consumer<FeedResponse> onSuccess, Consumer<String> onError) {
-        User user = getValue();
-        if (user == null) { onError.accept("does-not-exist"); }
-        user.getFeed(page, feedResponse -> {
-            List<FeedItem> feedItems = feedResponse.getFeed();
-            for (FeedItem feedItem: feedItems) {
-                HighLowManager.shared().saveHighLow(feedItem.getHighlow());
-            }
-            onSuccess.accept(feedResponse);
-        }, onError);
+    public void getFeed(int page, Consumer<List<HighLowLiveData>> onSuccess, Consumer<String> onError) {
+        User.getFeed(page, onSuccess, onError);
     }
 
     public void getDate(String date, Consumer<HighLow> onSuccess, Consumer<String> onError) {
@@ -139,27 +122,15 @@ public class UserLiveData extends MutableLiveData<User> {
         user.getAllInterests(onSuccess, onError);
     }
 
-    public void getFriendSuggestions(Consumer<FriendSuggestionsResponse> onSuccess, Consumer<String> onError) {
+    public void getFriendSuggestions(Consumer<List<UserLiveData>> onSuccess, Consumer<String> onError) {
         User user = getValue();
         if (user == null) { onError.accept("does-not-exist"); }
-        user.getFriendSuggestions(friendSuggestionsResponse -> {
-            List<User> users = friendSuggestionsResponse.getUsers();
-            for (User thisUser: users) {
-                UserManager.shared().saveUser(thisUser);
-            }
-            onSuccess.accept(friendSuggestionsResponse);
-        }, onError);
+        user.getFriendSuggestions(onSuccess, onError);
     }
 
-    public void searchUsers(String search, Consumer<SearchResponse> onSuccess, Consumer<String> onError) {
+    public void searchUsers(String search, Consumer<List<UserLiveData>> onSuccess, Consumer<String> onError) {
         User user = getValue();
         if (user == null) { onError.accept("does-not-exist"); }
-        user.searchUsers(search, searchResponse -> {
-            List<SearchItem> users = searchResponse.getUsers();
-            for (SearchItem searchItem: users) {
-                UserManager.shared().saveUser(searchItem.getUser());
-            }
-            onSuccess.accept(searchResponse);
-        }, onError);
+        user.searchUsers(search, onSuccess, onError);
     }
 }

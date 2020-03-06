@@ -78,7 +78,6 @@ public class CommentView extends RelativeLayout {
         String[] options = {"Edit", "Delete", "Cancel"};
 
         builder.setItems(options, (dialogInterface, i) -> {
-            Log.w("Debug", Integer.toString(i));
             if (i == 0) {
                 edit();
             } else if (i == 1) {

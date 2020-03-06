@@ -45,8 +45,6 @@ public class SignInActivity extends Activity implements TextInputDelegate, HLBut
     }
 
     public void signIn(View view) {
-        Log.w("Debug", "Hi");
-
         String email = emailInput.getText();
         String password = passwordInput.getText();
 
@@ -55,7 +53,6 @@ public class SignInActivity extends Activity implements TextInputDelegate, HLBut
         AuthService.shared().signIn(email, password, authResponse -> {
             signInButton.stopLoading();
             signInButton.setEnabled(true);
-            Log.w("Debug", authResponse.access());
         }, error -> {
             signInButton.stopLoading();
             signInButton.setEnabled(true);
@@ -93,7 +90,6 @@ public class SignInActivity extends Activity implements TextInputDelegate, HLBut
     }
 
     public void onButtonClick(View view) {
-        Log.w("Debug", "TEST");
         if (view == signInButton) {
             signIn(view);
         }

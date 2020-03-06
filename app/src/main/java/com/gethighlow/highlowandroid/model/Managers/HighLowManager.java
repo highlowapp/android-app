@@ -7,6 +7,7 @@ import android.util.Log;
 import com.gethighlow.highlowandroid.model.Managers.Caches.HighLowCache;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
 import com.gethighlow.highlowandroid.model.Resources.HighLow;
+import com.gethighlow.highlowandroid.model.Services.AuthService;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
 
 import java.time.LocalDate;
@@ -65,15 +66,21 @@ public class HighLowManager {
     }
 
     public HighLowLiveData saveHighLow(HighLow highLow) {
-        if (cachedHighLows.containsKey(highLow.getDate())) {
-            HighLowLiveData liveData = cachedHighLows.get(highLow.getDate());
-            liveData.setValue(highLow);
-            return liveData;
-        } else {
-            HighLowLiveData liveData = new HighLowLiveData(highLow);
-            cachedHighLows.put(highLow.getDate(), liveData);
-            return liveData;
+        HighLowLiveData aLiveData = saveHighLow(highLow.getHighlowid(), highLow);
+
+        if (highLow.getUid().equals(AuthService.shared().getUid())) {
+            if (dateHighLows.containsKey(highLow.getDate())) {
+                HighLowLiveData liveData = dateHighLows.get(highLow.getDate());
+                liveData.setValue(highLow);
+                return liveData;
+            } else {
+                HighLowLiveData liveData = new HighLowLiveData(highLow);
+                dateHighLows.put(highLow.getDate(), liveData);
+                return liveData;
+            }
         }
+
+        return aLiveData;
     }
 
     public void getHighLowByDate(String date, Consumer<HighLowLiveData> onSuccess, Consumer<String> onError) {
@@ -87,7 +94,6 @@ public class HighLowManager {
                 onSuccess.accept(liveData);
             }, onError);
         } else {
-            Log.w("Debug", "USED_CACHE");
             onSuccess.accept(highLow);
         }
     }

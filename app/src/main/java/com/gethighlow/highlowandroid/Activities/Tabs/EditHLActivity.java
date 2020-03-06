@@ -303,7 +303,6 @@ public class EditHLActivity extends AppCompatActivity {
 
         if (type.equals("high")) {
             highLow.setHigh(text, date, isPrivate, img, highLow -> {
-                Log.w("Debug", highLow.toString());
                 HighLowManager.shared().saveHighLow(highLow);
                 Intent newIntent = new Intent("highlow-updated");
                 newIntent.putExtra("date", date);
@@ -311,7 +310,6 @@ public class EditHLActivity extends AppCompatActivity {
 
                 this.finish();
             }, error -> {
-                Log.w("Debug", error);
             });
         } else {
             highLow.setLow(text, date, isPrivate, img, highLow -> {
@@ -322,7 +320,6 @@ public class EditHLActivity extends AppCompatActivity {
 
                 this.finish();
             }, error -> {
-                Log.w("Debug", error);
             });
         }
 

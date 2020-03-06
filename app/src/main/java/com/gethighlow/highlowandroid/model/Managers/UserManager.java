@@ -2,6 +2,7 @@ package com.gethighlow.highlowandroid.model.Managers;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.util.Log;
 import android.util.LruCache;
 
 import com.gethighlow.highlowandroid.model.Managers.Caches.UserCache;
@@ -29,14 +30,11 @@ public class UserManager {
     public void getUser(String uid, Consumer<UserLiveData> onSuccess, Consumer<String> onError) {
         UserLiveData user = userCache.get(uid);
         if (user == null) {
-
             UserService.shared().getUser(uid, (newUser) -> {
                 UserLiveData liveData = new UserLiveData(newUser);
                 userCache.put(uid, liveData);
                 onSuccess.accept(liveData);
-            }, (error) -> {
-                onError.accept(error);
-            });
+            }, onError);
 
         } else {
             onSuccess.accept(user);

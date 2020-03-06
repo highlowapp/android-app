@@ -116,6 +116,8 @@ public class APIService implements APIConfig {
     }
 
     public void makeHTTPRequest(String url, int method, Map<String, String> params, Consumer<String> onSuccess, Consumer<VolleyError> onError) {
+        if (requestQueue == null) return;
+
         String completeUrl;
 
         if (method == 0) {
@@ -124,7 +126,6 @@ public class APIService implements APIConfig {
             completeUrl = base_url + url;
         }
 
-        Log.w("Debug", completeUrl);
 
         StringRequest request = new StringRequest(method, completeUrl, new Response.Listener<String>() {
             @Override
@@ -177,6 +178,7 @@ public class APIService implements APIConfig {
     }
 
     public void authenticatedRequest(String url, int method, Map<String, String> params, Consumer<String> onSuccess, Consumer<String> onError) {
+        if (requestQueue == null) return;
 
         String completeUrl;
 
@@ -185,8 +187,6 @@ public class APIService implements APIConfig {
         } else {
             completeUrl = base_url + url;
         }
-
-        Log.w("Debug", completeUrl);
 
         StringRequest request = new StringRequest(method, completeUrl, new Response.Listener<String>() {
             @Override
@@ -201,7 +201,7 @@ public class APIService implements APIConfig {
                             if (shouldContinue) {
                                 authenticatedRequest(url, method, params, onSuccess, onError);
                             } else {
-                                //Log out
+                                mainActivity.switchToAuth();
                             }
                         });
                     } else {
@@ -215,12 +215,8 @@ public class APIService implements APIConfig {
                 }
 
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.w("Debug", error.toString());
-                onError.accept("network-error");
-            }
+        }, error -> {
+            onError.accept("network-error");
         }) {
             @Override
             public Map<String, String> getParams() {
@@ -238,6 +234,8 @@ public class APIService implements APIConfig {
     }
 
     public void makeMultipartRequest(String url, int method, Map<String, String> params, Bitmap image, Consumer<String> onSuccess, Consumer<String> onError) {
+        if (requestQueue == null) return;
+
         VolleyMultipartRequest request = new VolleyMultipartRequest(method, base_url + url, new Response.Listener<NetworkResponse>() {
             @Override
             public void onResponse(NetworkResponse response) {
@@ -252,7 +250,7 @@ public class APIService implements APIConfig {
                             if (shouldContinue) {
                                 makeMultipartRequest(url, method, params, image, onSuccess, onError);
                             } else {
-                                //Log out
+                                mainActivity.switchToAuth();
                             }
                         });
                     } else {

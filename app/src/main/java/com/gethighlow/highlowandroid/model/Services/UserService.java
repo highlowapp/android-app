@@ -2,6 +2,7 @@ package com.gethighlow.highlowandroid.model.Services;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.gethighlow.highlowandroid.model.Responses.FeedResponse;
@@ -28,12 +29,12 @@ public class UserService {
     public UserService() {}
 
     public void getUser(String uid, Consumer<User> onSuccess, Consumer<String> onError) {
-        Map<String, String> params = new HashMap<>();
+        String url = "/user/get";
         if (uid != null) {
-            params.put("uid", uid);
+            url += "?uid=" + uid;
         }
 
-        APIService.shared().authenticatedRequest("/user/get", Request.Method.POST, params, (response) -> {
+        APIService.shared().authenticatedRequest(url, Request.Method.POST, null, (response) -> {
 
             User user = gson.fromJson(response, User.class);
 

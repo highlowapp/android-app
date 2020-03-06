@@ -3,9 +3,12 @@ package com.gethighlow.highlowandroid.model.Resources;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
+import com.gethighlow.highlowandroid.model.Managers.ImageManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
+import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.UserLiveData;
 import com.gethighlow.highlowandroid.model.Managers.UserManager;
 import com.gethighlow.highlowandroid.model.Responses.FeedResponse;
 import com.gethighlow.highlowandroid.model.Responses.FriendSuggestionsResponse;
@@ -20,6 +23,8 @@ import com.gethighlow.highlowandroid.model.Services.UserService;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -50,6 +55,24 @@ public class User {
 
     public String uid() { return uid; }
     public String name() { return firstname + " " + lastname; }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public String getProfileImageUrl() {
+        String url = profileimage;
+        if (url == null) return null;
+        if (!url.startsWith("http")) {
+            return "https://storage.googleapis.com/highlowfiles/" + url;
+        }
+        return url;
+    }
+
     public String email() { return email; }
     public String profileimage() { return profileimage; }
     public int streak() { return streak; }
@@ -61,6 +84,13 @@ public class User {
         return "Name: " + name();
     }
 
+    public void fetchProfileImage(Consumer<Bitmap> onSuccess, Consumer<String> onError) {
+        String url = profileimage;
+        if (!url.startsWith("http")) url = "https://storage.googleapis.com/highlowfiles/" + url;
+
+        ImageManager.shared().getImage(url, onSuccess, onError);
+    }
+
     public void setProfile(String firstname, String lastname, String email, String bio, Bitmap profileimage, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
         UserService.shared().setProfile(firstname, lastname, email, bio, profileimage, (response) -> {
 
@@ -69,8 +99,6 @@ public class User {
             this.email = email;
             this.bio = bio;
 
-            UserManager.shared().saveUser(this);
-
             onSuccess.accept(response);
 
         }, (error) -> {
@@ -78,8 +106,15 @@ public class User {
         });
     }
 
-    public void getFriends(Consumer<FriendsResponse> onSuccess, Consumer<String> onError) {
-        UserService.shared().getFriendsForUser(this.uid, onSuccess, onError);
+    public void getFriends(Consumer<List<UserLiveData>> onSuccess, Consumer<String> onError) {
+        UserService.shared().getFriendsForUser(this.uid, friendsResponse -> {
+            List<User> friends = friendsResponse.getFriends();
+            List<UserLiveData> liveData = new ArrayList<>();
+            for (User friend: friends) {
+                liveData.add( UserManager.shared().saveUser(friend) );
+            }
+            onSuccess.accept(liveData);
+        }, onError);
     }
 
     public void requestFriendship(Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
@@ -94,13 +129,14 @@ public class User {
         UserService.shared().unFriend(this.uid, onSuccess, onError);
     }
 
-    public void getPendingFriendships(Consumer<PendingFriendshipsResponse> onSuccess, Consumer<String> onError) {
+    public void getPendingFriendships(Consumer<List<UserLiveData>> onSuccess, Consumer<String> onError) {
         UserService.shared().getPendingFriendships(pendingFriendshipsResponse -> {
             List<User> requests = pendingFriendshipsResponse.getRequests();
+            List<UserLiveData> liveData = new ArrayList<>();
             for (User request: requests) {
-                UserManager.shared().saveUser(request);
+                liveData.add( UserManager.shared().saveUser(request) );
             }
-            onSuccess.accept(pendingFriendshipsResponse);
+            onSuccess.accept(liveData);
         }, onError);
     }
 
@@ -110,7 +146,7 @@ public class User {
             List<HighLow> highLows = response.getHighlows();
             List<HighLowLiveData> liveDataList = new ArrayList<>();
             for (HighLow highLow: highLows) {
-                liveDataList.add( HighLowManager.shared().saveHighLow(highLow) );
+                liveDataList.add( HighLowManager.shared().saveHighLow(highLow.getHighlowid(), highLow) );
             }
 
             onSuccess.accept(liveDataList);
@@ -118,13 +154,14 @@ public class User {
         }, onError);
     }
 
-    public void getFeed(int page, Consumer<FeedResponse> onSuccess, Consumer<String> onError) {
+    public static void getFeed(int page, Consumer<List<HighLowLiveData>> onSuccess, Consumer<String> onError) {
         UserService.shared().getFeed(page, (response) -> {
+            List<HighLowLiveData> liveData = new ArrayList<>();
             List<FeedItem> highLows = response.getFeed();
             for (FeedItem feedItem: highLows) {
-                HighLowManager.shared().saveHighLow(feedItem.getHighlow());
+                liveData.add( HighLowManager.shared().saveHighLow(feedItem.getHighlow()) );
             }
-            onSuccess.accept(response);
+            onSuccess.accept(liveData);
         }, onError);
     }
 
@@ -164,24 +201,28 @@ public class User {
         UserService.shared().getAllInterests(onSuccess, onError);
     }
 
-    public void getFriendSuggestions(Consumer<FriendSuggestionsResponse> onSuccess, Consumer<String> onError) {
+    public void getFriendSuggestions(Consumer<List<UserLiveData>> onSuccess, Consumer<String> onError) {
         UserService.shared().getFriendSuggestions(friendSuggestionsResponse -> {
             List<User> users = friendSuggestionsResponse.getUsers();
+            List<UserLiveData> friends = new ArrayList<>();
             for (User user: users) {
-                UserManager.shared().saveUser(user);
+                friends.add( UserManager.shared().saveUser(user) );
             }
-            onSuccess.accept(friendSuggestionsResponse);
+            onSuccess.accept(friends);
         }, onError);
     }
 
-    public void searchUsers(String search, Consumer<SearchResponse> onSuccess, Consumer<String> onError) {
+    public void searchUsers(String search, Consumer<List<UserLiveData>> onSuccess, Consumer<String> onError) {
         UserService.shared().searchUsers(search, searchResponse -> {
             List<SearchItem> results = searchResponse.getUsers();
+            List<UserLiveData> users = new ArrayList<>();
+            Collections.sort(results, (searchItem, t1) -> t1.getRank() - searchItem.getRank());
+
             for (SearchItem item: results) {
                 User user = item.getUser();
-                UserManager.shared().saveUser(user);
+                users.add( UserManager.shared().saveUser(user) );
             }
-            onSuccess.accept(searchResponse);
+            onSuccess.accept(users);
         }, onError);
     }
 

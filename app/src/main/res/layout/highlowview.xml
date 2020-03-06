@@ -163,7 +163,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginTop="20dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:id="@+id/privateView">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -256,6 +257,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_alignParentStart="true"
+                android:scaleType="centerCrop"
                 app:riv_corner_radius="25dp" />
 
             <LinearLayout

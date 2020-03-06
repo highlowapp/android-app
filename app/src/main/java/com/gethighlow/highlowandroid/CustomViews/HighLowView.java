@@ -74,6 +74,7 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
     private ImageView sendImg;
     private ProgressBar sendProgress;
     private RelativeLayout sendButton;
+    private LinearLayout privateView;
 
     public HighLowViewDelegate delegate;
 
@@ -115,6 +116,7 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
         editHigh = findViewById(R.id.editHigh);
         editLow = findViewById(R.id.editLow);
         editLow = findViewById(R.id.editLow);
+        privateView = findViewById(R.id.privateView);
         privateSwitch = findViewById(R.id.privateSwitch);
         dateLabel = findViewById(R.id.dateLabel);
         profileImage = findViewById(R.id.commentProfileImage);
@@ -293,6 +295,7 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
 
         String highText = highLow.getHigh();
         String lowText = highLow.getLow();
+        if (highLow.getHighlowid() != null)
 
         if (highLow.getFlagged()) {
             flagButton.setOnClickListener(unFlag);
@@ -340,7 +343,6 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
                 highImage.setImageBitmap(img);
                 highImage.setVisibility(View.VISIBLE);
             }, (error) -> {
-                Log.w("Debug", error);
             });
         }
 
@@ -349,7 +351,6 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
                 lowImage.setImageBitmap(img);
                 lowImage.setVisibility(View.VISIBLE);
             }, (error) -> {
-                Log.w("Debug", error);
             });
         }
 
@@ -359,6 +360,11 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
         addLow.setVisibility(View.GONE);
         lowNotGiven.setVisibility(View.GONE);
         editLow.setVisibility(View.GONE);
+        privateView.setVisibility(View.GONE);
+
+        if (editable) {
+            privateView.setVisibility(View.VISIBLE);
+        }
 
         if (highLow.getPrivate() != null) {
             privateSwitch.setOnCheckedChangeListener(null);
@@ -376,13 +382,16 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
             } else {
                 highNotGiven.setVisibility(View.VISIBLE);
                 addHigh.setVisibility(View.GONE);
+                editHigh.setVisibility(View.GONE);
                 privateSwitch.setVisibility(View.GONE);
             }
         } else {
             high.setVisibility(View.VISIBLE);
             highImage.setVisibility(View.VISIBLE);
-            editHigh.setVisibility(View.VISIBLE);
-            privateSwitch.setVisibility(View.VISIBLE);
+            if (editable) {
+                editHigh.setVisibility(View.VISIBLE);
+                privateSwitch.setVisibility(View.VISIBLE);
+            }
         }
 
 
@@ -396,13 +405,16 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
             } else {
                 lowNotGiven.setVisibility(View.VISIBLE);
                 addLow.setVisibility(View.GONE);
+                editLow.setVisibility(View.GONE);
                 privateSwitch.setVisibility(View.GONE);
             }
         } else {
             low.setVisibility(View.VISIBLE);
             lowImage.setVisibility(View.VISIBLE);
-            editLow.setVisibility(View.VISIBLE);
-            privateSwitch.setVisibility(View.VISIBLE);
+            if (editable) {
+                editLow.setVisibility(View.VISIBLE);
+                privateSwitch.setVisibility(View.VISIBLE);
+            }
         }
 
         if (highLow.getDate() != null) {
@@ -417,7 +429,6 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
         UserManager.shared().getUser(AuthService.shared().getUid(), userLiveData -> {
             userLiveData.observe(lifecycleOwner , currentUserObserver);
         }, error -> {
-            Log.w("Debug", error);
             alert("An error occurred", "Try refreshing the page");
         });
     }
@@ -488,8 +499,6 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.w("Debug", "Received");
-
             String date = intent.getStringExtra("date");
             String highLowId = intent.getStringExtra("highlowid");
             if (date != null && highLow.getDate() != null) {

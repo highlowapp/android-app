@@ -1,9 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gethighlow.highlowandroid">
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".Activities.AddFriendsActivity"></activity>
+        <activity android:name=".Activities.ProfileViewActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.gethighlow.highlowandroid.fileprovider"
@@ -19,23 +25,38 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"/>
+                android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name="com.gethighlow.highlowandroid.Activities.MainActivity">
+        <activity
+            android:name=".Activities.MainActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.gethighlow.highlowandroid.Activities.Authentication.SignInActivity">
-
-        </activity>
-        <activity android:name="com.gethighlow.highlowandroid.Activities.Authentication.CreateAccountActivity"/>
-        <activity android:name=".Activities.Authentication.ForgotPasswordActivity"/>
-        <activity android:name=".Activities.TabActivity"/>
-        <activity android:name=".Activities.Tabs.EditHLActivity" android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".CustomViews.EditCommentActivity" android:theme="@style/AppTheme.NoActionBar"/>
-
+        <activity
+            android:name=".Activities.Authentication.SignInActivity"
+            android:noHistory="true" />
+        <activity
+            android:name=".Activities.Authentication.CreateAccountActivity"
+            android:noHistory="true" />
+        <activity
+            android:name=".Activities.Authentication.ForgotPasswordActivity"
+            android:noHistory="true" />
+        <activity android:name=".Activities.TabActivity" />
+        <activity
+            android:name=".Activities.Tabs.EditHLActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CustomViews.EditCommentActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activities.EditProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.FriendsActivity" />
     </application>
+
 </manifest>
