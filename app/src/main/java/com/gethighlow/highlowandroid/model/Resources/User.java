@@ -2,29 +2,19 @@ package com.gethighlow.highlowandroid.model.Resources;
 
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
 import com.gethighlow.highlowandroid.model.Managers.ImageManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.UserLiveData;
 import com.gethighlow.highlowandroid.model.Managers.UserManager;
-import com.gethighlow.highlowandroid.model.Responses.FeedResponse;
-import com.gethighlow.highlowandroid.model.Responses.FriendSuggestionsResponse;
-import com.gethighlow.highlowandroid.model.Responses.FriendsResponse;
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Responses.InterestResponse;
-import com.gethighlow.highlowandroid.model.Responses.PendingFriendshipsResponse;
-import com.gethighlow.highlowandroid.model.Responses.SearchResponse;
-import com.gethighlow.highlowandroid.model.Responses.UserHighLowsResponse;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
 import com.gethighlow.highlowandroid.model.Services.UserService;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -79,6 +69,13 @@ public class User {
     public String bio() { return bio; }
     public List<String> interests() { return interests; }
     public String error() { return error; }
+
+    public void setInterests(List<Interest> interests) {
+        this.interests.clear();
+        for (Interest interest: interests) {
+            this.interests.add(interest.getName());
+        }
+    }
 
     public String toString() {
         return "Name: " + name();
@@ -181,23 +178,23 @@ public class User {
         }, onError);
     }
 
-    public void getInterests(Consumer<InterestResponse> onSuccess, Consumer<String> onError) {
+    public static void getInterests(Consumer<InterestResponse> onSuccess, Consumer<String> onError) {
         UserService.shared().getInterests(onSuccess, onError);
     }
 
-    public void createInterest(String name, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
+    public static void createInterest(String name, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
         UserService.shared().createInterest(name, onSuccess, onError);
     }
 
-    public void addInterest(String interestId, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
+    public static void addInterest(String interestId, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
         UserService.shared().addInterest(interestId, onSuccess, onError);
     }
 
-    public void removeInterest(String interestId, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
+    public static void removeInterest(String interestId, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
         UserService.shared().removeInterest(interestId, onSuccess, onError);
     }
 
-    public void getAllInterests(Consumer<InterestResponse> onSuccess, Consumer<String> onError) {
+    public static void getAllInterests(Consumer<InterestResponse> onSuccess, Consumer<String> onError) {
         UserService.shared().getAllInterests(onSuccess, onError);
     }
 

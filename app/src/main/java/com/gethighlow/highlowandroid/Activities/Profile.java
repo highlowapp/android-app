@@ -6,7 +6,13 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
@@ -15,26 +21,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.gethighlow.highlowandroid.CustomViews.EndlessRecyclerViewScrollListener;
 import com.gethighlow.highlowandroid.CustomViews.ProfileAdapter;
 import com.gethighlow.highlowandroid.R;
 import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
-import com.gethighlow.highlowandroid.model.Managers.ImageManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.UserLiveData;
 import com.gethighlow.highlowandroid.model.Managers.UserManager;
 import com.gethighlow.highlowandroid.model.Resources.User;
 import com.gethighlow.highlowandroid.model.Services.AuthService;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,11 +50,28 @@ public class Profile extends Fragment implements SwipeRefreshLayout.OnRefreshLis
     private EndlessRecyclerViewScrollListener scrollListener;
     private TextView notice;
     private SwipeRefreshLayout refreshLayout;
+    private LinearLayoutManager layoutManager;
 
     String uid = AuthService.shared().getUid();
 
     public Profile() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        ArrayList<String> highlowids = new ArrayList<>();
+        for (HighLowLiveData highLowLiveData: highLows) {
+            highlowids.add(highLowLiveData.getHighlowid());
+        }
+        outState.putStringArrayList("highlowids", highlowids);
+
+        super.onSaveInstanceState(outState);
     }
 
     private void alert(String title, String message) {
@@ -91,7 +103,8 @@ public class Profile extends Fragment implements SwipeRefreshLayout.OnRefreshLis
     public void getProfile() {
         scrollListener.resetState();
         highLows.clear();
-        UserManager.shared().getUser(uid, userLiveData -> {
+        UserManager.shared().getUser(null, userLiveData -> {
+            if (userLiveData == null) Log.w("Debug", "WASNULL");
             user = userLiveData;
             user.observe(this, userObserver);
             adapter.setUser(userLiveData);
@@ -138,12 +151,16 @@ public class Profile extends Fragment implements SwipeRefreshLayout.OnRefreshLis
         refreshLayout.setColorSchemeColors(Color.RED);
         notice = view.findViewById(R.id.notice);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager = new LinearLayoutManager(getContext());
 
         scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                getHighlows(page);
+                if (user == null) {
+                    getProfile();
+                } else {
+                    getHighlows(page);
+                }
             }
         };
 
@@ -159,6 +176,19 @@ public class Profile extends Fragment implements SwipeRefreshLayout.OnRefreshLis
 
         refreshLayout.setOnRefreshListener(this);
 
+        if (savedInstanceState != null && savedInstanceState.containsKey("highlowids")) {
+            List<HighLowLiveData> highLowLiveData = HighLowManager.shared().restoreHighLows(savedInstanceState.getStringArrayList("highlowids"));
+
+            Log.w("Debug", "SCROLLPOS: " + savedInstanceState.getInt("scrollPos"));
+
+
+            if (highLowLiveData != null) {
+                highLows.clear();
+                highLows.addAll(highLowLiveData);
+                return view;
+            }
+
+        }
         getProfile();
 
         return view;

@@ -1,7 +1,6 @@
 package com.gethighlow.highlowandroid.CustomViews;
 
 import android.content.Intent;
-import android.media.Image;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;

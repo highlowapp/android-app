@@ -4,8 +4,10 @@
     package="com.gethighlow.highlowandroid">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -15,7 +17,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".Activities.AddFriendsActivity"></activity>
+        <activity android:name=".Activities.TutorialActivity" android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".Activities.EditInterestsActivity" />
+        <activity android:name=".Activities.PushNotifSettings" />
+        <activity android:name=".Activities.ReportABug" />
+        <activity android:name=".Activities.AddFriendsActivity" />
         <activity android:name=".Activities.ProfileViewActivity" />
 
         <provider
@@ -28,9 +34,12 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <receiver android:name=".Activities.AlarmNotificationReceiver" />
+
         <activity
             android:name=".Activities.MainActivity"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -57,6 +66,21 @@
             android:name=".Activities.EditProfileActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.FriendsActivity" />
+
+        <service
+            android:name=".model.MessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher" /> <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming notification message. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
     </application>
 
 </manifest>

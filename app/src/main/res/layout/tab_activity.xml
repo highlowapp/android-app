@@ -3,14 +3,11 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <fragment
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        app:defaultNavHost="true"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/navigation"
-        android:id="@+id/fragments"
-        app:navGraph="@navigation/tab_nav_graph"/>
+        android:id="@+id/fragments" />
     <com.google.android.material.bottomnavigation.BottomNavigationView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,5 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
+        android:background="@color/very_light_gray"
         app:menu="@menu/tab_bar"/>
 </RelativeLayout>

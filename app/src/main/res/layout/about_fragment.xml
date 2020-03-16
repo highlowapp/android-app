@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.About"
+    android:background="@color/very_light_gray">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Account"
+            android:textColor="@color/black"
+            android:background="@color/very_light_gray"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:textSize="17sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Log Out"
+            android:textColor="@color/colorPrimary"
+            android:padding="10dp"
+            android:id="@+id/logOut"
+            android:clickable="true"
+            android:textSize="17sp"
+            android:background="@color/white"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Feedback"
+            android:textColor="@color/black"
+            android:background="@color/very_light_gray"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:textSize="17sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Report a bug"
+            android:textColor="@color/colorPrimary"
+            android:padding="10dp"
+            android:id="@+id/reportBug"
+            android:textSize="17sp"
+            android:background="@color/white"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:textColor="@color/black"
+            android:background="@color/very_light_gray"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:textSize="17sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Push Notification Settings"
+            android:textColor="@color/colorPrimary"
+            android:padding="10dp"
+            android:id="@+id/pushNotifSettings"
+            android:textSize="17sp"
+            android:background="@color/white"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Support"
+            android:textColor="@color/black"
+            android:background="@color/very_light_gray"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:textSize="17sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Our Website"
+            android:textColor="@color/colorPrimary"
+            android:padding="10dp"
+            android:id="@+id/ourWebsite"
+            android:textSize="17sp"
+            android:background="@color/white"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_grey"
+            android:layout_marginHorizontal="10dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Contact Us"
+            android:textColor="@color/colorPrimary"
+            android:padding="10dp"
+            android:id="@+id/contactUs"
+            android:textSize="17sp"
+            android:background="@color/white"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Agreements"
+            android:textColor="@color/black"
+            android:background="@color/very_light_gray"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:textSize="17sp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Privacy Policy"
+            android:textColor="@color/colorPrimary"
+            android:padding="10dp"
+            android:id="@+id/privacyPolicy"
+            android:textSize="17sp"
+            android:background="@color/white"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_grey"
+            android:layout_marginHorizontal="10dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Terms of Service"
+            android:textColor="@color/colorPrimary"
+            android:padding="10dp"
+            android:id="@+id/termsOfService"
+            android:textSize="17sp"
+            android:background="@color/white"/>
+
+    </LinearLayout>
+
+</ScrollView>

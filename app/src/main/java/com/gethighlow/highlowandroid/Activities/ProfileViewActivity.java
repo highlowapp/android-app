@@ -1,11 +1,11 @@
 package com.gethighlow.highlowandroid.Activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.gethighlow.highlowandroid.R;
 

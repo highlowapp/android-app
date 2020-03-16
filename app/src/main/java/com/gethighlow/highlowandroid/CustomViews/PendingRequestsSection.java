@@ -1,7 +1,5 @@
 package com.gethighlow.highlowandroid.CustomViews;
 
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.lifecycle.LifecycleOwner;
@@ -13,9 +11,7 @@ import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.UserLiveData;
 import java.util.List;
 
 import io.github.luizgrp.sectionedrecyclerviewadapter.Section;
-import io.github.luizgrp.sectionedrecyclerviewadapter.SectionAdapter;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
-import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import io.github.luizgrp.sectionedrecyclerviewadapter.utils.EmptyViewHolder;
 
 public class PendingRequestsSection extends Section implements PendingRequestViewHolderDelegate {

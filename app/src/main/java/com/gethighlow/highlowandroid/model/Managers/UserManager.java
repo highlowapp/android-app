@@ -2,10 +2,7 @@ package com.gethighlow.highlowandroid.model.Managers;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.util.Log;
-import android.util.LruCache;
 
-import com.gethighlow.highlowandroid.model.Managers.Caches.UserCache;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.UserLiveData;
 import com.gethighlow.highlowandroid.model.Resources.User;
 import com.gethighlow.highlowandroid.model.Services.UserService;

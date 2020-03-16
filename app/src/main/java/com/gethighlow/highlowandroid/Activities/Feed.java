@@ -3,6 +3,10 @@ package com.gethighlow.highlowandroid.Activities;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -10,20 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
 import com.gethighlow.highlowandroid.CustomViews.EndlessRecyclerViewScrollListener;
 import com.gethighlow.highlowandroid.CustomViews.FeedAdapter;
 import com.gethighlow.highlowandroid.R;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
-import com.gethighlow.highlowandroid.model.Managers.UserManager;
 import com.gethighlow.highlowandroid.model.Resources.User;
-import com.gethighlow.highlowandroid.model.Services.AuthService;
 
 import java.util.ArrayList;
 import java.util.List;

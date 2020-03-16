@@ -1,5 +1,7 @@
 package com.gethighlow.highlowandroid.model;
 
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -70,7 +72,7 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
     @Override
     public String getBodyContentType() {
-        return "multipart/form-data;boundary=" + boundary;
+        return "multipart/form-data;charset=UTF-8;boundary=" + boundary;
     }
 
     @Override
@@ -105,9 +107,8 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
      * Custom method handle data payload.
      *
      * @return Map data part label with data byte
-     * @throws AuthFailureError
      */
-    protected Map<String, DataPart> getByteData() throws AuthFailureError {
+    protected Map<String, DataPart> getByteData() {
         return null;
     }
 
@@ -176,7 +177,8 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
         dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"" + parameterName + "\"" + lineEnd);
         //dataOutputStream.writeBytes("Content-Type: text/plain; charset=UTF-8" + lineEnd);
         dataOutputStream.writeBytes(lineEnd);
-        dataOutputStream.writeBytes(parameterValue + lineEnd);
+        dataOutputStream.write(parameterValue.getBytes("utf-8"));
+        dataOutputStream.writeBytes(lineEnd);
     }
 
     /**

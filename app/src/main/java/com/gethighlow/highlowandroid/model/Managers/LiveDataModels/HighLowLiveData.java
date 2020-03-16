@@ -1,8 +1,6 @@
 package com.gethighlow.highlowandroid.model.Managers.LiveDataModels;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 

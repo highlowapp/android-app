@@ -1,20 +1,18 @@
 package com.gethighlow.highlowandroid.Activities;
 
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SortedList;
-
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gethighlow.highlowandroid.CustomViews.AddFriendsAdapter;
 import com.gethighlow.highlowandroid.CustomViews.UserRowViewHolderDelegate;
@@ -22,8 +20,6 @@ import com.gethighlow.highlowandroid.R;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.UserLiveData;
 import com.gethighlow.highlowandroid.model.Managers.UserManager;
 import com.gethighlow.highlowandroid.model.Services.AuthService;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -62,7 +62,7 @@ public class APIService implements APIConfig {
         sharedPrefEditor.putString("uid", uid);
         sharedPrefEditor.apply();
 
-        mainActivity.switchToMain();
+        mainActivity.isAuthenticated();
     }
 
     public void setAccessToken(String token) {
@@ -90,6 +90,10 @@ public class APIService implements APIConfig {
         refreshToken = sharedPref.getString("refresh", null);
 
         initiateRequestQueue();
+    }
+
+    public void switchToAuth() {
+        mainActivity.switchToAuth();
     }
 
     private static String urlFromMap(String url, Map<String, String> params) {
@@ -127,17 +131,7 @@ public class APIService implements APIConfig {
         }
 
 
-        StringRequest request = new StringRequest(method, completeUrl, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                onSuccess.accept(response);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onError.accept(error);
-            }
-        }) {
+        StringRequest request = new StringRequest(method, completeUrl, onSuccess::accept, onError::accept) {
             @Override
             public Map<String, String> getParams() {
                 if (method == 0) return null;
@@ -187,37 +181,32 @@ public class APIService implements APIConfig {
         } else {
             completeUrl = base_url + url;
         }
+        Log.w("Debug", completeUrl);
+        StringRequest request = new StringRequest(method, completeUrl, response -> {
+            Gson gson = new Gson();
+            GenericResponse genericResponse = gson.fromJson(response, GenericResponse.class);
 
-        StringRequest request = new StringRequest(method, completeUrl, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                Gson gson = new Gson();
-                GenericResponse genericResponse = gson.fromJson(response, GenericResponse.class);
+            if (genericResponse.getError() != null) {
 
-                if (genericResponse.getError() != null) {
-
-                    if (genericResponse.getError().equals("ERROR-INVALID-TOKEN")) {
-                        refresh_access((shouldContinue) -> {
-                            if (shouldContinue) {
-                                authenticatedRequest(url, method, params, onSuccess, onError);
-                            } else {
-                                mainActivity.switchToAuth();
-                            }
-                        });
-                    } else {
-                        onError.accept(genericResponse.getError());
-                    }
-
-                }
-
-                else {
-                    onSuccess.accept(response);
+                if (genericResponse.getError().equals("ERROR-INVALID-TOKEN")) {
+                    refresh_access((shouldContinue) -> {
+                        if (shouldContinue) {
+                            authenticatedRequest(url, method, params, onSuccess, onError);
+                        } else {
+                            mainActivity.switchToAuth();
+                        }
+                    });
+                } else {
+                    onError.accept(genericResponse.getError());
                 }
 
             }
-        }, error -> {
-            onError.accept("network-error");
-        }) {
+
+            else {
+                onSuccess.accept(response);
+            }
+
+        }, error -> onError.accept("network-error")) {
             @Override
             public Map<String, String> getParams() {
                 return params;
@@ -236,36 +225,29 @@ public class APIService implements APIConfig {
     public void makeMultipartRequest(String url, int method, Map<String, String> params, Bitmap image, Consumer<String> onSuccess, Consumer<String> onError) {
         if (requestQueue == null) return;
 
-        VolleyMultipartRequest request = new VolleyMultipartRequest(method, base_url + url, new Response.Listener<NetworkResponse>() {
-            @Override
-            public void onResponse(NetworkResponse response) {
-                String json = new String(response.data);
-                Gson gson = new Gson();
-                GenericResponse genericResponse = gson.fromJson(json, GenericResponse.class);
+        Log.w("Debug", base_url + url);
+        VolleyMultipartRequest request = new VolleyMultipartRequest(method, base_url + url, response -> {
+            String json = new String(response.data);
+            Gson gson = new Gson();
+            GenericResponse genericResponse = gson.fromJson(json, GenericResponse.class);
 
-                String error = genericResponse.getError();
-                if (error != null) {
-                    if (error.equals("ERROR-INVALID-TOKEN")) {
-                        refresh_access((shouldContinue) -> {
-                            if (shouldContinue) {
-                                makeMultipartRequest(url, method, params, image, onSuccess, onError);
-                            } else {
-                                mainActivity.switchToAuth();
-                            }
-                        });
-                    } else {
-                        onError.accept(error);
-                    }
+            String error = genericResponse.getError();
+            if (error != null) {
+                if (error.equals("ERROR-INVALID-TOKEN")) {
+                    refresh_access((shouldContinue) -> {
+                        if (shouldContinue) {
+                            makeMultipartRequest(url, method, params, image, onSuccess, onError);
+                        } else {
+                            mainActivity.switchToAuth();
+                        }
+                    });
                 } else {
-                    onSuccess.accept(json);
+                    onError.accept(error);
                 }
+            } else {
+                onSuccess.accept(json);
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                onError.accept("network-error");
-            }
-        }) {
+        }, error -> onError.accept("network-error")) {
             @Override
             protected Map<String, String> getParams() {
                 return params;

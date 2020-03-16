@@ -9,7 +9,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 
 import com.gethighlow.highlowandroid.Activities.Authentication.SignInActivity;
-import com.gethighlow.highlowandroid.Activities.TabActivity;
 import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
 import com.gethighlow.highlowandroid.model.Managers.ImageManager;
 import com.gethighlow.highlowandroid.model.Managers.UserManager;
@@ -31,11 +30,14 @@ public class MainActivity extends Activity {
         SharedPreferences sharedPreferences = this.getSharedPreferences("com.gethighlow.SharedPref", Context.MODE_PRIVATE);
         String accessToken = sharedPreferences.getString("access", "none");
 
-        if (accessToken.equals("none")) {
-            switchToAuth();
+        if (accessToken.equals("none") || accessToken.equals("")) {
+            isNotAuthenticated();
+            //switchToAuth();
         } else {
             switchToMain();
         }
+
+        finish();
     }
 
     public void switchToAuth() {
@@ -43,8 +45,29 @@ public class MainActivity extends Activity {
         this.startActivity(openAuth);
     }
 
+    public void showTutorial() {
+        Intent openTutorial = new Intent(this, TutorialActivity.class);
+        startActivity(openTutorial);
+    }
+
+    public void isNotAuthenticated() {
+        SharedPreferences sharedPreferences = getSharedPreferences("com.gethighlow.SharedPref", Context.MODE_PRIVATE);
+        Boolean hasReceivedTutorial = sharedPreferences.getBoolean("hasReceivedTutorial", false);
+
+        if (hasReceivedTutorial) {
+            switchToAuth();
+        }
+        else {
+            showTutorial();
+        }
+    }
+
     public void switchToMain() {
         Intent openMain = new Intent(this, TabActivity.class);
         this.startActivity(openMain);
+    }
+
+    public void isAuthenticated() {
+        switchToMain();
     }
 }

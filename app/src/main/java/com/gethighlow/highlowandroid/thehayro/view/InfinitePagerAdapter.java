@@ -15,17 +15,16 @@
  */
 package com.gethighlow.highlowandroid.thehayro.view;
 
-import static com.thehayro.internal.Constants.PAGE_COUNT;
-
-import com.thehayro.internal.Constants;
-import com.thehayro.internal.PageModel;
-
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.PagerAdapter;
+
+import com.thehayro.internal.Constants;
+import com.thehayro.internal.PageModel;
+
+import static com.thehayro.internal.Constants.PAGE_COUNT;
 
 
 public abstract class InfinitePagerAdapter<T> extends PagerAdapter {

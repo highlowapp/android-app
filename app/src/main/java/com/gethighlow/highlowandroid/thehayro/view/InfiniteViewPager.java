@@ -16,24 +16,23 @@
 
 package com.gethighlow.highlowandroid.thehayro.view;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.AttributeSet;
+import android.util.Log;
+
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.thehayro.internal.Constants;
+
 import static com.thehayro.internal.Constants.ADAPTER_STATE;
 import static com.thehayro.internal.Constants.LOG_TAG;
 import static com.thehayro.internal.Constants.PAGE_POSITION_CENTER;
 import static com.thehayro.internal.Constants.PAGE_POSITION_LEFT;
 import static com.thehayro.internal.Constants.PAGE_POSITION_RIGHT;
 import static com.thehayro.internal.Constants.SUPER_STATE;
-
-import com.thehayro.internal.Constants;
-
-import android.content.Context;
-import android.os.Bundle;
-import android.os.Parcelable;
-
-import android.util.AttributeSet;
-import android.util.Log;
-
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 /**
  * ViewPager that allows infinite scrolling.

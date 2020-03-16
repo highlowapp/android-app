@@ -1,7 +1,6 @@
 package com.gethighlow.highlowandroid.CustomViews;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,8 +14,14 @@ import com.gethighlow.highlowandroid.Activities.EditProfileActivity;
 import com.gethighlow.highlowandroid.Activities.FriendsActivity;
 import com.gethighlow.highlowandroid.R;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.UserLiveData;
+import com.gethighlow.highlowandroid.model.Resources.Interest;
 import com.gethighlow.highlowandroid.model.Resources.User;
 import com.gethighlow.highlowandroid.model.Services.AuthService;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import co.lujun.androidtagview.TagContainerLayout;
 
 public class ProfileHeaderViewHolder extends RecyclerView.ViewHolder {
     private ImageView profileImage;
@@ -25,6 +30,7 @@ public class ProfileHeaderViewHolder extends RecyclerView.ViewHolder {
     private TextView bio;
     private Button manageFriends;
     private Button editProfile;
+    private TagContainerLayout tagContainerLayout;
 
     private User currentUser;
 
@@ -39,6 +45,7 @@ public class ProfileHeaderViewHolder extends RecyclerView.ViewHolder {
         bio = view.findViewById(R.id.bio_text);
         manageFriends = view.findViewById(R.id.manageFriends);
         editProfile = view.findViewById(R.id.editProfile);
+        tagContainerLayout = view.findViewById(R.id.interests);
 
         editProfile.setOnClickListener(editProfileClickListener);
         manageFriends.setOnClickListener(manageFriendsClickListener);
@@ -50,6 +57,7 @@ public class ProfileHeaderViewHolder extends RecyclerView.ViewHolder {
         starter.putExtra("lastName", currentUser.getLastname());
         starter.putExtra("bio", currentUser.bio());
         starter.putExtra("profileImage", currentUser.getProfileImageUrl());
+        starter.putStringArrayListExtra("interests", new ArrayList<>(currentUser.interests()));
         view.getContext().startActivity(starter);
     };
 
@@ -83,5 +91,7 @@ public class ProfileHeaderViewHolder extends RecyclerView.ViewHolder {
         if (!user.uid().equals(AuthService.shared().getUid())) {
             editProfile.setVisibility(View.GONE);
         }
+
+        tagContainerLayout.setTags(user.interests());
     };
 }

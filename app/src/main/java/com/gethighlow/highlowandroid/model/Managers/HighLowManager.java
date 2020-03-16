@@ -2,7 +2,6 @@ package com.gethighlow.highlowandroid.model.Managers;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.util.Log;
 
 import com.gethighlow.highlowandroid.model.Managers.Caches.HighLowCache;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
@@ -12,7 +11,9 @@ import com.gethighlow.highlowandroid.model.Services.HighLowService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -35,6 +36,16 @@ public class HighLowManager {
         int maxKb = am.getMemoryClass() * 1024;
         int limitKb = maxKb / 16;
 
+    }
+
+    public List<HighLowLiveData> restoreHighLows(List<String> highlowids) {
+        List<HighLowLiveData> result = new ArrayList<>();
+        for (String highlowid: highlowids) {
+            HighLowLiveData highLowLiveData = cachedHighLows.getOrDefault(highlowid, null);
+            if (highLowLiveData == null) return null;
+            result.add(highLowLiveData);
+        }
+        return result;
     }
 
     public void getHighLow(String highlowid, Consumer<HighLowLiveData> onSuccess, Consumer<String> onError) {

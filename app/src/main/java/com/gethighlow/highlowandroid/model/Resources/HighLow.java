@@ -1,11 +1,8 @@
 package com.gethighlow.highlowandroid.model.Resources;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
-import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
 import com.google.gson.annotations.SerializedName;
 
@@ -176,7 +173,7 @@ public class HighLow {
     }
 
     public void setHigh(String high, String date, Boolean isPrivate, Bitmap image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLowService.shared().setHigh(high, date, isPrivate, image, (highLow) -> {
+        HighLowService.shared().setHigh(high, date, highlowid, isPrivate, image, (highLow) -> {
             updateWithHighLow(highLow);
             HighLowManager.shared().saveHighLow(this);
             onSuccess.accept(highLow);
@@ -184,7 +181,7 @@ public class HighLow {
     }
 
     public void setLow(String low, String date, Boolean isPrivate, Bitmap image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLowService.shared().setLow(low, date, isPrivate, image, (highLow) -> {
+        HighLowService.shared().setLow(low, date, highlowid, isPrivate, image, (highLow) -> {
             updateWithHighLow(highLow);
             HighLowManager.shared().saveHighLow(this);
             onSuccess.accept(highLow);

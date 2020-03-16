@@ -1,11 +1,5 @@
 package com.gethighlow.highlowandroid.Activities;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-
 import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
@@ -21,17 +15,30 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+import androidx.lifecycle.Observer;
+
 import com.gethighlow.highlowandroid.R;
 import com.gethighlow.highlowandroid.model.Managers.ImageManager;
 import com.gethighlow.highlowandroid.model.Managers.UserManager;
+import com.gethighlow.highlowandroid.model.Resources.Interest;
+import com.gethighlow.highlowandroid.model.Resources.User;
 import com.gethighlow.highlowandroid.model.Services.AuthService;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+
+import co.lujun.androidtagview.TagContainerLayout;
 
 public class EditProfileActivity extends AppCompatActivity {
     private EditText firstName;
@@ -39,6 +46,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private ImageView profileImage;
     private EditText bio;
     private RelativeLayout loader;
+    private TagContainerLayout interestsView;
+    private Button editInterests;
 
     private int GALLERY_REQUEST_CODE = 80;
     private int CAMERA_REQUEST_CODE = 82;
@@ -59,15 +68,26 @@ public class EditProfileActivity extends AppCompatActivity {
         profileImage = findViewById(R.id.profile_image);
         bio = findViewById(R.id.bio);
         loader = findViewById(R.id.loader);
+        interestsView = findViewById(R.id.interests);
+        editInterests = findViewById(R.id.editInterests);
+
+        editInterests.setOnClickListener(editInterestsListener);
 
         String currentFirstName = getIntent().getStringExtra("firstName");
         String currentLastName = getIntent().getStringExtra("lastName");
         String currentProfileImage = getIntent().getStringExtra("profileImage");
         String currentBio = getIntent().getStringExtra("bio");
+        List<String> interests = getIntent().getStringArrayListExtra("interests");
 
         firstName.setText(currentFirstName);
         lastName.setText(currentLastName);
         bio.setText(currentBio);
+
+        UserManager.shared().getUser(null, userLiveData -> {
+            userLiveData.observe(this, userObserver);
+        }, error -> {
+            alert("An error occurred", "Please try again");
+        });
 
         loader.setVisibility(View.GONE);
 
@@ -77,6 +97,19 @@ public class EditProfileActivity extends AppCompatActivity {
 
         });
     }
+
+    private Observer<User> userObserver = user -> {
+        Log.w("Debug", "UPDATE");
+        interestsView.removeAllTags();
+        for (String interest: user.interests()) {
+            interestsView.addTag(interest);
+        }
+    };
+
+    View.OnClickListener editInterestsListener = view -> {
+        Intent starter = new Intent(getApplicationContext(), EditInterestsActivity.class);
+        startActivity(starter);
+    };
 
     private void alert(String title, String message) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
@@ -91,17 +124,13 @@ public class EditProfileActivity extends AppCompatActivity {
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setCancelable(true);
-        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                onComplete.run();
-            }
-        });
+        alertDialog.setPositiveButton("OK", (dialogInterface, i) -> onComplete.run());
         alertDialog.show();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GALLERY_REQUEST_CODE) {
 

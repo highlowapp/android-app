@@ -1,19 +1,13 @@
 package com.gethighlow.highlowandroid.model.Services;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 
-import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
-import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.CommentLiveData;
-import com.gethighlow.highlowandroid.model.Resources.Comment;
-import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Resources.HighLow;
+import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Responses.UserHighLowsResponse;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -24,12 +18,15 @@ public class HighLowService {
 
     private Gson gson = new Gson();
 
-    public void setHigh(String high, String date, Boolean isPrivate, Bitmap image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
+    public void setHigh(String high, String date, String highlowid, Boolean isPrivate, Bitmap image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
         Map<String, String> params = new HashMap<>();
         params.put("high", high);
         params.put("private", (isPrivate) ? "true": "false");
         if (date != null) {
             params.put("date", date);
+        }
+        if (highlowid != null) {
+            params.put("highlowid", highlowid);
         }
 
         APIService.shared().makeMultipartRequest("/highlow/set/high", 1, params, image, (response) -> {
@@ -47,12 +44,15 @@ public class HighLowService {
         });
     }
 
-    public void setLow(String low, String date, Boolean isPrivate, Bitmap image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
+    public void setLow(String low, String date, String highlowid, Boolean isPrivate, Bitmap image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
         Map<String, String> params = new HashMap<>();
         params.put("low", low);
         params.put("private", (isPrivate) ? "true": "false");
         if (date != null) {
             params.put("date", date);
+        }
+        if (highlowid != null) {
+            params.put("highlowid", highlowid);
         }
 
         APIService.shared().makeMultipartRequest("/highlow/set/low", 1, params, image, (response) -> {

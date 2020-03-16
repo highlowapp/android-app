@@ -1,10 +1,9 @@
 package com.gethighlow.highlowandroid.model.Services;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import com.android.volley.Request;
+import com.gethighlow.highlowandroid.model.Resources.User;
 import com.gethighlow.highlowandroid.model.Responses.FeedResponse;
 import com.gethighlow.highlowandroid.model.Responses.FriendSuggestionsResponse;
 import com.gethighlow.highlowandroid.model.Responses.FriendsResponse;
@@ -12,7 +11,6 @@ import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Responses.InterestResponse;
 import com.gethighlow.highlowandroid.model.Responses.PendingFriendshipsResponse;
 import com.gethighlow.highlowandroid.model.Responses.SearchResponse;
-import com.gethighlow.highlowandroid.model.Resources.User;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -236,9 +234,9 @@ public class UserService {
 
     public void addInterest(String interestId, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
         Map<String, String> params = new HashMap<>();
-        params.put("interests", "[" + interestId + "]");
+        params.put("interest", interestId);
 
-        APIService.shared().authenticatedRequest("/user/interests/add", 1, params, (response) -> {
+        APIService.shared().authenticatedRequest("/user/interest/add", 1, params, (response) -> {
             GenericResponse genericResponse = gson.fromJson(response, GenericResponse.class);
 
             String error = genericResponse.getError();
@@ -254,9 +252,9 @@ public class UserService {
 
     public void removeInterest(String interestId, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
         Map<String, String> params = new HashMap<>();
-        params.put("interests", "[" + interestId + "]");
+        params.put("interest", interestId);
 
-        APIService.shared().authenticatedRequest("/user/interests/remove", 1, params, (response) -> {
+        APIService.shared().authenticatedRequest("/user/interest/remove", 1, params, (response) -> {
             GenericResponse genericResponse = gson.fromJson(response, GenericResponse.class);
 
             String error = genericResponse.getError();

@@ -1,24 +1,14 @@
 package com.gethighlow.highlowandroid.model.Managers.LiveDataModels;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
-import com.gethighlow.highlowandroid.model.Managers.UserManager;
-import com.gethighlow.highlowandroid.model.Resources.FeedItem;
 import com.gethighlow.highlowandroid.model.Resources.HighLow;
-import com.gethighlow.highlowandroid.model.Resources.SearchItem;
+import com.gethighlow.highlowandroid.model.Resources.Interest;
 import com.gethighlow.highlowandroid.model.Resources.User;
-import com.gethighlow.highlowandroid.model.Responses.FeedResponse;
-import com.gethighlow.highlowandroid.model.Responses.FriendSuggestionsResponse;
-import com.gethighlow.highlowandroid.model.Responses.FriendsResponse;
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Responses.InterestResponse;
-import com.gethighlow.highlowandroid.model.Responses.PendingFriendshipsResponse;
-import com.gethighlow.highlowandroid.model.Responses.SearchResponse;
-import com.gethighlow.highlowandroid.model.Responses.UserHighLowsResponse;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -30,6 +20,13 @@ public class UserLiveData extends MutableLiveData<User> {
     }
 
     public User getUser() { return this.getValue(); }
+
+    public void setInterests(List<Interest> interests) {
+        User user = getValue();
+        if (user == null) { return; }
+        user.setInterests(interests);
+        this.setValue(user);
+    }
 
     public void setProfile(String firstname, String lastname, String email, String bio, Bitmap profileimage, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
         User user = getValue();

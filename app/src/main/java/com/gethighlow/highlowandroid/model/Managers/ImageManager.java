@@ -3,7 +3,6 @@ package com.gethighlow.highlowandroid.model.Managers;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.gethighlow.highlowandroid.model.Managers.Caches.ImageCache;
 
@@ -27,6 +26,11 @@ public class ImageManager {
     }
 
     public void getImage(String url, Consumer<Bitmap> onSuccess, Consumer<String> onError) {
+        if (cache == null) {
+            onError.accept("cache-no-exist");
+            return;
+        }
+
         Bitmap img = cache.get(url);
         if (img == null) {
             DownloadImageTask task = new DownloadImageTask((image) -> {

@@ -1,10 +1,18 @@
 package com.gethighlow.highlowandroid.model.Services;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+
+import androidx.annotation.NonNull;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.gethighlow.highlowandroid.model.Responses.AuthResponse;
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
@@ -29,6 +37,27 @@ public class AuthService {
         this.context = context;
         SharedPreferences sharedPreferences = context.getSharedPreferences("com.gethighlow.SharedPref", Context.MODE_PRIVATE);
         uid = sharedPreferences.getString("uid", null);
+    }
+
+    public void logOut() {
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                String id = task.getResult().getId();
+                NotificationsService.shared().deRegister(id, genericResponse -> {
+
+                }, error -> {
+
+                });
+            }
+        });
+        SharedPreferences sharedPreferences = context.getSharedPreferences("com.gethighlow.SharedPref", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("access");
+        editor.remove("refresh");
+        editor.apply();
+        Intent newIntent = new Intent("com.gethighlow.com_logout");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(newIntent);
+        APIService.shared().switchToAuth();
     }
 
     public void signIn(String email, String password, Consumer<AuthResponse> onSuccess, Consumer<String> onError) {

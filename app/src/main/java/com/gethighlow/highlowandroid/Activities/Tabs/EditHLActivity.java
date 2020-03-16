@@ -2,7 +2,6 @@ package com.gethighlow.highlowandroid.Activities.Tabs;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,7 +9,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.VectorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,8 +34,12 @@ import com.gethighlow.highlowandroid.model.Managers.ImageManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
 import com.gethighlow.highlowandroid.model.Resources.HighLow;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -220,6 +222,7 @@ public class EditHLActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GALLERY_REQUEST_CODE) {
 
@@ -276,7 +279,7 @@ public class EditHLActivity extends AppCompatActivity {
 
     public void submit() {
         String text = textInput.getText().toString();
-
+        Log.w("Debug", text);
         Bitmap img = null;
 
         if (!(imageView.getDrawable() instanceof VectorDrawable)) {
@@ -303,6 +306,7 @@ public class EditHLActivity extends AppCompatActivity {
 
         if (type.equals("high")) {
             highLow.setHigh(text, date, isPrivate, img, highLow -> {
+                Log.w("Debug", highLow.toString());
                 HighLowManager.shared().saveHighLow(highLow);
                 Intent newIntent = new Intent("highlow-updated");
                 newIntent.putExtra("date", date);

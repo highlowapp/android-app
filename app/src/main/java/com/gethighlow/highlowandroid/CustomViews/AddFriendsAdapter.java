@@ -6,12 +6,9 @@ import android.view.ViewGroup;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SortedList;
 
 import com.gethighlow.highlowandroid.R;
-import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.UserLiveData;
-import com.gethighlow.highlowandroid.model.Resources.SearchItem;
 
 import org.jetbrains.annotations.NotNull;
 

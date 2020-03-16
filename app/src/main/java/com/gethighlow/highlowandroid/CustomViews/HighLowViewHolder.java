@@ -1,13 +1,11 @@
 package com.gethighlow.highlowandroid.CustomViews;
 
-import android.media.Image;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.gethighlow.highlowandroid.R;

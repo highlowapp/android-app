@@ -2,19 +2,20 @@ package com.gethighlow.highlowandroid.Activities;
 
 import android.content.Context;
 import android.os.Bundle;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
-import androidx.navigation.Navigator.Extras;
 import androidx.navigation.Navigator.Name;
 import androidx.navigation.fragment.FragmentNavigator;
-import androidx.navigation.fragment.FragmentNavigator.Destination;
-import kotlin.Metadata;
-import kotlin.jvm.internal.Intrinsics;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import kotlin.Metadata;
+import kotlin.jvm.internal.Intrinsics;
 
 @Name("keep_state_fragment")
 @Metadata(

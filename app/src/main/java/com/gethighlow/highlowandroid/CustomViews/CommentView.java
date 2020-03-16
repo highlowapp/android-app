@@ -2,30 +2,23 @@ package com.gethighlow.highlowandroid.CustomViews;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.gethighlow.highlowandroid.R;
-import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
 import com.gethighlow.highlowandroid.model.Managers.ImageManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.CommentLiveData;
 import com.gethighlow.highlowandroid.model.Resources.Comment;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
