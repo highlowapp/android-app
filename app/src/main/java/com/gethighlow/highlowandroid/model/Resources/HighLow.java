@@ -2,12 +2,12 @@ package com.gethighlow.highlowandroid.model.Resources;
 
 import android.graphics.Bitmap;
 
+import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class HighLow {
     private String highlowid;
@@ -111,48 +111,32 @@ public class HighLow {
 
     public void update(String key, Object value) {
         if (value == null) return;
-        switch(key) {
-            case "highlowid":
-                this.highlowid = value.toString();
-                break;
-            case "uid":
-                this.uid = value.toString();
-                break;
-            case "high":
-                this.high = value.toString();
-                break;
-            case "low":
-                this.low = value.toString();
-                break;
-            case "highImage":
-                this.highImage = value.toString();
-                break;
-            case "lowImage":
-                this.lowImage = value.toString();
-                break;
-            case "total_likes":
-                this.total_likes = (Integer) value;
-                break;
-            case "comments":
-                this.comments = (List<Comment>) value;
-                break;
-            case "timestamp":
-                this.timestamp = value.toString();
-                break;
-            case "date":
-                this.date = value.toString();
-                break;
-            case "isPrivate":
-                this.isPrivate = (Boolean) value;
-                break;
-            case "flagged":
-                this.flagged = (Boolean) value;
-                break;
-            case "liked":
-                this.liked = (Boolean) value;
-                break;
-            default:
-                break;
+        if ("highlowid".equals(key)) {
+            this.highlowid = value.toString();
+        } else if ("uid".equals(key)) {
+            this.uid = value.toString();
+        } else if ("high".equals(key)) {
+            this.high = value.toString();
+        } else if ("low".equals(key)) {
+            this.low = value.toString();
+        } else if ("highImage".equals(key)) {
+            this.highImage = value.toString();
+        } else if ("lowImage".equals(key)) {
+            this.lowImage = value.toString();
+        } else if ("total_likes".equals(key)) {
+            this.total_likes = (Integer) value;
+        } else if ("comments".equals(key)) {
+            this.comments = (List<Comment>) value;
+        } else if ("timestamp".equals(key)) {
+            this.timestamp = value.toString();
+        } else if ("date".equals(key)) {
+            this.date = value.toString();
+        } else if ("isPrivate".equals(key)) {
+            this.isPrivate = (Boolean) value;
+        } else if ("flagged".equals(key)) {
+            this.flagged = (Boolean) value;
+        } else if ("liked".equals(key)) {
+            this.liked = (Boolean) value;
         }
     }
 
@@ -172,83 +156,113 @@ public class HighLow {
         update("liked", highLow.getLiked());
     }
 
-    public void setHigh(String high, String date, Boolean isPrivate, Bitmap image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLowService.shared().setHigh(high, date, highlowid, isPrivate, image, (highLow) -> {
-            updateWithHighLow(highLow);
-            HighLowManager.shared().saveHighLow(this);
-            onSuccess.accept(highLow);
+    public void setHigh(String high, String date, Boolean isPrivate, Bitmap image, final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        HighLowService.shared().setHigh(high, date, highlowid, isPrivate, image, new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow highLow) {
+                HighLow.this.updateWithHighLow(highLow);
+                HighLowManager.shared().saveHighLow(HighLow.this);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void setLow(String low, String date, Boolean isPrivate, Bitmap image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLowService.shared().setLow(low, date, highlowid, isPrivate, image, (highLow) -> {
-            updateWithHighLow(highLow);
-            HighLowManager.shared().saveHighLow(this);
-            onSuccess.accept(highLow);
+    public void setLow(String low, String date, Boolean isPrivate, Bitmap image, final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        HighLowService.shared().setLow(low, date, highlowid, isPrivate, image, new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow highLow) {
+                HighLow.this.updateWithHighLow(highLow);
+                HighLowManager.shared().saveHighLow(HighLow.this);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void makePrivate(Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLowService.shared().makePrivate(this.highlowid, (highLow) -> {
-            updateWithHighLow(highLow);
-            HighLowManager.shared().saveHighLow(this);
-            onSuccess.accept(highLow);
+    public void makePrivate(final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        HighLowService.shared().makePrivate(this.highlowid, new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow highLow) {
+                HighLow.this.updateWithHighLow(highLow);
+                HighLowManager.shared().saveHighLow(HighLow.this);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void makePublic(Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLowService.shared().makePublic(this.highlowid, (highLow) -> {
-            updateWithHighLow(highLow);
-            HighLowManager.shared().saveHighLow(this);
-            onSuccess.accept(highLow);
+    public void makePublic(final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        HighLowService.shared().makePublic(this.highlowid, new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow highLow) {
+                HighLow.this.updateWithHighLow(highLow);
+                HighLowManager.shared().saveHighLow(HighLow.this);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void like(Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLowService.shared().like(this.highlowid, (highLow) -> {
-            updateWithHighLow(highLow);
-            HighLowManager.shared().saveHighLow(this);
-            onSuccess.accept(highLow);
+    public void like(final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        HighLowService.shared().like(this.highlowid, new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow highLow) {
+                HighLow.this.updateWithHighLow(highLow);
+                HighLowManager.shared().saveHighLow(HighLow.this);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void unLike(Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLowService.shared().unLike(this.highlowid, (highLow) -> {
-            updateWithHighLow(highLow);
-            HighLowManager.shared().saveHighLow(this);
-            onSuccess.accept(highLow);
+    public void unLike(final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        HighLowService.shared().unLike(this.highlowid, new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow highLow) {
+                HighLow.this.updateWithHighLow(highLow);
+                HighLowManager.shared().saveHighLow(HighLow.this);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void flag(Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLowService.shared().flag(this.highlowid, (highLow) -> {
-            updateWithHighLow(highLow);
-            HighLowManager.shared().saveHighLow(this);
-            onSuccess.accept(highLow);
+    public void flag(final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        HighLowService.shared().flag(this.highlowid, new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow highLow) {
+                HighLow.this.updateWithHighLow(highLow);
+                HighLowManager.shared().saveHighLow(HighLow.this);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void unFlag(Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLowService.shared().unFlag(this.highlowid, (highLow) -> {
-            updateWithHighLow(highLow);
-            HighLowManager.shared().saveHighLow(this);
-            onSuccess.accept(highLow);
+    public void unFlag(final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        HighLowService.shared().unFlag(this.highlowid, new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow highLow) {
+                HighLow.this.updateWithHighLow(highLow);
+                HighLowManager.shared().saveHighLow(HighLow.this);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void comment(String message, Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLowService.shared().comment(this.highlowid, message, highLow -> {
-            updateWithHighLow(highLow);
-            HighLowManager.shared().saveHighLow(this);
-            onSuccess.accept(highLow);
+    public void comment(String message, final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        HighLowService.shared().comment(this.highlowid, message, new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow highLow) {
+                HighLow.this.updateWithHighLow(highLow);
+                HighLowManager.shared().saveHighLow(HighLow.this);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void getComments(Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLowService.shared().getComments(this.highlowid, highLow -> {
-            updateWithHighLow(highLow);
-            HighLowManager.shared().saveHighLow(this);
-            onSuccess.accept(highLow);
+    public void getComments(final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        HighLowService.shared().getComments(this.highlowid, new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow highLow) {
+                HighLow.this.updateWithHighLow(highLow);
+                HighLowManager.shared().saveHighLow(HighLow.this);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 

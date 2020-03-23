@@ -19,7 +19,7 @@
             android:layout_marginBottom="10dp"
             android:background="@color/transparent"
             android:fontFamily="@font/chalkboard_se"
-            android:text="High"
+            android:text="@string/high"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
@@ -28,7 +28,6 @@
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:onClick="addHigh"
-            android:text=""
             custom:buttonIcon="add"
             custom:buttonTheme="plain" />
 
@@ -60,7 +59,7 @@
                 android:id="@+id/editHigh"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:background="@drawable/round_edit_button">
 
                 <com.makeramen.roundedimageview.RoundedImageView
@@ -79,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="No content provided"
+            android:text="@string/no_content_provided"
             android:textColor="@color/gray"
             android:textSize="20sp" />
 
@@ -88,14 +87,15 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
-            android:src="@drawable/logo_light" />
+            android:src="@drawable/logo_light"
+            android:contentDescription="@string/logo" />
 
         <TextView
             android:id="@+id/lowLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/chalkboard_se"
-            android:text="Low"
+            android:text="@string/low"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
@@ -104,7 +104,6 @@
             android:layout_width="250dp"
             android:layout_height="50dp"
             android:onClick="addLow"
-            android:text=""
             custom:buttonIcon="add"
             custom:buttonTheme="plain" />
 
@@ -134,7 +133,7 @@
                 android:id="@+id/editLow"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:background="@drawable/round_edit_button">
 
                 <com.makeramen.roundedimageview.RoundedImageView
@@ -153,7 +152,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="No content provided"
+            android:text="@string/no_content_provided"
             android:textColor="@color/gray"
             android:textSize="20sp" />
 
@@ -170,7 +169,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingVertical="5dp"
-                android:text="Private"
+                android:text="@string/is_private"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
@@ -178,7 +177,7 @@
                 android:id="@+id/privateSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp" />
+                android:layout_marginStart="5dp" />
         </LinearLayout>
 
         <RelativeLayout
@@ -191,8 +190,9 @@
                 android:id="@+id/flagButton"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_alignParentLeft="true"
-                android:src="@drawable/ic_flag_grayed" />
+                android:layout_alignParentStart="true"
+                android:src="@drawable/ic_flag_grayed"
+                android:contentDescription="@string/flag" />
 
             <TextView
                 android:id="@+id/dateLabel"
@@ -204,7 +204,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -212,8 +212,8 @@
                     android:id="@+id/likeCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="5dp"
-                    android:text="0"
+                    android:layout_marginEnd="5dp"
+                    android:text="@string/zero"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20sp" />
 
@@ -221,7 +221,8 @@
                     android:id="@+id/likeButton"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@drawable/ic_like_outline" />
+                    android:src="@drawable/ic_like_outline"
+                    android:contentDescription="@string/like" />
             </LinearLayout>
 
         </RelativeLayout>
@@ -242,7 +243,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="Show all comments"
+            android:text="@string/show_all_comments"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
             android:id="@+id/show_all_comments"/>
@@ -270,19 +271,18 @@
                     android:id="@+id/leaveComment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toStartOf="@id/sendButton"
+                    android:layout_marginStart="10dp"
                     android:layout_weight="0.8"
                     android:background="@drawable/leave_comment_background"
-                    android:hint="Leave a comment..."
-                    android:padding="12dp" />
+                    android:hint="@string/leave_a_comment"
+                    android:padding="12dp"
+                    android:autofillHints="comment"
+                    android:inputType="textShortMessage"/>
 
                 <RelativeLayout
                     android:id="@+id/sendButton"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_alignParentEnd="true"
                     android:background="@drawable/send_button_background"
                     android:padding="5dp">
                     <ImageView
@@ -290,7 +290,8 @@
                         android:layout_height="30dp"
                         android:layout_centerInParent="true"
                         android:id="@+id/sendImg"
-                        android:src="@drawable/send" />
+                        android:src="@drawable/send"
+                        android:contentDescription="@string/send" />
                     <ProgressBar
                         android:layout_centerInParent="true"
                         android:layout_height="30dp"

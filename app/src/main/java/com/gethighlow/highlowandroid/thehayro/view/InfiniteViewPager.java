@@ -20,7 +20,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -28,7 +27,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.thehayro.internal.Constants;
 
 import static com.thehayro.internal.Constants.ADAPTER_STATE;
-import static com.thehayro.internal.Constants.LOG_TAG;
 import static com.thehayro.internal.Constants.PAGE_POSITION_CENTER;
 import static com.thehayro.internal.Constants.PAGE_POSITION_LEFT;
 import static com.thehayro.internal.Constants.PAGE_POSITION_RIGHT;
@@ -56,7 +54,6 @@ public class InfiniteViewPager extends ViewPager {
     public Parcelable onSaveInstanceState() {
         final InfinitePagerAdapter adapter = (InfinitePagerAdapter) getAdapter();
         if (adapter == null) {
-            Log.d(LOG_TAG, " onSaveInstanceState adapter == null");
             return super.onSaveInstanceState();
         }
         Bundle bundle = new Bundle();
@@ -71,7 +68,6 @@ public class InfiniteViewPager extends ViewPager {
         final InfinitePagerAdapter adapter = (InfinitePagerAdapter) getAdapter();
         if (adapter == null) {
             if (Constants.DEBUG) {
-                Log.w(LOG_TAG, "onRestoreInstanceState adapter == null");
             }
             super.onRestoreInstanceState(state);
             return;
@@ -102,7 +98,6 @@ public class InfiniteViewPager extends ViewPager {
             public void onPageSelected(int position) {
                 mCurrPosition = position;
                 if (Constants.DEBUG) {
-                    Log.d(TAG, "on page " + position);
                 }
                 if (mListener != null && getAdapter() != null) {
                     final InfinitePagerAdapter adapter = (InfinitePagerAdapter) getAdapter();

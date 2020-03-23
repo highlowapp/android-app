@@ -6,10 +6,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 import androidx.core.content.ContextCompat;
-import androidx.core.util.Consumer;
 
 import com.android.volley.Cache;
 import com.android.volley.Network;
@@ -21,11 +19,12 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.StringRequest;
-import com.gethighlow.highlowandroid.Activities.MainActivity;
-import com.gethighlow.highlowandroid.model.APIConfig;
+import com.gethighlow.highlowandroid.Activities.Other.MainActivity;
+import com.gethighlow.highlowandroid.model.util.APIConfig;
+import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Responses.AuthResponse;
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
-import com.gethighlow.highlowandroid.model.VolleyMultipartRequest;
+import com.gethighlow.highlowandroid.model.util.VolleyMultipartRequest;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -92,6 +91,10 @@ public class APIService implements APIConfig {
         initiateRequestQueue();
     }
 
+    public void isAuthenticated() {
+        mainActivity.isAuthenticated();
+    }
+
     public void switchToAuth() {
         mainActivity.switchToAuth();
     }
@@ -119,7 +122,7 @@ public class APIService implements APIConfig {
         return completeUrl.toString();
     }
 
-    public void makeHTTPRequest(String url, int method, Map<String, String> params, Consumer<String> onSuccess, Consumer<VolleyError> onError) {
+    public void makeHTTPRequest(String url, final int method, final Map<String, String> params, final Consumer<String> onSuccess, final Consumer<VolleyError> onError) {
         if (requestQueue == null) return;
 
         String completeUrl;
@@ -131,7 +134,17 @@ public class APIService implements APIConfig {
         }
 
 
-        StringRequest request = new StringRequest(method, completeUrl, onSuccess::accept, onError::accept) {
+        StringRequest request = new StringRequest(method, completeUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String t) {
+                onSuccess.accept(t);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError t) {
+                onError.accept(t);
+            }
+        }) {
             @Override
             public Map<String, String> getParams() {
                 if (method == 0) return null;
@@ -142,36 +155,42 @@ public class APIService implements APIConfig {
         requestQueue.add(request);
     }
 
-    private void refresh_access(Consumer<Boolean> callback) {
+    private void refresh_access(final Consumer<Boolean> callback) {
         if (refreshToken == null) {
             callback.accept(false);
             mainActivity.switchToAuth();
             return;
         }
 
-        Map<String, String> params = new HashMap<>();
+        Map<String, String> params = new HashMap<String, String>();
         params.put("refresh", refreshToken);
-        makeHTTPRequest("/auth/refresh_access", 1, params, (response) -> {
-            Gson gson = new Gson();
-            AuthResponse authResponse = gson.fromJson(response, AuthResponse.class);
+        makeHTTPRequest("/auth/refresh_access", 1, params, new Consumer<String>() {
+            @Override
+            public void accept(String response) {
+                Gson gson = new Gson();
+                AuthResponse authResponse = gson.fromJson(response, AuthResponse.class);
 
-            if (authResponse.getError() != null) {
-                callback.accept(false);
-                mainActivity.switchToAuth();
-            } else {
-                accessToken = authResponse.access();
-                sharedPrefEditor.putString("access", accessToken);
-                sharedPrefEditor.apply();
+                if (authResponse.getError() != null) {
+                    callback.accept(false);
+                    mainActivity.switchToAuth();
+                } else {
+                    accessToken = authResponse.access();
+                    sharedPrefEditor.putString("access", accessToken);
+                    sharedPrefEditor.apply();
 
-                //Retry request
-                callback.accept(true);
+                    //Retry request
+                    callback.accept(true);
+                }
             }
-        }, (error) -> {
-            callback.accept(false);
+        }, new Consumer<VolleyError>() {
+            @Override
+            public void accept(VolleyError error) {
+                callback.accept(false);
+            }
         });
     }
 
-    public void authenticatedRequest(String url, int method, Map<String, String> params, Consumer<String> onSuccess, Consumer<String> onError) {
+    public void authenticatedRequest(final String url, final int method, final Map<String, String> params, final Consumer<String> onSuccess, final Consumer<String> onError) {
         if (requestQueue == null) return;
 
         String completeUrl;
@@ -181,39 +200,46 @@ public class APIService implements APIConfig {
         } else {
             completeUrl = base_url + url;
         }
-        Log.w("Debug", completeUrl);
-        StringRequest request = new StringRequest(method, completeUrl, response -> {
-            Gson gson = new Gson();
-            GenericResponse genericResponse = gson.fromJson(response, GenericResponse.class);
+        StringRequest request = new StringRequest(method, completeUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Gson gson = new Gson();
+                GenericResponse genericResponse = gson.fromJson(response, GenericResponse.class);
 
-            if (genericResponse.getError() != null) {
+                if (genericResponse.getError() != null) {
 
-                if (genericResponse.getError().equals("ERROR-INVALID-TOKEN")) {
-                    refresh_access((shouldContinue) -> {
-                        if (shouldContinue) {
-                            authenticatedRequest(url, method, params, onSuccess, onError);
-                        } else {
-                            mainActivity.switchToAuth();
-                        }
-                    });
+                    if (genericResponse.getError().equals("ERROR-INVALID-TOKEN")) {
+                        APIService.this.refresh_access(new Consumer<Boolean>() {
+                            @Override public void accept(Boolean shouldContinue) {
+                                if (shouldContinue) {
+                                    APIService.this.authenticatedRequest(url, method, params, onSuccess, onError);
+                                } else {
+                                    mainActivity.switchToAuth();
+                                }
+                            }
+                        });
+                    } else {
+                        onError.accept(genericResponse.getError());
+                    }
+
                 } else {
-                    onError.accept(genericResponse.getError());
+                    onSuccess.accept(response);
                 }
 
             }
-
-            else {
-                onSuccess.accept(response);
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                onError.accept("network-error");
             }
-
-        }, error -> onError.accept("network-error")) {
+        }) {
             @Override
             public Map<String, String> getParams() {
                 return params;
             }
             @Override
             public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
+                Map<String, String> headers = new HashMap<String, String>();
                 headers.put("Authorization", "Bearer " + accessToken);
                 return headers;
             }
@@ -222,32 +248,42 @@ public class APIService implements APIConfig {
         requestQueue.add(request);
     }
 
-    public void makeMultipartRequest(String url, int method, Map<String, String> params, Bitmap image, Consumer<String> onSuccess, Consumer<String> onError) {
+    public void makeMultipartRequest(final String url, final int method, final Map<String, String> params, final Bitmap image, final Consumer<String> onSuccess, final Consumer<String> onError) {
         if (requestQueue == null) return;
 
-        Log.w("Debug", base_url + url);
-        VolleyMultipartRequest request = new VolleyMultipartRequest(method, base_url + url, response -> {
-            String json = new String(response.data);
-            Gson gson = new Gson();
-            GenericResponse genericResponse = gson.fromJson(json, GenericResponse.class);
+        VolleyMultipartRequest request = new VolleyMultipartRequest(method, base_url + url, new Response.Listener<NetworkResponse>() {
+            @Override
+            public void onResponse(NetworkResponse response) {
+                String json = new String(response.data);
+                Gson gson = new Gson();
+                GenericResponse genericResponse = gson.fromJson(json, GenericResponse.class);
 
-            String error = genericResponse.getError();
-            if (error != null) {
-                if (error.equals("ERROR-INVALID-TOKEN")) {
-                    refresh_access((shouldContinue) -> {
-                        if (shouldContinue) {
-                            makeMultipartRequest(url, method, params, image, onSuccess, onError);
-                        } else {
-                            mainActivity.switchToAuth();
-                        }
-                    });
+                String error = genericResponse.getError();
+                if (error != null) {
+                    if (error.equals("ERROR-INVALID-TOKEN")) {
+                        APIService.this.refresh_access(new Consumer<Boolean>() {
+                            @Override
+                            public void accept(Boolean shouldContinue) {
+                                if (shouldContinue) {
+                                    APIService.this.makeMultipartRequest(url, method, params, image, onSuccess, onError);
+                                } else {
+                                    mainActivity.switchToAuth();
+                                }
+                            }
+                        });
+                    } else {
+                        onError.accept(error);
+                    }
                 } else {
-                    onError.accept(error);
+                    onSuccess.accept(json);
                 }
-            } else {
-                onSuccess.accept(json);
             }
-        }, error -> onError.accept("network-error")) {
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                onError.accept("network-error");
+            }
+        }) {
             @Override
             protected Map<String, String> getParams() {
                 return params;
@@ -255,14 +291,14 @@ public class APIService implements APIConfig {
 
             @Override
             public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
+                Map<String, String> headers = new HashMap<String, String>();
                 headers.put("Authorization", "Bearer " + accessToken);
                 return headers;
             }
 
             @Override
             protected Map<String, DataPart> getByteData() {
-                Map<String, DataPart> params = new HashMap<>();
+                Map<String, DataPart> params = new HashMap<String, DataPart>();
                 if (image != null) {
                     params.put("file", new DataPart("file.jpg", getFileDataFromBitmap(context, image), "image/jpeg"));
                 }

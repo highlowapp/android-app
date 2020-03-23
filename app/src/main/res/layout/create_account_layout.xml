@@ -5,7 +5,7 @@
     android:id="@+id/scrollView">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal">
         <RelativeLayout
@@ -18,7 +18,8 @@
                 android:src="@drawable/logo_triangles"
                 android:layout_marginTop="20dp"
                 android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"/>
+                android:layout_centerHorizontal="true"
+                android:contentDescription="@string/logo" />
 
             <ImageButton
                 android:layout_width="50dp"
@@ -28,23 +29,24 @@
                 android:padding="0dp"
                 android:scaleType="fitXY"
                 android:layout_marginTop="20dp"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp"
-                android:onClick="close"/>
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="20dp"
+                android:onClick="close"
+                android:contentDescription="@string/close" />
 
         </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Create An Account"
+            android:text="@string/create_an_account"
             android:textColor="#FFFFFF"
-            android:textSize="25dp"/>
+            android:textSize="25sp"/>
 
         <com.gethighlow.highlowandroid.CustomViews.BaseComponents.TextInput
             android:layout_width="250dp"
             android:layout_height="50dp"
-            custom:title="First Name"
+            custom:title="@string/first_name"
             custom:inputType="text"
             custom:inputTheme="plain"
             android:layout_marginTop="10dp"
@@ -52,7 +54,7 @@
         <com.gethighlow.highlowandroid.CustomViews.BaseComponents.TextInput
             android:layout_width="250dp"
             android:layout_height="50dp"
-            custom:title="Last Name"
+            custom:title="@string/last_name"
             custom:inputType="text"
             custom:inputTheme="plain"
             android:layout_marginTop="10dp"
@@ -60,7 +62,7 @@
         <com.gethighlow.highlowandroid.CustomViews.BaseComponents.TextInput
             android:layout_width="250dp"
             android:layout_height="50dp"
-            custom:title="Email"
+            custom:title="@string/email"
             custom:inputType="email"
             custom:inputTheme="plain"
             android:layout_marginTop="10dp"
@@ -68,7 +70,7 @@
         <com.gethighlow.highlowandroid.CustomViews.BaseComponents.TextInput
             android:layout_width="250dp"
             android:layout_height="50dp"
-            custom:title="Password"
+            custom:title="@string/password"
             custom:inputType="password"
             custom:inputTheme="plain"
             android:layout_marginTop="10dp"
@@ -76,7 +78,7 @@
         <com.gethighlow.highlowandroid.CustomViews.BaseComponents.TextInput
             android:layout_width="250dp"
             android:layout_height="50dp"
-            custom:title="Confirm Password"
+            custom:title="@string/confirm_password"
             custom:inputType="password"
             custom:inputTheme="plain"
             android:layout_marginTop="10dp"
@@ -85,13 +87,12 @@
             android:layout_width="240dp"
             android:layout_height="50dp"
             custom:buttonTheme="pink"
-            android:text="Create Account"
+            android:text="@string/create_account"
             android:layout_marginTop="10dp"
             android:id="@+id/create_account_button"/>
         <TextView
             android:layout_width="240dp"
             android:layout_height="wrap_content"
-            android:text="Errors"
             android:textColor="@color/white"
             android:layout_marginTop="5dp"
             android:textAlignment="center"

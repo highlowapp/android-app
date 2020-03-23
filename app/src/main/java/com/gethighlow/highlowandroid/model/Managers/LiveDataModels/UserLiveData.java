@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Resources.HighLow;
 import com.gethighlow.highlowandroid.model.Resources.Interest;
 import com.gethighlow.highlowandroid.model.Resources.User;
@@ -11,7 +12,6 @@ import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Responses.InterestResponse;
 
 import java.util.List;
-import java.util.function.Consumer;
 
 public class UserLiveData extends MutableLiveData<User> {
     public UserLiveData(User user) {
@@ -28,12 +28,15 @@ public class UserLiveData extends MutableLiveData<User> {
         this.setValue(user);
     }
 
-    public void setProfile(String firstname, String lastname, String email, String bio, Bitmap profileimage, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
-        User user = getValue();
+    public void setProfile(String firstname, String lastname, String email, String bio, Bitmap profileimage, final Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
+        final User user = getValue();
         if (user == null) { onError.accept("does-not-exist"); }
-        user.setProfile(firstname, lastname, email, bio, profileimage, genericResponse -> {
-            this.setValue(user);
-            onSuccess.accept(genericResponse);
+        user.setProfile(firstname, lastname, email, bio, profileimage, new Consumer<GenericResponse>() {
+            @Override
+            public void accept(GenericResponse genericResponse) {
+                UserLiveData.this.setValue(user);
+                onSuccess.accept(genericResponse);
+            }
         }, onError);
     }
 

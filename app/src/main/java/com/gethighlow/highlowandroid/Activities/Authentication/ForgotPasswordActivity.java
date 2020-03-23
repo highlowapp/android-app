@@ -11,6 +11,8 @@ import com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButton;
 import com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButtonDelegate;
 import com.gethighlow.highlowandroid.CustomViews.BaseComponents.TextInput;
 import com.gethighlow.highlowandroid.R;
+import com.gethighlow.highlowandroid.model.util.Consumer;
+import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Services.AuthService;
 
 public class ForgotPasswordActivity extends Activity implements HLButtonDelegate {
@@ -38,20 +40,24 @@ public class ForgotPasswordActivity extends Activity implements HLButtonDelegate
     public void sendConfirmation(View view) {
         String email = emailInput.getText();
         sendConfirmation.startLoading();
-        AuthService.shared().forgotPassword(email, (response) -> {
-            sendConfirmation.stopLoading();
-            errors.setText("Ok, you should be getting an email shortly!");
-        }, (error) -> {
-            sendConfirmation.stopLoading();
-
-            if (error.equals("user-no-exist")) {
-                errors.setText("No user exists with that email");
-            }
-            else if (error.equals("")) {
+        AuthService.shared().forgotPassword(email, new Consumer<GenericResponse>() {
+            @Override
+            public void accept(GenericResponse response) {
+                sendConfirmation.stopLoading();
                 errors.setText("Ok, you should be getting an email shortly!");
             }
-            else {
-                errors.setText("An unkown error occurred");
+        }, new Consumer<String>() {
+            @Override
+            public void accept(String error) {
+                sendConfirmation.stopLoading();
+
+                if (error.equals("user-no-exist")) {
+                    errors.setText("No user exists with that email");
+                } else if (error.equals("")) {
+                    errors.setText("Ok, you should be getting an email shortly!");
+                } else {
+                    errors.setText("An unkown error occurred");
+                }
             }
         });
     }

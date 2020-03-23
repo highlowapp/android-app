@@ -61,18 +61,14 @@ public class HLButton extends RelativeLayout implements View.OnClickListener {
                 icon.setVisibility(View.VISIBLE);
             }
 
-            switch(theme) {
-                case "pink":
-                    this.setBackgroundResource(R.drawable.plain_button_background);
-                    break;
-                case "white":
-                    this.setBackgroundResource(R.drawable.white_button_background);
-                    this.textView.setTextColor(ContextCompat.getColor(this.getContext(), R.color.colorPrimary));
-                    this.progressBar.setIndeterminateTintList(ColorStateList.valueOf(ContextCompat.getColor(this.getContext(), R.color.colorPrimary)));
-                    break;
-                default:
-                    this.setBackgroundResource(R.drawable.gradient_button_background);
-                    break;
+            if ("pink".equals(theme)) {
+                this.setBackgroundResource(R.drawable.plain_button_background);
+            } else if ("white".equals(theme)) {
+                this.setBackgroundResource(R.drawable.white_button_background);
+                this.textView.setTextColor(ContextCompat.getColor(this.getContext(), R.color.colorPrimary));
+                this.progressBar.setIndeterminateTintList(ColorStateList.valueOf(ContextCompat.getColor(this.getContext(), R.color.colorPrimary)));
+            } else {
+                this.setBackgroundResource(R.drawable.gradient_button_background);
             }
             textView.bringToFront();
 

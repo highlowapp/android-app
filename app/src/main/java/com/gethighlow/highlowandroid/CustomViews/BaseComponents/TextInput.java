@@ -45,15 +45,10 @@ public class TextInput extends LinearLayout {
             String inputType = a.getString(R.styleable.TextInput_inputType);
             textInput.setHint(hint);
             int inputTypeCode = InputType.TYPE_CLASS_TEXT;
-            switch(inputType) {
-                case "email":
-                    inputTypeCode = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
-                    break;
-                case "password":
-                    inputTypeCode = InputType.TYPE_TEXT_VARIATION_PASSWORD;
-                    break;
-                default:
-                    break;
+            if ("email".equals(inputType)) {
+                inputTypeCode = InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS;
+            } else if ("password".equals(inputType)) {
+                inputTypeCode = InputType.TYPE_TEXT_VARIATION_PASSWORD;
             }
 
 

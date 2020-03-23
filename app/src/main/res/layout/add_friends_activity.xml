@@ -6,11 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Activities.AddFriendsActivity">
+    tools:context=".Activities.Tabs.Profile.AddFriendsActivity">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Based on your interests"
+        android:text="@string/based_on_your_interests"
         android:background="@color/light_grey"
         android:padding="3dp"
         android:id="@+id/header"/>

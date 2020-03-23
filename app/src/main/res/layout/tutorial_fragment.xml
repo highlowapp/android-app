@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Activities.TutorialFragment"
-    android:background="@color/gray">
+    tools:context=".Activities.Other.TutorialFragment"
+    android:background="@color/transparent">
 
     <ImageView
         android:layout_width="match_parent"
@@ -14,15 +14,15 @@
         android:layout_marginTop="70dp"
         android:id="@+id/imageView"
         android:background="@color/white"
-        android:src="@drawable/tutorial1"/>
+        android:src="@drawable/tutorial1"
+        android:contentDescription="@string/tutorial_image" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:text="Caption"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/imageView"
-        android:textSize="30dp"
+        android:textSize="25sp"
         android:id="@+id/caption"
         android:layout_marginTop="20dp"
         android:textAlignment="center"
@@ -30,7 +30,7 @@
     <com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButton
         android:layout_width="250dp"
         android:layout_height="50dp"
-        android:text="Get Started"
+        android:text="@string/get_started"
         android:layout_below="@id/caption"
         android:layout_centerHorizontal="true"
         app:buttonTheme="white"

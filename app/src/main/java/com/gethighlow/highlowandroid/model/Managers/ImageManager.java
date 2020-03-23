@@ -4,9 +4,8 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 
+import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Managers.Caches.ImageCache;
-
-import java.util.function.Consumer;
 
 public class ImageManager {
     private static final ImageManager ourInstance = new ImageManager();
@@ -25,7 +24,7 @@ public class ImageManager {
         cache = new ImageCache(limitKb);
     }
 
-    public void getImage(String url, Consumer<Bitmap> onSuccess, Consumer<String> onError) {
+    public void getImage(final String url, final Consumer<Bitmap> onSuccess, final Consumer<String> onError) {
         if (cache == null) {
             onError.accept("cache-no-exist");
             return;
@@ -33,12 +32,15 @@ public class ImageManager {
 
         Bitmap img = cache.get(url);
         if (img == null) {
-            DownloadImageTask task = new DownloadImageTask((image) -> {
-                if (image == null) {
-                    onError.accept("no-image");
-                } else {
-                    cache.put(url, image);
-                    onSuccess.accept(image);
+            DownloadImageTask task = new DownloadImageTask(new Consumer<Bitmap>() {
+                @Override
+                public void accept(Bitmap image) {
+                    if (image == null) {
+                        onError.accept("no-image");
+                    } else {
+                        cache.put(url, image);
+                        onSuccess.accept(image);
+                    }
                 }
             });
             task.execute(url);

@@ -11,7 +11,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Daily Reminder Notification"
+            android:text="@string/daily_reminder_notification"
             android:textSize="20sp"
             android:textColor="@color/black"
             android:layout_margin="10dp"/>
@@ -25,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/datePickerButton"
-                android:text="Not Scheduled"
+                android:text="@string/not_scheduled"
                 android:backgroundTint="@color/colorPrimary"
                 android:textColor="@color/white"/>
             <View
@@ -35,7 +35,7 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cancel"
+                android:text="@string/cancel"
                 android:id="@+id/cancelReminder"/>
         </LinearLayout>
 
@@ -52,7 +52,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:layout_height="wrap_content"
-                android:text="New Friend Requests"
+                android:text="@string/new_friend_requests"
                 android:textSize="20sp"
                 android:textColor="@color/black"/>
             <androidx.appcompat.widget.SwitchCompat
@@ -72,7 +72,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:layout_height="wrap_content"
-                android:text="Friend Request Accepted"
+                android:text="@string/friend_request_accepted"
                 android:textSize="20sp"
                 android:textColor="@color/black"/>
             <androidx.appcompat.widget.SwitchCompat
@@ -92,7 +92,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:layout_height="wrap_content"
-                android:text="New Feed Items"
+                android:text="@string/new_feed_items"
                 android:textSize="20sp"
                 android:textColor="@color/black"/>
             <androidx.appcompat.widget.SwitchCompat
@@ -112,7 +112,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:layout_height="wrap_content"
-                android:text="Likes"
+                android:text="@string/likes"
                 android:textSize="20sp"
                 android:textColor="@color/black"/>
             <androidx.appcompat.widget.SwitchCompat
@@ -132,7 +132,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:layout_height="wrap_content"
-                android:text="Comments"
+                android:text="@string/comments"
                 android:textSize="20sp"
                 android:textColor="@color/black"/>
             <androidx.appcompat.widget.SwitchCompat

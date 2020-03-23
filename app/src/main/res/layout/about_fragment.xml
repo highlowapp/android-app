@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.About"
+    tools:context=".Activities.Tabs.Profile.About"
     android:background="@color/very_light_gray">
 
     <LinearLayout
@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Account"
+            android:text="@string/about_account_section_header"
             android:textColor="@color/black"
             android:background="@color/very_light_gray"
             android:padding="10dp"
@@ -23,17 +23,16 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Log Out"
+            android:text="@string/about_account_section_logout"
             android:textColor="@color/colorPrimary"
             android:padding="10dp"
             android:id="@+id/logOut"
-            android:clickable="true"
             android:textSize="17sp"
             android:background="@color/white"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Feedback"
+            android:text="@string/about_feedback_section_header"
             android:textColor="@color/black"
             android:background="@color/very_light_gray"
             android:padding="10dp"
@@ -42,7 +41,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Report a bug"
+            android:text="@string/about_feedback_section_report_a_bug"
             android:textColor="@color/colorPrimary"
             android:padding="10dp"
             android:id="@+id/reportBug"
@@ -51,7 +50,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Settings"
+            android:text="@string/about_settings_section_header"
             android:textColor="@color/black"
             android:background="@color/very_light_gray"
             android:padding="10dp"
@@ -60,7 +59,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Push Notification Settings"
+            android:text="@string/about_settings_section_push_notification_settings"
             android:textColor="@color/colorPrimary"
             android:padding="10dp"
             android:id="@+id/pushNotifSettings"
@@ -69,7 +68,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Support"
+            android:text="@string/about_support_section_header"
             android:textColor="@color/black"
             android:background="@color/very_light_gray"
             android:padding="10dp"
@@ -78,7 +77,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Our Website"
+            android:text="@string/about_support_section_our_website"
             android:textColor="@color/colorPrimary"
             android:padding="10dp"
             android:id="@+id/ourWebsite"
@@ -92,7 +91,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Contact Us"
+            android:text="@string/about_support_section_contact_us"
             android:textColor="@color/colorPrimary"
             android:padding="10dp"
             android:id="@+id/contactUs"
@@ -101,7 +100,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Agreements"
+            android:text="@string/about_agreements_section_header"
             android:textColor="@color/black"
             android:background="@color/very_light_gray"
             android:padding="10dp"
@@ -110,7 +109,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Privacy Policy"
+            android:text="@string/about_agreements_section_privacy_policy"
             android:textColor="@color/colorPrimary"
             android:padding="10dp"
             android:id="@+id/privacyPolicy"
@@ -126,7 +125,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Terms of Service"
+            android:text="@string/about_agreements_section_terms_of_service"
             android:textColor="@color/colorPrimary"
             android:padding="10dp"
             android:id="@+id/termsOfService"

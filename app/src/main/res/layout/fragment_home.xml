@@ -3,17 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Tabs.Fragments.Home">
+    tools:context=".Activities.Tabs.Home.Home">
 
     <com.gethighlow.highlowandroid.thehayro.view.InfiniteViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/viewpager"/>
-    <!--
-    <androidx.viewpager.widget.ViewPager
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:id="@+id/viewpager"/>
-    -->
+
 </FrameLayout>

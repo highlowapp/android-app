@@ -4,13 +4,13 @@ import android.graphics.Bitmap;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Resources.Comment;
 import com.gethighlow.highlowandroid.model.Resources.HighLow;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class HighLowLiveData extends MutableLiveData<HighLow> {
     private HighLow highLow;
@@ -32,127 +32,174 @@ public class HighLowLiveData extends MutableLiveData<HighLow> {
         }
 
         if (highLow.getHighlowid() != null) {
-            HighLowService.shared().get(highLow.getHighlowid(), this::setValue, error -> {
+            HighLowService.shared().get(highLow.getHighlowid(), new Consumer<HighLow>() {
+                @Override
+                public void accept(HighLow value) {
+                    HighLowLiveData.this.setValue(value);
+                }
+            }, new Consumer<String>() {
+                @Override
+                public void accept(String error) {
 
+                }
             });
         } else if (highLow.getDate() != null) {
-            HighLowService.shared().getDate(highLow.getDate(), this::setValue, error -> {});
+            HighLowService.shared().getDate(highLow.getDate(), new Consumer<HighLow>() {
+                @Override
+                public void accept(HighLow value) {
+                    HighLowLiveData.this.setValue(value);
+                }
+            }, new Consumer<String>() {
+                @Override
+                public void accept(String error) {
+                }
+            });
         }
     }
 
-    public void setHigh(String high, String date, Boolean isPrivate, Bitmap image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLow highLow = getValue();
+    public void setHigh(String high, String date, Boolean isPrivate, Bitmap image, final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        final HighLow highLow = getValue();
         if (highLow == null) {
             onError.accept("does-not-exist");
         }
-        highLow.setHigh(high, date, isPrivate, image, (newHighLow) -> {
-            this.setValue(highLow);
-            onSuccess.accept(highLow);
+        highLow.setHigh(high, date, isPrivate, image, new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow newHighLow) {
+                HighLowLiveData.this.setValue(highLow);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void setLow(String low, String date, Boolean isPrivate, Bitmap image, Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLow highLow = getValue();
+    public void setLow(String low, String date, Boolean isPrivate, Bitmap image, final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        final HighLow highLow = getValue();
         if (highLow == null) {
             onError.accept("does-not-exist");
         }
-        highLow.setLow(low, date, isPrivate, image, (newHighLow) -> {
-            this.setValue(highLow);
-            onSuccess.accept(highLow);
+        highLow.setLow(low, date, isPrivate, image, new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow newHighLow) {
+                HighLowLiveData.this.setValue(highLow);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void makePrivate(Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLow highLow = getValue();
+    public void makePrivate(final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        final HighLow highLow = getValue();
         if (highLow == null) {
             onError.accept("does-not-exist");
         }
-        highLow.makePrivate((newHighLow) -> {
-            this.setValue(highLow);
-            onSuccess.accept(highLow);
+        highLow.makePrivate(new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow newHighLow) {
+                HighLowLiveData.this.setValue(highLow);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void makePublic(Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLow highLow = getValue();
+    public void makePublic(final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        final HighLow highLow = getValue();
         if (highLow == null) {
             onError.accept("does-not-exist");
         }
-        highLow.makePublic((newHighLow) -> {
-            this.setValue(highLow);
-            onSuccess.accept(highLow);
+        highLow.makePublic(new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow newHighLow) {
+                HighLowLiveData.this.setValue(highLow);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void like(Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLow highLow = getValue();
+    public void like(final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        final HighLow highLow = getValue();
         if (highLow == null) {
             onError.accept("does-not-exist");
         }
-        highLow.like((newHighLow) -> {
-            this.setValue(highLow);
-            onSuccess.accept(highLow);
+        highLow.like(new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow newHighLow) {
+                HighLowLiveData.this.setValue(highLow);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void unLike(Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLow highLow = getValue();
+    public void unLike(final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        final HighLow highLow = getValue();
         if (highLow == null) {
             onError.accept("does-not-exist");
         }
-        highLow.unLike((newHighLow) -> {
-            this.setValue(highLow);
-            onSuccess.accept(highLow);
+        highLow.unLike(new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow newHighLow) {
+                HighLowLiveData.this.setValue(highLow);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void flag(Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLow highLow = getValue();
+    public void flag(final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        final HighLow highLow = getValue();
         if (highLow == null) {
             onError.accept("does-not-exist");
         }
-        highLow.flag((newHighLow) -> {
-            this.setValue(highLow);
-            onSuccess.accept(highLow);
+        highLow.flag(new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow newHighLow) {
+                HighLowLiveData.this.setValue(highLow);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void unFlag(Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLow highLow = getValue();
+    public void unFlag(final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        final HighLow highLow = getValue();
         if (highLow == null) {
             onError.accept("does-not-exist");
         }
-        highLow.unFlag((newHighLow) -> {
-            this.setValue(highLow);
-            onSuccess.accept(highLow);
+        highLow.unFlag(new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow newHighLow) {
+                HighLowLiveData.this.setValue(highLow);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void comment(String message, Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLow highLow = getValue();
+    public void comment(String message, final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        final HighLow highLow = getValue();
         if (highLow == null) {
             onError.accept("does-not-exist");
         }
-        highLow.comment(message, (newHighLow) -> {
-            this.setValue(highLow);
-            onSuccess.accept(highLow);
+        highLow.comment(message, new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow newHighLow) {
+                HighLowLiveData.this.setValue(highLow);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
-    public void getComments(Consumer<HighLow> onSuccess, Consumer<String> onError) {
-        HighLow highLow = getValue();
+    public void getComments(final Consumer<HighLow> onSuccess, Consumer<String> onError) {
+        final HighLow highLow = getValue();
         if (highLow == null) {
             onError.accept("does-not-exist");
         }
-        highLow.getComments((newHighLow) -> {
-            this.setValue(highLow);
-            onSuccess.accept(highLow);
+        highLow.getComments(new Consumer<HighLow>() {
+            @Override
+            public void accept(HighLow newHighLow) {
+                HighLowLiveData.this.setValue(highLow);
+                onSuccess.accept(highLow);
+            }
         }, onError);
     }
 
     public List<CommentLiveData> getComments() {
         HighLow highLow = getValue();
-        List<CommentLiveData> comments = new ArrayList<>();
+        List<CommentLiveData> comments = new ArrayList<CommentLiveData>();
 
         for (Comment comment: highLow.getComments()) {
             comments.add(new CommentLiveData(comment));

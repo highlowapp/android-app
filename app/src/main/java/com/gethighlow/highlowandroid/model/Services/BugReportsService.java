@@ -1,11 +1,11 @@
 package com.gethighlow.highlowandroid.model.Services;
 
+import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class BugReportsService {
     private static final BugReportsService ourInstance = new BugReportsService();
@@ -13,22 +13,28 @@ public class BugReportsService {
 
     private Gson gson = new Gson();
 
-    public void submitBugReport(String title, String message, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
+    public void submitBugReport(final String title, final String message, final Consumer<GenericResponse> onSuccess, final Consumer<String> onError) {
         Map<String, String> params = new HashMap<String, String>() {{
             put("title", title);
             put("message", message);
         }};
-        APIService.shared().authenticatedRequest("/bug_reports/submit", 1, params, (response) -> {
-            GenericResponse genericResponse = gson.fromJson(response, GenericResponse.class);
+        APIService.shared().authenticatedRequest("/bug_reports/submit", 1, params, new Consumer<String>() {
+            @Override
+            public void accept(String response) {
+                GenericResponse genericResponse = gson.fromJson(response, GenericResponse.class);
 
-            String error = genericResponse.getError();
-            if (error != null) {
-                onError.accept(error);
-            } else {
-                onSuccess.accept(genericResponse);
+                String error = genericResponse.getError();
+                if (error != null) {
+                    onError.accept(error);
+                } else {
+                    onSuccess.accept(genericResponse);
+                }
             }
-        }, (error) -> {
-            onError.accept("network-error");
+        }, new Consumer<String>() {
+            @Override
+            public void accept(String error) {
+                onError.accept("network-error");
+            }
         });
     }
 }

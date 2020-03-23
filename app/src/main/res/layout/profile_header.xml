@@ -31,14 +31,15 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
+            android:text="@string/zero"
             android:textColor="@color/white"
             android:textSize="30sp"
             android:id="@+id/streak"/>
         <ImageView
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:src="@drawable/streak"/>
+            android:src="@drawable/streak"
+            android:contentDescription="@string/streak" />
     </LinearLayout>
     <TextView
         android:layout_width="wrap_content"
@@ -92,14 +93,14 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Friends"
-            android:drawableLeft="@drawable/friends"
+            android:text="@string/friends"
+            android:drawableStart="@drawable/friends"
             android:backgroundTint="@color/white"
             android:id="@+id/manageFriends"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit Profile"
+            android:text="@string/edit_profile"
             android:backgroundTint="@color/white"
             android:id="@+id/editProfile"/>
     </LinearLayout>

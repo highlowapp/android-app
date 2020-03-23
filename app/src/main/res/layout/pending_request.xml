@@ -16,7 +16,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="User Name"
         android:layout_toEndOf="@id/userImage"
         android:layout_alignTop="@id/userImage"
         android:textSize="20sp"
@@ -25,7 +24,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="has requested your friendship"
+        android:text="@string/has_requested_your_friendship"
         android:layout_toEndOf="@id/userImage"
         android:layout_below="@id/userName"
         android:textSize="15sp"
@@ -41,13 +40,13 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Accept"
+            android:text="@string/accept"
             android:backgroundTint="@color/_light_green"
             android:id="@+id/acceptButton"/>
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Reject"
+            android:text="@string/reject"
             android:backgroundTint="@color/red"
             android:id="@+id/rejectButton"/>
     </LinearLayout>

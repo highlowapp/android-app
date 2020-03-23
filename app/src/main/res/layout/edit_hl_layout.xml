@@ -19,7 +19,7 @@
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textAllCaps="false"
-                android:text="Cancel"
+                android:text="@string/cancel"
                 android:onClick="dismiss"/>
             <Button
                 android:layout_width="0dp"
@@ -29,7 +29,7 @@
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textAllCaps="false"
-                android:text="Done"
+                android:text="@string/done"
                 android:onClick="done"/>
         </LinearLayout>
 
@@ -42,7 +42,7 @@
             android:background="@color/very_light_gray"
             android:id="@+id/add_image"
             android:onClick="pickImage"
-            />
+            android:contentDescription="@string/post_image" />
         <View
             android:layout_width="match_parent"
             android:layout_height="15dp"
@@ -52,8 +52,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:hint="Enter text here"
+            android:hint="@string/enter_text_here"
             android:background="@color/transparent"
-            android:id="@+id/text"/>
+            android:id="@+id/text"
+            android:importantForAutofill="no"
+            android:inputType="text"/>
     </LinearLayout>
 </ScrollView>

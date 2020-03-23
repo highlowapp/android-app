@@ -2,11 +2,10 @@ package com.gethighlow.highlowandroid.model.Managers.LiveDataModels;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Resources.Comment;
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
-
-import java.util.function.Consumer;
 
 public class CommentLiveData extends MutableLiveData<Comment> {
     public CommentLiveData(Comment comment) {
@@ -69,16 +68,19 @@ public class CommentLiveData extends MutableLiveData<Comment> {
         return null;
     }
 
-    public void update(String message, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
-        Comment comment = getValue();
+    public void update(final String message, final Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
+        final Comment comment = getValue();
         if (comment == null) {
             onError.accept("does-not-exist");
         } else {
 
-            HighLowService.shared().updateComment(comment.getCommentid(), message, genericResponse -> {
-                comment.setMessage(message);
-                this.setValue(comment);
-                onSuccess.accept(genericResponse);
+            HighLowService.shared().updateComment(comment.getCommentid(), message, new Consumer<GenericResponse>() {
+                @Override
+                public void accept(GenericResponse genericResponse) {
+                    comment.setMessage(message);
+                    CommentLiveData.this.setValue(comment);
+                    onSuccess.accept(genericResponse);
+                }
             }, onError);
 
         }

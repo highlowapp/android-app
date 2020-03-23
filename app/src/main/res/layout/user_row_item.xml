@@ -17,7 +17,6 @@
         android:layout_width="0dp"
         android:layout_weight="0.7"
         android:layout_height="wrap_content"
-        android:text="User Name"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:layout_marginStart="10dp"
@@ -28,7 +27,8 @@
         android:tint="@color/gray"
         android:layout_height="wrap_content"
         android:src="@drawable/navigate_arrow"
-        android:id="@+id/chevron"/>
+        android:id="@+id/chevron"
+        android:contentDescription="@string/navigate" />
 
     <ImageView
         android:layout_width="50dp"
@@ -36,12 +36,14 @@
         android:layout_marginEnd="10dp"
         android:padding="10dp"
         android:src="@drawable/unfriend"
-        android:id="@+id/unfriend"/>
+        android:id="@+id/unfriend"
+        android:contentDescription="@string/unfriend" />
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginEnd="10dp"
         android:padding="10dp"
         android:src="@drawable/add_friend"
-        android:id="@+id/addAsFriend"/>
+        android:id="@+id/addAsFriend"
+        android:contentDescription="@string/add_friend" />
 </LinearLayout>

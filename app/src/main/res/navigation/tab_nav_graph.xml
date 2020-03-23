@@ -7,16 +7,16 @@
 
     <fragment
         android:id="@+id/navigation_feed"
-        android:name="com.gethighlow.highlowandroid.Activities.Feed"
+        android:name="com.gethighlow.highlowandroid.Activities.Tabs.Feed.Feed"
         android:label="Feed" />
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.gethighlow.highlowandroid.Activities.Tabs.Fragments.Home"
+        android:name="com.gethighlow.highlowandroid.Activities.Tabs.Home.Home"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/navigation_profile"
-        android:name="com.gethighlow.highlowandroid.Activities.Profile"
+        android:name="com.gethighlow.highlowandroid.Activities.Tabs.Profile.Profile"
         android:label="profile_fragment"
         tools:layout="@layout/profile_fragment" />
 </navigation>

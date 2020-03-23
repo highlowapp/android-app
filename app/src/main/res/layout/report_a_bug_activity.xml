@@ -12,20 +12,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Subject"
+            android:text="@string/subject"
             android:textSize="20sp"
             android:textColor="@color/black"/>
         <com.gethighlow.highlowandroid.CustomViews.BaseComponents.TextInput
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
-            app:title="Subject"
+            app:title="@string/subject"
             app:inputType="email"
             android:id="@+id/subject"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Message"
+            android:text="@string/bug_message"
             android:textSize="20sp"
             android:textColor="@color/black"
             android:layout_marginTop="20dp"/>
@@ -33,16 +33,18 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:background="@color/very_light_gray"
-            android:hint="Describe the bug..."
+            android:hint="@string/describe_the_bug"
             android:gravity="start"
             android:layout_marginVertical="10dp"
             android:padding="10dp"
-            android:id="@+id/message"/>
+            android:id="@+id/message"
+            android:inputType="textLongMessage"
+            android:importantForAutofill="no"/>
         <com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButton
             android:layout_width="240dp"
             android:layout_height="50dp"
             app:buttonTheme="plain"
-            android:text="Submit"
+            android:text="@string/submit"
             android:layout_gravity="center_horizontal"
             android:layout_marginVertical="20dp"
             android:id="@+id/submitButton"/>

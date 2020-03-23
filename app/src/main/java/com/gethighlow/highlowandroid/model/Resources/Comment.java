@@ -1,10 +1,9 @@
 package com.gethighlow.highlowandroid.model.Resources;
 
+import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.function.Consumer;
 
 public class Comment {
     private String commentid;
@@ -64,10 +63,13 @@ public class Comment {
         this.message = message;
     }
 
-    public void update(String message, Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
-        HighLowService.shared().updateComment(this.commentid, message, genericResponse -> {
-            this.message = message;
-            onSuccess.accept(genericResponse);
+    public void update(final String message, final Consumer<GenericResponse> onSuccess, Consumer<String> onError) {
+        HighLowService.shared().updateComment(this.commentid, message, new Consumer<GenericResponse>() {
+            @Override
+            public void accept(GenericResponse genericResponse) {
+                Comment.this.message = message;
+                onSuccess.accept(genericResponse);
+            }
         }, onError);
     }
 

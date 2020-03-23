@@ -3,13 +3,12 @@ package com.gethighlow.highlowandroid.model.Managers;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.util.Log;
 
-import java.io.IOException;
+import com.gethighlow.highlowandroid.model.util.Consumer;
+
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.function.Consumer;
 
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
@@ -21,16 +20,18 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
     protected Bitmap doInBackground(String... src) {
         try {
+
             URL url = new URL(src[0]);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(5000);
             InputStream input = connection.getInputStream();
             Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            connection.disconnect();
+
             return myBitmap;
-        } catch (IOException e) {
+        } catch (Exception e) {
             // Log exception
-            Log.w("Debug", e);
             return null;
         }
     }

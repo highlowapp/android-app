@@ -17,15 +17,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="User Name"
         android:textColor="@color/black"
         android:id="@+id/userName"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Posted on"
+        android:text="@string/posted_on"
         android:id="@+id/highlowDate"/>
-    <com.gethighlow.highlowandroid.CustomViews.HighLowView
+    <com.gethighlow.highlowandroid.CustomViews.Other.HighLowView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/highlowview"/>

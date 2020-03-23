@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.FriendsActivity">
+    tools:context=".Activities.Tabs.Profile.FriendsActivity">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -18,12 +18,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/colorPrimary"
-                android:text="Add Friends"
+                android:text="@string/add_friends"
                 android:textColor="@color/white"
                 android:paddingHorizontal="10dp"
                 android:layout_margin="10dp"
                 android:layout_centerInParent="true"
-                android:drawableLeft="@drawable/add_friends"
+                android:drawableStart="@drawable/add_friends"
                 android:id="@+id/addFriends"/>
         </RelativeLayout>
         <androidx.recyclerview.widget.RecyclerView

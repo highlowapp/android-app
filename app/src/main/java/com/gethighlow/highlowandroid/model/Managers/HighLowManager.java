@@ -3,28 +3,26 @@ package com.gethighlow.highlowandroid.model.Managers;
 import android.app.ActivityManager;
 import android.content.Context;
 
-import com.gethighlow.highlowandroid.model.Managers.Caches.HighLowCache;
+import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
 import com.gethighlow.highlowandroid.model.Resources.HighLow;
 import com.gethighlow.highlowandroid.model.Services.AuthService;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import org.threeten.bp.LocalDate;
+import org.threeten.bp.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public class HighLowManager {
     private static final HighLowManager ourInstance = new HighLowManager();
     public static HighLowManager shared() { return ourInstance; }
 
-    private HighLowCache cache;
-
-    private Map<String, HighLowLiveData> cachedHighLows = new HashMap<>();
-    private Map<String, HighLowLiveData> dateHighLows = new HashMap<>();
+    private Map<String, HighLowLiveData> cachedHighLows = new HashMap<String, HighLowLiveData>();
+    private Map<String, HighLowLiveData> dateHighLows = new HashMap<String, HighLowLiveData>();
     private HighLowLiveData today;
 
     private Context context;
@@ -39,23 +37,32 @@ public class HighLowManager {
     }
 
     public List<HighLowLiveData> restoreHighLows(List<String> highlowids) {
-        List<HighLowLiveData> result = new ArrayList<>();
+        List<HighLowLiveData> result = new ArrayList<HighLowLiveData>();
         for (String highlowid: highlowids) {
-            HighLowLiveData highLowLiveData = cachedHighLows.getOrDefault(highlowid, null);
+            HighLowLiveData highLowLiveData = null;
+            if (cachedHighLows.containsKey(highlowid)) {
+                highLowLiveData = cachedHighLows.get(highlowid);
+            }
             if (highLowLiveData == null) return null;
             result.add(highLowLiveData);
         }
         return result;
     }
 
-    public void getHighLow(String highlowid, Consumer<HighLowLiveData> onSuccess, Consumer<String> onError) {
-        HighLowLiveData highLow = cachedHighLows.getOrDefault(highlowid, null);
+    public void getHighLow(final String highlowid, final Consumer<HighLowLiveData> onSuccess, Consumer<String> onError) {
+        HighLowLiveData highLow = null;
+        if (cachedHighLows.containsKey(highlowid)) {
+            highLow = cachedHighLows.get(highlowid);
+        }
 
         if (highLow == null) {
-            HighLowService.shared().get(highlowid, (newHighLow) -> {
-                HighLowLiveData liveDataObject = new HighLowLiveData(newHighLow);
-                cachedHighLows.put(highlowid, liveDataObject);
-                onSuccess.accept(liveDataObject);
+            HighLowService.shared().get(highlowid, new Consumer<HighLow>() {
+                @Override
+                public void accept(HighLow newHighLow) {
+                    HighLowLiveData liveDataObject = new HighLowLiveData(newHighLow);
+                    cachedHighLows.put(highlowid, liveDataObject);
+                    onSuccess.accept(liveDataObject);
+                }
             }, onError);
         } else {
             onSuccess.accept(highLow);
@@ -94,30 +101,39 @@ public class HighLowManager {
         return aLiveData;
     }
 
-    public void getHighLowByDate(String date, Consumer<HighLowLiveData> onSuccess, Consumer<String> onError) {
-        HighLowLiveData highLow = dateHighLows.getOrDefault(date, null);
+    public void getHighLowByDate(String date, final Consumer<HighLowLiveData> onSuccess, Consumer<String> onError) {
+        HighLowLiveData highLow = null;
+        if (dateHighLows.containsKey(date)) {
+            dateHighLows.get(date);
+        }
         if (highLow == null) {
-            HighLowService.shared().getDate(date, (newHighLow) -> {
-                HighLowLiveData liveData = new HighLowLiveData(newHighLow);
-                if (newHighLow.getDate() != null) {
-                    dateHighLows.put(newHighLow.getDate(), liveData);
+            HighLowService.shared().getDate(date, new Consumer<HighLow>() {
+                @Override
+                public void accept(HighLow newHighLow) {
+                    HighLowLiveData liveData = new HighLowLiveData(newHighLow);
+                    if (newHighLow.getDate() != null) {
+                        dateHighLows.put(newHighLow.getDate(), liveData);
+                    }
+                    onSuccess.accept(liveData);
                 }
-                onSuccess.accept(liveData);
             }, onError);
         } else {
             onSuccess.accept(highLow);
         }
     }
 
-    public void getToday(Consumer<HighLowLiveData> onSuccess, Consumer<String> onError) {
+    public void getToday(final Consumer<HighLowLiveData> onSuccess, Consumer<String> onError) {
         LocalDate today = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String dateStr = formatter.format(today);
 
         if (today == null) {
-            HighLowService.shared().getToday((newHighLow) -> {
-                this.today = new HighLowLiveData(newHighLow);
-                onSuccess.accept(this.today);
+            HighLowService.shared().getToday(new Consumer<HighLow>() {
+                @Override
+                public void accept(HighLow newHighLow) {
+                    HighLowManager.this.today = new HighLowLiveData(newHighLow);
+                    onSuccess.accept(HighLowManager.this.today);
+                }
             }, onError);
         } else {
             onSuccess.accept(this.today);

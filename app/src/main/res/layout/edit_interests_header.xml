@@ -28,7 +28,5 @@
         app:tag_background_color="@color/colorPrimary"
         app:tag_border_width="0dp"
         app:tag_text_color="@color/white"
-        android:id="@+id/interests"
-        android:layout_below="@id/bio_text"
-        android:layout_centerHorizontal="true"/>
+        android:id="@+id/interests" />
 </LinearLayout>

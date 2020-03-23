@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/refresher">
+    android:id="@+id/refresher"
+    android:background="@color/very_light_gray">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Activities.Feed"
+        tools:context=".Activities.Tabs.Feed.Feed"
         android:orientation="vertical"
         android:gravity="center_horizontal">
 
@@ -20,7 +21,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No items in your feed yet!"
+            android:text="@string/no_items_in_your_feed_yet"
             android:layout_margin="10dp"
             android:id="@+id/notice"/>
     </LinearLayout>

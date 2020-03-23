@@ -15,7 +15,6 @@
  */
 package com.gethighlow.highlowandroid.thehayro.view;
 
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -49,7 +48,6 @@ public abstract class InfinitePagerAdapter<T> extends PagerAdapter {
     @Override
     public final Object instantiateItem(final ViewGroup container, final int position) {
         if (Constants.DEBUG) {
-            Log.i("InfiniteViewPager", String.format("instantiating position %s", position));
         }
         final PageModel<T> model = createPageModel(position);
         mPageModels[position] = model;
@@ -63,13 +61,11 @@ public abstract class InfinitePagerAdapter<T> extends PagerAdapter {
      */
     void fillPage(final int position) {
         if (Constants.DEBUG) {
-            Log.d("InfiniteViewPager", "setup Page " + position);
             printPageModels("before newPage");
         }
         final PageModel<T> oldModel = mPageModels[position];
         final PageModel<T> newModel = createPageModel(position);
         if (oldModel == null || newModel == null) {
-            Log.w(Constants.LOG_TAG, "fillPage no model found " + oldModel + " " + newModel);
             return;
         }
         // moving the new created views to the page of the viewpager
@@ -124,13 +120,9 @@ public abstract class InfinitePagerAdapter<T> extends PagerAdapter {
         final PageModel<T> fromModel = mPageModels[from];
         final PageModel<T> toModel = mPageModels[to];
         if (fromModel == null || toModel == null) {
-            Log.w(Constants.LOG_TAG, "fillPage no model found " + fromModel + " " + toModel);
             return;
         }
         if (Constants.DEBUG) {
-            Log.d("InfiniteViewPager",
-                String.format("Moving page %s to %s, indicator from %s to %s", from, to,
-                fromModel.getIndicator(), toModel.getIndicator()));
             printPageModels("before");
         }
 
@@ -234,7 +226,6 @@ public abstract class InfinitePagerAdapter<T> extends PagerAdapter {
             tag, modelPos,
             model.getIndicator(), model.getChildren().size(), model.getParentView().getChildCount(),
             model.getParentView().getTag());
-        Log.d("InfiniteViewPager", builder);
     }
 
 
