@@ -24,7 +24,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.gethighlow.highlowandroid.Activities.Tabs.Feed.Feed;
 import com.gethighlow.highlowandroid.Activities.Tabs.Home.Home;
 import com.gethighlow.highlowandroid.Activities.Tabs.Home.ViewHighLowActivity;
-import com.gethighlow.highlowandroid.Activities.Tabs.Profile.About;
+import com.gethighlow.highlowandroid.Activities.Tabs.About.About;
 import com.gethighlow.highlowandroid.Activities.Tabs.Profile.FriendsActivity;
 import com.gethighlow.highlowandroid.Activities.Tabs.Profile.Profile;
 import com.gethighlow.highlowandroid.R;

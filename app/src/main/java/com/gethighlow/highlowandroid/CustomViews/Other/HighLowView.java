@@ -622,7 +622,7 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
                 if (highLow.getDate() != null && highLow.getDate().equals(date)) {
                     highLow.update();
                 } else if (HighLowView.this.date.equals(date)){
-
+                    highLow.update();
                 }
             }
             else if (highLowId != null && highLow.getHighlowid() != null) {

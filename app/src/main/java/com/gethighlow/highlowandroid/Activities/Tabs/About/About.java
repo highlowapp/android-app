@@ -1,4 +1,4 @@
-package com.gethighlow.highlowandroid.Activities.Tabs.Profile;
+package com.gethighlow.highlowandroid.Activities.Tabs.About;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -12,8 +12,6 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
-import com.gethighlow.highlowandroid.Activities.Tabs.About.PushNotifSettings;
-import com.gethighlow.highlowandroid.Activities.Tabs.About.ReportABug;
 import com.gethighlow.highlowandroid.R;
 import com.gethighlow.highlowandroid.model.Services.AuthService;
 
