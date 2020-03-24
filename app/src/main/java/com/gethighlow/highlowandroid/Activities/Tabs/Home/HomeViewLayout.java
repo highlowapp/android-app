@@ -3,6 +3,7 @@ package com.gethighlow.highlowandroid.Activities.Tabs.Home;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -69,6 +70,7 @@ public class HomeViewLayout extends LinearLayout {
             @Override
             public void accept(HighLowLiveData highLowLiveData) {
                 highLow = highLowLiveData;
+                highLowView.setDate(localDate);
                 highLowView.attachToLiveData(fragment, highLowLiveData);
             }
         }, new Consumer<String>() {

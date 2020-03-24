@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -203,13 +204,18 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
     public void addHigh(View view) {
         Intent presenter = new Intent(getContext(), EditHLActivity.class);
         presenter.putExtra("type", "high");
-        presenter.putExtra("date", highLow.getDate());
+
+        String _date = highLow.getDate();
+        if (_date == null) _date = date;
+        presenter.putExtra("date", _date);
         getContext().startActivity(presenter);
     }
     public void addLow(View view) {
         Intent presenter = new Intent(getContext(), EditHLActivity.class);
         presenter.putExtra("type", "low");
-        presenter.putExtra("date", highLow.getDate());
+        String _date = highLow.getDate();
+        if (_date == null) _date = date;
+        presenter.putExtra("date", _date);
         getContext().startActivity(presenter);
     }
 
@@ -366,7 +372,6 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
 
     public void loadHighLow(HighLow highLow) {
         editable = highLow.getUid().equals(AuthService.shared().getUid());
-
         String highText = highLow.getHigh();
         String lowText = highLow.getLow();
         if (highLow.getHighlowid() != null)
@@ -603,15 +608,21 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
 
     }
 
+    public void setDate(LocalDate localDate) {
+        date = localDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
 
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String date = intent.getStringExtra("date");
             String highLowId = intent.getStringExtra("highlowid");
-            if (date != null && highLow.getDate() != null) {
-                if (highLow.getDate().equals(date)) {
+
+            if (date != null) {
+                if (highLow.getDate() != null && highLow.getDate().equals(date)) {
                     highLow.update();
+                } else if (HighLowView.this.date.equals(date)){
+
                 }
             }
             else if (highLowId != null && highLow.getHighlowid() != null) {

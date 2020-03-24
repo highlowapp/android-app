@@ -14,9 +14,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
@@ -48,6 +50,9 @@ public class EditHLActivity extends AppCompatActivity {
     private HighLowLiveData highLow;
     private String type;
     private Boolean isPrivate = true;
+    private RelativeLayout loader;
+
+    private String date;
 
     private int GALLERY_REQUEST_CODE = 80;
     private int CAMERA_REQUEST_CODE = 82;
@@ -62,10 +67,13 @@ public class EditHLActivity extends AppCompatActivity {
 
         imageView = findViewById(R.id.add_image);
         textInput = findViewById(R.id.text);
+        loader = findViewById(R.id.loader);
+
+        loader.setVisibility(View.GONE);
 
         type = getIntent().getStringExtra("type");
 
-        String date = getIntent().getStringExtra("date");
+        date = getIntent().getStringExtra("date");
 
         if (date != null) {
             HighLowManager.shared().getHighLowByDate(date, new Consumer<HighLowLiveData>() {
@@ -126,7 +134,7 @@ public class EditHLActivity extends AppCompatActivity {
             text = highLow.getLow();
         }
 
-        if (url != null) {
+        if (url != null && !url.equals("")) {
             ImageManager.shared().getImage(url, new Consumer<Bitmap>() {
                 @Override
                 public void accept(Bitmap img) {
@@ -292,6 +300,8 @@ public class EditHLActivity extends AppCompatActivity {
     }
 
     public void submit() {
+        loader.setVisibility(View.VISIBLE);
+
         String text = textInput.getText().toString();
         Bitmap img = null;
 
@@ -301,13 +311,7 @@ public class EditHLActivity extends AppCompatActivity {
 
         final String date;
 
-        if (highLow != null) {
-            date = highLow.getDate();
-        } else {
-            LocalDate localDate = LocalDate.now();
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            date = localDate.format(dateTimeFormatter);
-        }
+        date = this.date;
 
         if (highLow == null) {
             HighLow newHighLow = new HighLow();
@@ -321,32 +325,36 @@ public class EditHLActivity extends AppCompatActivity {
             highLow.setHigh(text, date, isPrivate, img, new Consumer<HighLow>() {
                 @Override
                 public void accept(HighLow highLow) {
-                    HighLowManager.shared().saveHighLow(highLow);
+                    HighLowManager.shared().saveHighLowForDate(highLow.getDate(), highLow);
                     Intent newIntent = new Intent("highlow-updated");
                     newIntent.putExtra("date", date);
                     LocalBroadcastManager.getInstance(EditHLActivity.this).sendBroadcast(newIntent);
-
+                    loader.setVisibility(View.GONE);
                     EditHLActivity.this.finish();
                 }
             }, new Consumer<String>() {
                 @Override
                 public void accept(String error) {
+                    loader.setVisibility(View.GONE);
+                    alert(getString(R.string.an_error_occurred), getString(R.string.please_try_again));
                 }
             });
         } else {
             highLow.setLow(text, date, isPrivate, img, new Consumer<HighLow>() {
                 @Override
                 public void accept(HighLow highLow) {
-                    HighLowManager.shared().saveHighLow(highLow);
+                    HighLowManager.shared().saveHighLowForDate(highLow.getDate(), highLow);
                     Intent newIntent = new Intent("highlow-updated");
                     newIntent.putExtra("date", date);
                     LocalBroadcastManager.getInstance(EditHLActivity.this).sendBroadcast(newIntent);
-
+                    loader.setVisibility(View.GONE);
                     EditHLActivity.this.finish();
                 }
             }, new Consumer<String>() {
                 @Override
                 public void accept(String error) {
+                    loader.setVisibility(View.GONE);
+                    alert(getString(R.string.an_error_occurred), getString(R.string.please_try_again));
                 }
             });
         }

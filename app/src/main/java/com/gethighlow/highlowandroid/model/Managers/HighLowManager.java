@@ -29,11 +29,6 @@ public class HighLowManager {
 
     public void attachToContext(Context context) {
         this.context = context;
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-
-        int maxKb = am.getMemoryClass() * 1024;
-        int limitKb = maxKb / 16;
-
     }
 
     public List<HighLowLiveData> restoreHighLows(List<String> highlowids) {
@@ -104,16 +99,14 @@ public class HighLowManager {
     public void getHighLowByDate(String date, final Consumer<HighLowLiveData> onSuccess, Consumer<String> onError) {
         HighLowLiveData highLow = null;
         if (dateHighLows.containsKey(date)) {
-            dateHighLows.get(date);
+           highLow = dateHighLows.get(date);
         }
         if (highLow == null) {
             HighLowService.shared().getDate(date, new Consumer<HighLow>() {
                 @Override
                 public void accept(HighLow newHighLow) {
                     HighLowLiveData liveData = new HighLowLiveData(newHighLow);
-                    if (newHighLow.getDate() != null) {
-                        dateHighLows.put(newHighLow.getDate(), liveData);
-                    }
+                    dateHighLows.put(date, liveData);
                     onSuccess.accept(liveData);
                 }
             }, onError);
