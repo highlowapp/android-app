@@ -180,7 +180,9 @@ public class EditHLActivity extends AppCompatActivity {
                     if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                         camera();
                     } else {
-                        ActivityCompat.requestPermissions(context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, WRITE_STORAGE_REQUEST);
+                        ActivityCompat.requestPermissions(context,
+                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                WRITE_STORAGE_REQUEST);
                     }
                 }
             }

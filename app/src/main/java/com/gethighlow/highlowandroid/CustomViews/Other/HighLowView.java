@@ -432,7 +432,7 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
         }
 
         if (lowImageUrl != null && !lowImageUrl.equals("") && !lowImageUrl.equals("NULL")) {
-            ImageManager.shared().getImage("https://storage.googleapis.com/highlowfiles/lows/" + highImageUrl, new Consumer<Bitmap>() {
+            ImageManager.shared().getImage("https://storage.googleapis.com/highlowfiles/lows/" + lowImageUrl, new Consumer<Bitmap>() {
                 @Override
                 public void accept(Bitmap img) {
                     lowImage.setImageBitmap(img);
