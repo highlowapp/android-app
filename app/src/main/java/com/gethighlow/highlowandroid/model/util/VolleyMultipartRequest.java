@@ -1,5 +1,7 @@
 package com.gethighlow.highlowandroid.model.util;
 
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.ParseError;
@@ -13,6 +15,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -112,13 +116,24 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
 
     @Override
     protected Response<NetworkResponse> parseNetworkResponse(NetworkResponse response) {
-        try {
-            return Response.success(
-                    response,
-                    HttpHeaderParser.parseCacheHeaders(response));
-        } catch (Exception e) {
-            return Response.error(new ParseError(e));
-        }
+//        if (response != null){
+            try {
+                return Response.success(
+                        response,
+                        HttpHeaderParser.parseCacheHeaders(response));
+            } catch (Exception e) {
+                return Response.error(new ParseError(e));
+            }
+        /*} else{
+            response = new NetworkResponse(
+                    response.statusCode,
+                    response.data,
+                    Collections.<String, String>emptyMap(), // this is the important line, set an empty but non-null map.
+                    response.notModified,
+                    response.networkTimeMs);
+        }*/
+//        return super.parseNetworkResponse(response);
+
     }
 
     @Override
@@ -175,7 +190,11 @@ public class VolleyMultipartRequest extends Request<NetworkResponse> {
         dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"" + parameterName + "\"" + lineEnd);
         //dataOutputStream.writeBytes("Content-Type: text/plain; charset=UTF-8" + lineEnd);
         dataOutputStream.writeBytes(lineEnd);
-        dataOutputStream.write(parameterValue.getBytes("utf-8"));
+        if (parameterValue != null) {
+            dataOutputStream.write(parameterValue.getBytes(StandardCharsets.UTF_8));
+        } else{
+            Log.d("Error", "Parameter Value is null");
+        }
         dataOutputStream.writeBytes(lineEnd);
     }
 

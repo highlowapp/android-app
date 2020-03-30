@@ -279,5 +279,4 @@ public class HighLowLiveData extends MutableLiveData<HighLow> {
         if (highLow == null) return null;
         return highLow.getTimestamp();
     }
-
 }

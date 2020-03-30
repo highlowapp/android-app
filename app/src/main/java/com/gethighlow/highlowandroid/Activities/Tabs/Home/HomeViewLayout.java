@@ -2,6 +2,7 @@ package com.gethighlow.highlowandroid.Activities.Tabs.Home;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.gethighlow.highlowandroid.CustomViews.Other.HighLowView;
 import com.gethighlow.highlowandroid.R;
@@ -24,11 +26,12 @@ import org.threeten.bp.format.DateTimeFormatter;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeViewLayout extends LinearLayout {
+public class HomeViewLayout extends LinearLayout implements SwipeRefreshLayout.OnRefreshListener {
     private HighLowLiveData highLow;
     private Fragment fragment;
     private TextView textView;
     private HighLowView highLowView;
+    private SwipeRefreshLayout refreshLayout;
 
     public HomeViewLayout(Fragment fragment, AttributeSet attributeSet, LocalDate localDate) {
         super(fragment.getContext(), attributeSet);
@@ -43,6 +46,9 @@ public class HomeViewLayout extends LinearLayout {
         this.setOrientation(LinearLayout.VERTICAL);
         this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
         highLowView = findViewById(R.id.highlowview);
+        refreshLayout = findViewById(R.id.homeViewRefresher);
+        refreshLayout.setOnRefreshListener(this);
+        refreshLayout.setColorSchemeColors(Color.RED);
     }
 
     private String prettyFormat(LocalDate localDate) {
@@ -78,5 +84,10 @@ public class HomeViewLayout extends LinearLayout {
             public void accept(String error) {
             }
         });
+    }
+
+    @Override
+    public void onRefresh() {
+        highLowView.highLow.update();
     }
 }

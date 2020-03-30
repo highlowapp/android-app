@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.gethighlow.highlowandroid.Activities.Tabs.Home.EditHLActivity;
 import com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButton;
@@ -51,7 +52,7 @@ import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
 
-public class HighLowView extends RelativeLayout implements HLButtonDelegate, CommentViewDelegate {
+public class HighLowView extends RelativeLayout implements HLButtonDelegate, CommentViewDelegate{
     private Fragment fragment;
     private ImageView highImage;
     private TextView high;
@@ -64,7 +65,6 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
     private RelativeLayout editHigh;
     private RelativeLayout editLow;
     private boolean editable = false;
-    private HighLowLiveData highLow;
     private ImageView flagButton;
     private ImageView likeButton;
     private TextView likeCount;
@@ -82,7 +82,9 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
     private RelativeLayout sendButton;
     private LinearLayout privateView;
 
+
     public HighLowViewDelegate delegate;
+    public HighLowLiveData highLow;
 
     public HighLowView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -371,6 +373,7 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
     }
 
     public void loadHighLow(HighLow highLow) {
+
         editable = highLow.getUid().equals(AuthService.shared().getUid());
         String highText = highLow.getHigh();
         String lowText = highLow.getLow();
@@ -528,6 +531,7 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
                 HighLowView.this.alert("An error occurred", "Try refreshing the page");
             }
         });
+
     }
 
     private Observer<User> currentUserObserver = new Observer<User>() {
@@ -632,4 +636,5 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
             }
         }
     };
+
 }

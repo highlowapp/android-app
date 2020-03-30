@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.gethighlow.highlowandroid.CustomViews.Other.HighLowView;
 import com.gethighlow.highlowandroid.R;
@@ -19,7 +20,7 @@ import com.gethighlow.highlowandroid.model.Resources.User;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
-public class HighLowViewHolder extends RecyclerView.ViewHolder {
+public class HighLowViewHolder extends RecyclerView.ViewHolder /*implements SwipeRefreshLayout.OnRefreshListener*/ {
     private HighLowView highLowView;
     private ImageView userImage;
     private TextView userName;
@@ -80,4 +81,9 @@ public class HighLowViewHolder extends RecyclerView.ViewHolder {
 
         userName.setText(user.name());
     }
+
+    /*@Override
+    public void onRefresh() {
+        this.setHighLow();
+    }*/
 }
