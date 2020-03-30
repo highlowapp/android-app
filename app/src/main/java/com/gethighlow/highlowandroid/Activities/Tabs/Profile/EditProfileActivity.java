@@ -36,6 +36,7 @@ import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Services.AuthService;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -164,14 +165,20 @@ public class EditProfileActivity extends AppCompatActivity {
                 // Move to first row
                 cursor.moveToFirst();
                 //Get the column index of MediaStore.Images.Media.DATA
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                //int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                 //Gets the String value in the column
-                String imgDecodableString = cursor.getString(columnIndex);
+                //String imgDecodableString = cursor.getString(columnIndex);
                 cursor.close();
                 // Set the Image in ImageView after decoding the String
                 profileImage.setImageTintList(null);
                 profileImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                profileImage.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
+                //profileImage.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
+                try {
+                    Bitmap bitmap=BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage));
+                    profileImage.setImageBitmap(bitmap);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
                 imgHasBeenChanged = true;
 
             } else if (requestCode == CAMERA_REQUEST_CODE) {
