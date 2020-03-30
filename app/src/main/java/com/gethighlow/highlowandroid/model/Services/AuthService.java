@@ -3,6 +3,7 @@ package com.gethighlow.highlowandroid.model.Services;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -120,7 +121,10 @@ public class AuthService {
             put("email", email);
             put("password", password);
             put("confirmpassword", confirmPassword);
+            put("platform", "1");
         }};
+
+        Log.w("Debug", params.toString());
 
         APIService.shared().makeHTTPRequest("/auth/sign_up", 1, params, new Consumer<String>() {
             @Override

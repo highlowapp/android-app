@@ -8,6 +8,7 @@ import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Resources.Comment;
 import com.gethighlow.highlowandroid.model.Resources.HighLow;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
+import com.gethighlow.highlowandroid.model.util.Runnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,45 @@ public class HighLowLiveData extends MutableLiveData<HighLow> {
         return this.getValue();
     }
 
+    public void update(Runnable onSuccess) {
+        HighLow highLow = getValue();
+        if (highLow == null) {
+            onSuccess.run();
+            return;
+        }
+
+        if (highLow.getHighlowid() != null) {
+            HighLowService.shared().get(highLow.getHighlowid(), new Consumer<HighLow>() {
+                @Override
+                public void accept(HighLow value) {
+                    HighLowLiveData.this.setValue(value);
+                    onSuccess.run();
+                }
+            }, new Consumer<String>() {
+                @Override
+                public void accept(String error) {
+                    onSuccess.run();
+                }
+            });
+        } else if (highLow.getDate() != null) {
+            HighLowService.shared().getDate(highLow.getDate(), new Consumer<HighLow>() {
+                @Override
+                public void accept(HighLow value) {
+                    HighLowLiveData.this.setValue(value);
+                    onSuccess.run();
+                }
+            }, new Consumer<String>() {
+                @Override
+                public void accept(String error) {
+                    onSuccess.run();
+                }
+            });
+        } else {
+            onSuccess.run();
+        }
+    }
+
+
     public void update() {
         HighLow highLow = getValue();
         if (highLow == null) {
@@ -40,7 +80,6 @@ public class HighLowLiveData extends MutableLiveData<HighLow> {
             }, new Consumer<String>() {
                 @Override
                 public void accept(String error) {
-
                 }
             });
         } else if (highLow.getDate() != null) {

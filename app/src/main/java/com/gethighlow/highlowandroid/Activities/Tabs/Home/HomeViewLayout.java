@@ -19,6 +19,7 @@ import com.gethighlow.highlowandroid.R;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
+import com.gethighlow.highlowandroid.model.util.Runnable;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
@@ -88,6 +89,11 @@ public class HomeViewLayout extends LinearLayout implements SwipeRefreshLayout.O
 
     @Override
     public void onRefresh() {
-        highLowView.highLow.update();
+        highLowView.highLow.update(new Runnable() {
+            @Override
+            public void run() {
+                refreshLayout.setRefreshing(false);
+            }
+        });
     }
 }
