@@ -121,7 +121,7 @@ public class AuthService {
             put("email", email);
             put("password", password);
             put("confirmpassword", confirmPassword);
-            put("platform", "1");
+            put("is_android", "1");
         }};
 
         Log.w("Debug", params.toString());
@@ -192,6 +192,7 @@ public class AuthService {
 
         params.put("provider_key", provider_key);
         params.put("provider_name", provider_name);
+        params.put("is_android", "1");
 
         APIService.shared().makeHTTPRequest("/auth/oauth/sign_in", 1, params, new Consumer<String>() {
             @Override

@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import androidx.core.content.ContextCompat;
 
 import com.android.volley.Cache;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Network;
 import com.android.volley.NetworkResponse;
 import com.android.volley.RequestQueue;
@@ -151,7 +152,11 @@ public class APIService implements APIConfig {
                 return params;
             }
         };
-
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                10 * 1000,
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        ));
         requestQueue.add(request);
     }
 
