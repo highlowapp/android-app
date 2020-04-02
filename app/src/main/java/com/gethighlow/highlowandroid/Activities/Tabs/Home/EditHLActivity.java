@@ -13,6 +13,7 @@ import android.graphics.drawable.VectorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -36,11 +37,15 @@ import com.gethighlow.highlowandroid.model.Managers.ImageManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
 import com.gethighlow.highlowandroid.model.Resources.HighLow;
 
+import org.apache.commons.io.IOUtils;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class EditHLActivity extends AppCompatActivity {
 
@@ -135,9 +140,17 @@ public class EditHLActivity extends AppCompatActivity {
         }
 
         if (url != null && !url.equals("")) {
+            if (type.equals("low")) {
+                url = "https://storage.googleapis.com/highlowfiles/lows/" + url;
+            } else {
+                url = "https://storage.googleapis.com/highlowfiles/highs/" + url;
+            }
+
             ImageManager.shared().getImage(url, new Consumer<Bitmap>() {
                 @Override
                 public void accept(Bitmap img) {
+                    imageView.setImageTintList(null);
+                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     imageView.setImageBitmap(img);
                 }
             }, new Consumer<String>() {
@@ -250,21 +263,28 @@ public class EditHLActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GALLERY_REQUEST_CODE) {
 
-                Uri selectedImage = data.getData();
-                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                // Get the cursor
-                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                // Move to first row
-                cursor.moveToFirst();
-                //Get the column index of MediaStore.Images.Media.DATA
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                //Gets the String value in the column
-                String imgDecodableString = cursor.getString(columnIndex);
-                cursor.close();
-                // Set the Image in ImageView after decoding the String
-                imageView.setImageTintList(null);
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
+                try {
+                    Uri selectedImage = data.getData();
+
+                    ParcelFileDescriptor parcelFileDescriptor = getContentResolver().openFileDescriptor(selectedImage, "r", null);
+
+                    FileInputStream inputStream = new FileInputStream(parcelFileDescriptor.getFileDescriptor());
+
+                    File file = new File(getCacheDir(), "highlow_img");
+
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+
+                    IOUtils.copy(inputStream, fileOutputStream);
+
+                    imageView.setImageTintList(null);
+                    imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    imageView.setImageBitmap(BitmapFactory.decodeFile(getCacheDir() + "/highlow_img"));
+
+                    fileOutputStream.close();
+                    inputStream.close();
+                } catch(Exception e) {
+                    alert(getString(R.string.an_error_occurred), getString(R.string.please_try_again));
+                }
 
             } else if (requestCode == CAMERA_REQUEST_CODE) {
                 Bitmap bitmap = BitmapFactory.decodeFile(filePath);

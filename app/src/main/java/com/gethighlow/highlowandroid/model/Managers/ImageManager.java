@@ -3,6 +3,7 @@ package com.gethighlow.highlowandroid.model.Managers;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Managers.Caches.ImageCache;
@@ -47,6 +48,10 @@ public class ImageManager {
         } else {
             onSuccess.accept(img);
         }
+    }
+
+    public void invalidateUrl(final String url) {
+        cache.remove(url);
     }
 
     public void saveImage(String url, Bitmap image) { cache.put(url, image); }

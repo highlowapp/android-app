@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    
     <!-- The line android:requestLegacyExternalStorage="false" says this: Attribute requestLegacyExternalStorage is only used in API level 29 and higher (current min is 22)
     So I don't know if this will make it to where the app doesn't support lower level APIs or not so beware of this-->
     <application

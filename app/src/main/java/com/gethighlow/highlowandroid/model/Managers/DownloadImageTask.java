@@ -3,6 +3,7 @@ package com.gethighlow.highlowandroid.model.Managers;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.gethighlow.highlowandroid.model.util.Consumer;
 
@@ -20,7 +21,6 @@ public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
 
     protected Bitmap doInBackground(String... src) {
         try {
-
             URL url = new URL(src[0]);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");

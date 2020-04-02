@@ -2,6 +2,7 @@ package com.gethighlow.highlowandroid.model.Resources;
 
 
 import android.graphics.Bitmap;
+import android.media.Image;
 
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
@@ -104,6 +105,11 @@ public class User {
                 User.this.lastname = lastname;
                 User.this.email = email;
                 User.this.bio = bio;
+
+                if (!User.this.profileimage.startsWith("http"))
+                    ImageManager.shared().invalidateUrl("https://storage.googleapis.com/highlowfiles/" + User.this.profileimage);
+                else
+                    ImageManager.shared().invalidateUrl(User.this.profileimage);
 
                 onSuccess.accept(response);
 

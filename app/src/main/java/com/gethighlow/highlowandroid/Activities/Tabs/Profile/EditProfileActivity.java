@@ -12,7 +12,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,8 +37,12 @@ import com.gethighlow.highlowandroid.model.Resources.User;
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Services.AuthService;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -158,28 +164,30 @@ public class EditProfileActivity extends AppCompatActivity {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GALLERY_REQUEST_CODE) {
 
-                Uri selectedImage = data.getData();
-                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-                // Get the cursor
-                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                // Move to first row
-                cursor.moveToFirst();
-                //Get the column index of MediaStore.Images.Media.DATA
-                //int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                //Gets the String value in the column
-                //String imgDecodableString = cursor.getString(columnIndex);
-                cursor.close();
-                // Set the Image in ImageView after decoding the String
-                profileImage.setImageTintList(null);
-                profileImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                //profileImage.setImageBitmap(BitmapFactory.decodeFile(imgDecodableString));
                 try {
-                    Bitmap bitmap=BitmapFactory.decodeStream(getContentResolver().openInputStream(selectedImage));
-                    profileImage.setImageBitmap(bitmap);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
+                    Uri selectedImage = data.getData();
+
+                    ParcelFileDescriptor parcelFileDescriptor = getContentResolver().openFileDescriptor(selectedImage, "r", null);
+
+                    FileInputStream inputStream = new FileInputStream(parcelFileDescriptor.getFileDescriptor());
+
+                    File file = new File(getCacheDir(), "profile_img");
+
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+
+                    IOUtils.copy(inputStream, fileOutputStream);
+
+                    profileImage.setImageTintList(null);
+                    profileImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                    profileImage.setImageBitmap(BitmapFactory.decodeFile(getCacheDir() + "/profile_img"));
+                    imgHasBeenChanged = true;
+
+                    fileOutputStream.close();
+                    inputStream.close();
+                } catch(Exception e) {
+                    alert(getString(R.string.an_error_occurred), getString(R.string.please_try_again));
                 }
-                imgHasBeenChanged = true;
+
 
             } else if (requestCode == CAMERA_REQUEST_CODE) {
                 Bitmap bitmap = BitmapFactory.decodeFile(filePath);
