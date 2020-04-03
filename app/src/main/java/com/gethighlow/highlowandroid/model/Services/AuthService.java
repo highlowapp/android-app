@@ -124,7 +124,6 @@ public class AuthService {
             put("is_android", "1");
         }};
 
-        Log.w("Debug", params.toString());
 
         APIService.shared().makeHTTPRequest("/auth/sign_up", 1, params, new Consumer<String>() {
             @Override

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
@@ -133,7 +134,6 @@ public class APIService implements APIConfig {
         } else {
             completeUrl = base_url + url;
         }
-
 
         StringRequest request = new StringRequest(method, completeUrl, new Response.Listener<String>() {
             @Override
