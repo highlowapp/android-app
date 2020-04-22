@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,9 +23,11 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -36,6 +39,8 @@ import com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButtonDelegate
 import com.gethighlow.highlowandroid.CustomViews.Other.Delegates.CommentViewDelegate;
 import com.gethighlow.highlowandroid.CustomViews.Other.Delegates.HighLowViewDelegate;
 import com.gethighlow.highlowandroid.R;
+import com.gethighlow.highlowandroid.model.Resources.DynamicColors;
+import com.gethighlow.highlowandroid.model.Services.SetActivityTheme;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Managers.ImageManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.CommentLiveData;
@@ -51,6 +56,7 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
+import java.util.Set;
 
 public class HighLowView extends RelativeLayout implements HLButtonDelegate, CommentViewDelegate{
     private Fragment fragment;
@@ -89,6 +95,8 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
     public HighLowView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
 
+
+
         setup(context, attributeSet);
     }
 
@@ -102,8 +110,42 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
     }
 
     private void setup(Context context, @Nullable AttributeSet attributeSet) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.highlowview, this, true);
+
+
+        /*if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.DarkTheme);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater localInflater = inflater.cloneInContext(theme);
+            localInflater.inflate(R.layout.highlowview, this, true);
+        } else{
+            final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.LightTheme);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater localInflater = inflater.cloneInContext(theme);
+            localInflater.inflate(R.layout.highlowview, this, true);
+        }*/
+
+
+        /*LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.highlowview, this, true);*/
+
+
+
+        String currentTheme = SetActivityTheme.getTheme(context);
+        Log.d("Current theme", currentTheme);
+        if(currentTheme.equals("light")) {
+            final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.LightTheme);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater localInflater = inflater.cloneInContext(theme);
+            localInflater.inflate(R.layout.highlowview, this, true);
+        } else if(currentTheme.equals("dark")){
+            final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.DarkTheme);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater localInflater = inflater.cloneInContext(theme);
+            localInflater.inflate(R.layout.highlowview, this, true);
+        }
+
+
+
         this.setGravity(Gravity.CENTER);
         this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
         this.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -155,6 +197,8 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
         privateSwitch.setOnCheckedChangeListener(onCheckedChangeListener);
 
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(receiver, new IntentFilter("highlow-updated"));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(themeReceiver, new IntentFilter("theme-updated"));
+
     }
 
     public View.OnClickListener sendCommentListener = new View.OnClickListener() {
@@ -634,7 +678,38 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
                     highLow.update();
                 }
             }
+
         }
+        };
+
+        private BroadcastReceiver themeReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                String currentTheme = SetActivityTheme.getTheme(context);
+                Log.d("Current theme", currentTheme);
+                if(currentTheme.equals("light")) {
+                    String layoutTheme = "light";
+                    setLayout(context, layoutTheme);
+                } else if(currentTheme.equals("dark")){
+                    String layoutTheme = "dark";
+                    setLayout(context, layoutTheme);
+                }
+
+            }
     };
 
+        private void setLayout(Context context, String layoutTheme){
+            if(layoutTheme.equals("light")) {
+                final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.LightTheme);
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                LayoutInflater localInflater = inflater.cloneInContext(theme);
+                localInflater.inflate(R.layout.highlowview, this, true);
+            } else if(layoutTheme.equals("dark")){
+                final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.DarkTheme);
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                LayoutInflater localInflater = inflater.cloneInContext(theme);
+                localInflater.inflate(R.layout.highlowview, this, true);
+            }
+    }
 }

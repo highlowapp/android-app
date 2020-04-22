@@ -22,6 +22,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         android:networkSecurityConfig="@xml/network_security_config">
+
+
         <activity android:name=".Activities.Tabs.Home.ViewHighLowActivity"
             android:theme="@style/AppTheme"></activity>
         <activity
@@ -36,6 +38,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.Tabs.Profile.EditInterestsActivity" />
         <activity android:name=".Activities.Tabs.About.PushNotifSettings" />
+        <activity android:name=".Activities.Tabs.About.SetTheme"/>
         <activity android:name=".Activities.Tabs.About.ReportABug" />
         <activity android:name=".Activities.Tabs.Profile.AddFriendsActivity" />
         <activity android:name=".Activities.Tabs.Profile.ProfileViewActivity" />

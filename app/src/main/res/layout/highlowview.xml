@@ -3,13 +3,24 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/bgColor">
+
+
+<!--<LinearLayout
+    android:layout_margin="0dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="?attr/bgColor"-->
     <LinearLayout
         android:layout_margin="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="?attr/bgColor">
 
         <TextView
             android:id="@+id/highLabel"
@@ -19,7 +30,7 @@
             android:background="@color/transparent"
             android:fontFamily="@font/chalkboard_se"
             android:text="@string/high"
-            android:textColor="@color/black"
+            android:textColor="?attr/textColor"
             android:textSize="20sp" />
 
         <com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButton
@@ -51,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_below="@id/highImage"
-                android:textColor="@color/black"
+                android:textColor="?attr/textColor"
                 android:textSize="20sp" />
 
             <RelativeLayout
@@ -95,7 +106,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/chalkboard_se"
             android:text="@string/low"
-            android:textColor="@color/black"
+            android:textColor="?attr/textColor"
             android:textSize="20sp" />
 
         <com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButton
@@ -302,4 +313,5 @@
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
+<!--</LinearLayout> -->
 </merge>

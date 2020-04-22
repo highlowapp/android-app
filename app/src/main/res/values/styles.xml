@@ -2,17 +2,42 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#FB2A57</item>
+        <item name="colorPrimaryDark">#c8042f</item>
+        <item name="colorAccent">#FA9C1D</item>
         <item name="android:textColorAlertDialogListItem">@color/colorPrimary</item>
+        <item name="textColor">#000000</item>
+        <item name="bgColor">#FFFFFF</item>
+
     </style>
+    <!--<style name="AppTheme" parent="Theme.AppCompat.DayNight">-->
+        <!-- Customize your theme here. -->
+        <style name="LightTheme" parent="AppTheme">
+            <item name="colorPrimary">#FB2A57</item>
+            <item name="colorPrimaryDark">#c8042f</item>
+            <item name="colorAccent">#FA9C1D</item>
+            <item name="android:textColorAlertDialogListItem">@color/colorPrimary</item>
+            <item name="textColor">#000000</item>
+            <item name="bgColor">#FFFFFF</item>
+        </style>
+
+        <style name="DarkTheme" parent="AppTheme">
+            <item name="colorPrimary">#FB2A57</item>
+            <item name="colorPrimaryDark">#c8042f</item>
+            <item name="colorAccent">#FA9C1D</item>
+            <item name="android:textColorAlertDialogListItem">@color/colorPrimary</item>
+            <item name="textColor">#FFFFFF</item>
+            <item name="bgColor">#000000</item>
+        </style>
+
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:textColorAlertDialogListItem">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+
+
 
 </resources>

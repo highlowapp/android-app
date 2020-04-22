@@ -112,7 +112,8 @@ public class SignInActivity extends AppCompatActivity implements TextInputDelega
                 } else if ("user-no-exist".equals(error)) {
                     errors.setText("A user with that email does not exist");
                 } else {
-                    errors.setText("An unkown error occurred");
+                    //errors.setText("An unknown error occurred (This is the error)");
+                    errors.setText(error);
                 }
             }
         });
