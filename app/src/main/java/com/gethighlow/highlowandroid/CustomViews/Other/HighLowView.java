@@ -23,15 +23,12 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.gethighlow.highlowandroid.Activities.Tabs.Home.EditHLActivity;
 import com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButton;
@@ -39,7 +36,6 @@ import com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButtonDelegate
 import com.gethighlow.highlowandroid.CustomViews.Other.Delegates.CommentViewDelegate;
 import com.gethighlow.highlowandroid.CustomViews.Other.Delegates.HighLowViewDelegate;
 import com.gethighlow.highlowandroid.R;
-import com.gethighlow.highlowandroid.model.Resources.DynamicColors;
 import com.gethighlow.highlowandroid.model.Services.SetActivityTheme;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Managers.ImageManager;
@@ -56,7 +52,6 @@ import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
-import java.util.Set;
 
 public class HighLowView extends RelativeLayout implements HLButtonDelegate, CommentViewDelegate{
     private Fragment fragment;
@@ -101,7 +96,7 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
     }
 
     private void alert(String title, String message) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom);
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setCancelable(true);
@@ -110,26 +105,9 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
     }
 
     private void setup(Context context, @Nullable AttributeSet attributeSet) {
-
-
-        /*if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
-            final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.DarkTheme);
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            LayoutInflater localInflater = inflater.cloneInContext(theme);
-            localInflater.inflate(R.layout.highlowview, this, true);
-        } else{
-            final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.LightTheme);
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            LayoutInflater localInflater = inflater.cloneInContext(theme);
-            localInflater.inflate(R.layout.highlowview, this, true);
-        }*/
-
-
-        /*LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.highlowview, this, true);*/
-
-
-
+        //Here is where you'd apply a theme to an activity
+        // (Note: this looks different than it would normally look because highlowview.xml is a fragment.
+        // See EditHLActivity.java in the Home tab to see what it normally looks like to apply a theme)
         String currentTheme = SetActivityTheme.getTheme(context);
         Log.d("Current theme", currentTheme);
         if(currentTheme.equals("light")) {
@@ -314,7 +292,7 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
     public View.OnClickListener flag = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom);
             builder.setTitle(R.string.flag_title)
                     .setMessage(R.string.flag_message)
             .setPositiveButton(R.string.flag_confirmation, new DialogInterface.OnClickListener() {
@@ -347,7 +325,7 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
     public View.OnClickListener unFlag = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom);
             builder.setTitle(R.string.unflag_title)
                     .setMessage(R.string.unflag_message)
                     .setPositiveButton(R.string.flag_confirmation, new DialogInterface.OnClickListener() {

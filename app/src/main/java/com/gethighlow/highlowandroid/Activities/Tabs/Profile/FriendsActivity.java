@@ -1,8 +1,12 @@
 package com.gethighlow.highlowandroid.Activities.Tabs.Profile;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,6 +15,7 @@ import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +25,7 @@ import com.gethighlow.highlowandroid.CustomViews.Sections.Delegates.FriendsSecti
 import com.gethighlow.highlowandroid.CustomViews.Sections.PendingRequestsSection;
 import com.gethighlow.highlowandroid.CustomViews.Sections.Delegates.PendingRequestsSectionDelegate;
 import com.gethighlow.highlowandroid.R;
+import com.gethighlow.highlowandroid.model.Services.SetActivityTheme;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.UserLiveData;
 import com.gethighlow.highlowandroid.model.Managers.UserManager;
@@ -28,6 +34,7 @@ import com.gethighlow.highlowandroid.model.Services.AuthService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 
@@ -43,6 +50,13 @@ public class FriendsActivity extends AppCompatActivity implements PendingRequest
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String theme = SetActivityTheme.getTheme(getApplicationContext());
+        if(theme.equals("light")){
+            setTheme(R.style.LightTheme);
+        }else{
+            setTheme(R.style.DarkTheme);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.friends_activity);
 
@@ -72,7 +86,7 @@ public class FriendsActivity extends AppCompatActivity implements PendingRequest
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(themeReceiver, new IntentFilter("theme-updated"));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
 
@@ -112,7 +126,7 @@ public class FriendsActivity extends AppCompatActivity implements PendingRequest
     }
 
     private void alert(String title, String message) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setCancelable(true);
@@ -120,7 +134,7 @@ public class FriendsActivity extends AppCompatActivity implements PendingRequest
         alertDialog.show();
     }
     private void alert(String title, String message, final Runnable onComplete) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setCancelable(true);
@@ -229,4 +243,16 @@ public class FriendsActivity extends AppCompatActivity implements PendingRequest
             }
         });
     }
+
+    private BroadcastReceiver themeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String theme = SetActivityTheme.getTheme(getApplicationContext());
+            if(theme.equals("light")){
+                setTheme(R.style.LightTheme);
+            }else{
+                setTheme(R.style.DarkTheme);
+            }
+        }
+    };
 }

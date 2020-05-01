@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activities.Tabs.About.About"
-    android:background="@color/very_light_gray">
+    android:background="?attr/bgColor">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,8 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/about_account_section_header"
-            android:textColor="@color/black"
-            android:background="@color/very_light_gray"
+            android:textColor="?attr/textColor"
+            android:background="?attr/aboutGray"
             android:padding="10dp"
             android:textStyle="bold"
             android:textSize="17sp"/>
@@ -28,22 +28,13 @@
             android:padding="10dp"
             android:id="@+id/logOut"
             android:textSize="17sp"
-            android:background="@color/white"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/customize"
-            android:textColor="@color/colorPrimary"
-            android:padding="10dp"
-            android:id="@+id/customize"
-            android:textSize="17sp"
-            android:background="@color/white"/>
+            android:background="?attr/bgColor"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/about_feedback_section_header"
-            android:textColor="@color/black"
-            android:background="@color/very_light_gray"
+            android:textColor="?attr/textColor"
+            android:background="?attr/aboutGray"
             android:padding="10dp"
             android:textStyle="bold"
             android:textSize="17sp"/>
@@ -55,14 +46,13 @@
             android:padding="10dp"
             android:id="@+id/reportBug"
             android:textSize="17sp"
-            android:background="@color/white"/>
+            android:background="?attr/bgColor"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/about_settings_section_header"
-            android:textColor="@color/black"
-            android:background="@color/very_light_gray"
-            android:padding="10dp"
+            android:textColor="?attr/textColor"
+            android:background="?attr/aboutGray"            android:padding="10dp"
             android:textStyle="bold"
             android:textSize="17sp"/>
         <TextView
@@ -73,14 +63,27 @@
             android:padding="10dp"
             android:id="@+id/pushNotifSettings"
             android:textSize="17sp"
-            android:background="@color/white"/>
+            android:background="?attr/bgColor"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/aboutDivider"
+            android:layout_marginHorizontal="10dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/darkTheme"
+            android:textColor="@color/colorPrimary"
+            android:padding="10dp"
+            android:id="@+id/customize"
+            android:textSize="17sp"
+            android:background="?attr/bgColor"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/about_support_section_header"
-            android:textColor="@color/black"
-            android:background="@color/very_light_gray"
-            android:padding="10dp"
+            android:textColor="?attr/textColor"
+            android:background="?attr/aboutGray"            android:padding="10dp"
             android:textStyle="bold"
             android:textSize="17sp"/>
         <TextView
@@ -91,11 +94,11 @@
             android:padding="10dp"
             android:id="@+id/ourWebsite"
             android:textSize="17sp"
-            android:background="@color/white"/>
+            android:background="?attr/bgColor"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/light_grey"
+            android:background="?attr/aboutDivider"
             android:layout_marginHorizontal="10dp"/>
         <TextView
             android:layout_width="match_parent"
@@ -105,14 +108,13 @@
             android:padding="10dp"
             android:id="@+id/contactUs"
             android:textSize="17sp"
-            android:background="@color/white"/>
+            android:background="?attr/bgColor"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/about_agreements_section_header"
-            android:textColor="@color/black"
-            android:background="@color/very_light_gray"
-            android:padding="10dp"
+            android:textColor="?attr/textColor"
+            android:background="?attr/aboutGray"            android:padding="10dp"
             android:textStyle="bold"
             android:textSize="17sp"/>
         <TextView
@@ -123,12 +125,12 @@
             android:padding="10dp"
             android:id="@+id/privacyPolicy"
             android:textSize="17sp"
-            android:background="@color/white"/>
+            android:background="?attr/bgColor"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/light_grey"
+            android:background="?attr/aboutDivider"
             android:layout_marginHorizontal="10dp"/>
 
         <TextView
@@ -139,7 +141,7 @@
             android:padding="10dp"
             android:id="@+id/termsOfService"
             android:textSize="17sp"
-            android:background="@color/white"/>
+            android:background="?attr/bgColor"/>
 
     </LinearLayout>
 

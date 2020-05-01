@@ -95,6 +95,6 @@
     <string name="forgot_password_message">Sin preocupaciones. Sucede. Simplemente ingrese su dirección de correo electrónico a continuación y le enviaremos un mensaje para confirmar que desea restablecer su contraseña. (Asegúrese de revisar su carpeta de spam)</string>
     <string name="title_home">Home</string>
     <string name="unflag_title">Confirm Unflag?</string>
-    <string name="customize">Customize</string>
     <string name="set_theme">Set Theme</string>
+    <string name="darkTheme">Dark Theme</string>
 </resources>

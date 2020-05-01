@@ -13,15 +13,29 @@
         android:orientation="vertical"
         android:background="?attr/bgColor">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/set_theme"
-            android:textColor="?attr/textColor"
-            android:background="?attr/bgColor"
-            android:padding="10dp"
-            android:textStyle="bold"
-            android:textSize="24dp"/>
+            android:orientation="horizontal"
+            android:background="?attr/bgColor">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/set_theme"
+                android:textColor="?attr/textColor"
+                android:background="?attr/bgColor"
+                android:padding="10dp"
+                android:textStyle="bold"
+                android:textSize="24dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,6 +60,12 @@
                 android:color="?attr/textColor"/>
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/aboutDivider"
+            android:layout_marginHorizontal="10dp"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,7 +89,7 @@
                 android:color="?attr/textColor"/>
         </LinearLayout>
 
-        <LinearLayout
+        <!--<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -90,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/systemDefault"
                 android:color="?attr/textColor"/>
-        </LinearLayout>
+        </LinearLayout>-->
 
 
     </LinearLayout>

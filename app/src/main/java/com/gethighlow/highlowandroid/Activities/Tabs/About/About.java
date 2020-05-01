@@ -61,7 +61,7 @@ public class About extends Fragment {
     private View.OnClickListener logOutListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(About.this.getContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(About.this.getContext(), R.style.AlertDialogCustom);
             builder.setTitle("Confirm logout");
             builder.setMessage("Are you sure you want to log out?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {

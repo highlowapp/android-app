@@ -7,11 +7,13 @@
     tools:context=".Activities.Tabs.Home.ViewHighLowActivity">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="?attr/bgColor">
         <com.gethighlow.highlowandroid.CustomViews.Other.HighLowView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="100dp"
-            android:id="@+id/highlowview"/>
+            android:id="@+id/highlowview"
+            android:background="?attr/bgColor"/>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

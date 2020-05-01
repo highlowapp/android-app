@@ -2,31 +2,32 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/bgColor">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/very_light_gray">
+        android:background="?attr/aboutGray">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/daily_reminder_notification"
             android:textSize="20sp"
-            android:textColor="@color/black"
+            android:textColor="?attr/textColor"
             android:layout_margin="10dp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:background="@color/white"
+            android:background="?attr/bgColor"
             android:padding="10dp">
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/datePickerButton"
                 android:text="@string/not_scheduled"
-                android:backgroundTint="@color/colorPrimary"
+                android:background="?attr/primaryButton2borderButtonPink"
                 android:textColor="@color/white"/>
             <View
                 android:layout_width="0dp"
@@ -36,6 +37,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/cancel"
+                android:textColor="?attr/textColor"
+                android:background="?attr/grayButton2borderButtonWhite"
                 android:id="@+id/cancelReminder"/>
         </LinearLayout>
 
@@ -47,14 +50,14 @@
             android:paddingVertical="10dp"
             android:paddingHorizontal="10dp"
             android:layout_marginTop="20dp"
-            android:background="@color/white">
+            android:background="?attr/bgColor">
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:layout_height="wrap_content"
                 android:text="@string/new_friend_requests"
                 android:textSize="20sp"
-                android:textColor="@color/black"/>
+                android:textColor="?attr/textColor"/>
             <androidx.appcompat.widget.SwitchCompat
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -67,14 +70,14 @@
             android:paddingVertical="10dp"
             android:paddingHorizontal="10dp"
             android:layout_marginTop="1dp"
-            android:background="@color/white">
+            android:background="?attr/bgColor">
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:layout_height="wrap_content"
                 android:text="@string/friend_request_accepted"
                 android:textSize="20sp"
-                android:textColor="@color/black"/>
+                android:textColor="?attr/textColor"/>
             <androidx.appcompat.widget.SwitchCompat
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,14 +90,14 @@
             android:paddingVertical="10dp"
             android:paddingHorizontal="10dp"
             android:layout_marginTop="1dp"
-            android:background="@color/white">
+            android:background="?attr/bgColor">
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:layout_height="wrap_content"
                 android:text="@string/new_feed_items"
                 android:textSize="20sp"
-                android:textColor="@color/black"/>
+                android:textColor="?attr/textColor"/>
             <androidx.appcompat.widget.SwitchCompat
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,14 +110,14 @@
             android:paddingVertical="10dp"
             android:paddingHorizontal="10dp"
             android:layout_marginTop="1dp"
-            android:background="@color/white">
+            android:background="?attr/bgColor">
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:layout_height="wrap_content"
                 android:text="@string/likes"
                 android:textSize="20sp"
-                android:textColor="@color/black"/>
+                android:textColor="?attr/textColor"/>
             <androidx.appcompat.widget.SwitchCompat
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -127,14 +130,14 @@
             android:paddingVertical="10dp"
             android:paddingHorizontal="10dp"
             android:layout_marginTop="1dp"
-            android:background="@color/white">
+            android:background="?attr/bgColor">
             <TextView
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:layout_height="wrap_content"
                 android:text="@string/comments"
                 android:textSize="20sp"
-                android:textColor="@color/black"/>
+                android:textColor="?attr/textColor"/>
             <androidx.appcompat.widget.SwitchCompat
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

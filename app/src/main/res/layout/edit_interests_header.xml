@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:paddingVertical="5dp"
-    android:background="@color/very_light_gray">
+    android:background="?attr/aboutDivider">
     <co.lujun.androidtagview.TagContainerLayout
         android:layout_width="match_parent"
         android:layout_marginHorizontal="10dp"

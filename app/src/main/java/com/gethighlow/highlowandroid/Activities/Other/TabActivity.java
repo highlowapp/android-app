@@ -5,10 +5,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 
@@ -16,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.SupportMenuInflater;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -28,6 +36,7 @@ import com.gethighlow.highlowandroid.Activities.Tabs.About.About;
 import com.gethighlow.highlowandroid.Activities.Tabs.Profile.FriendsActivity;
 import com.gethighlow.highlowandroid.Activities.Tabs.Profile.Profile;
 import com.gethighlow.highlowandroid.R;
+import com.gethighlow.highlowandroid.model.Services.SetActivityTheme;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Responses.NotificationsRegisterResponse;
 import com.gethighlow.highlowandroid.model.Services.NotificationsService;
@@ -41,6 +50,7 @@ import org.threeten.bp.LocalDate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class TabActivity extends AppCompatActivity implements Home.OnFragmentInteractionListener, Profile.OnFragmentInteractionListener {
     private FrameLayout frameLayout;
@@ -80,6 +90,17 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Context context = getApplicationContext();
+        String theme = SetActivityTheme.getTheme(context);
+
+        if(theme.equals("light")){
+            setTheme(R.style.LightTheme);
+        }else{
+            setTheme(R.style.DarkTheme);
+        }
+
+
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.tab_activity);
@@ -104,6 +125,8 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.navigation);
 
+        bottomNavigationViewColor(context, bottomNavigationView);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(this.onNavigationItemSelectedListener);
 
         actionBar = getSupportActionBar();
@@ -111,7 +134,7 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
         actionBar.setTitle(titles.get(current));
 
         LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("com.gethighlow.com_logout"));
-
+        LocalBroadcastManager.getInstance(context).registerReceiver(themeReceiver, new IntentFilter("theme-updated"));
         FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
             @Override
             public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -163,6 +186,7 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        /** This is where I'm trying to set the theme of the calendar **/
         getMenuInflater().inflate(R.menu.home_menu, menu);
         calendarView = menu.getItem(0);
 
@@ -222,4 +246,30 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
             ((Home) fragments.get(R.id.navigation_home)).setDate(LocalDate.of(i, i1 + 1, i2));
         }
     };
+
+
+    private BroadcastReceiver themeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+                BottomNavigationView bottomNavigationView = findViewById(R.id.navigation);
+                bottomNavigationViewColor(context, bottomNavigationView);
+                recreate();
+        }
+    };
+
+
+    private void bottomNavigationViewColor(Context context, BottomNavigationView bottomNavigationView){
+
+        String theme = SetActivityTheme.getTheme(context);
+
+        if(theme.equals("light")) {
+            bottomNavigationView.setBackgroundColor(getResources().getColor(R.color.very_light_gray));
+            setTheme(R.style.LightTheme);
+
+        } else if(theme.equals("dark")){
+            bottomNavigationView.setBackgroundColor(getResources().getColor(R.color.very_dark_gray));
+            setTheme(R.style.DarkTheme);
+        }
+
+    }
 }

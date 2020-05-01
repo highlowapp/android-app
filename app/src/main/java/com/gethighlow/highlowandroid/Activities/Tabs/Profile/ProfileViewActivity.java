@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.gethighlow.highlowandroid.Activities.Tabs.Profile.Profile;
 import com.gethighlow.highlowandroid.R;
 
 public class ProfileViewActivity extends AppCompatActivity implements Profile.OnFragmentInteractionListener {

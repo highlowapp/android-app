@@ -22,6 +22,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.gethighlow.highlowandroid.CustomViews.Sections.EndlessRecyclerViewScrollListener;
 import com.gethighlow.highlowandroid.CustomViews.Adapters.ProfileAdapter;
 import com.gethighlow.highlowandroid.R;
+import com.gethighlow.highlowandroid.model.Services.SetActivityTheme;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.UserLiveData;
@@ -66,7 +67,7 @@ public class Profile extends Fragment implements SwipeRefreshLayout.OnRefreshLis
     }
 
     private void alert(String title, String message) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom);
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setCancelable(true);
@@ -160,7 +161,7 @@ public class Profile extends Fragment implements SwipeRefreshLayout.OnRefreshLis
         recyclerView.setLayoutManager(layoutManager);
         adapter = new ProfileAdapter(this, user, highLows);
         recyclerView.setAdapter(adapter);
-        Drawable divider = getResources().getDrawable(R.drawable.highlow_divider, null);
+        Drawable divider = getResources().getDrawable(getHighLowDivider());
         DividerItemDecoration decoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         decoration.setDrawable(divider);
         recyclerView.addItemDecoration(decoration);
@@ -198,5 +199,16 @@ public class Profile extends Fragment implements SwipeRefreshLayout.OnRefreshLis
 
     public interface OnFragmentInteractionListener {
         void onProfileFragmentInteraction(Uri uri);
+    }
+
+
+    private int getHighLowDivider(){
+        String theme = SetActivityTheme.getTheme(getContext());
+        if(theme.equals("light")){
+            return R.drawable.highlow_divider;
+        }else{
+            return R.drawable.highlow_divider_dark;
+        }
+
     }
 }

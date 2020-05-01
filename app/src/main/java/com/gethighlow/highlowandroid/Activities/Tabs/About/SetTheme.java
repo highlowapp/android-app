@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.gethighlow.highlowandroid.R;
@@ -30,14 +31,15 @@ public class SetTheme extends AppCompatActivity {
 
         setContentView(R.layout.set_theme_layout);
 
+        getSupportActionBar().setTitle("Dark Theme");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         lightTheme = findViewById(R.id.lightTheme);
         darkTheme = findViewById(R.id.darkTheme);
-        systemDefault = findViewById(R.id.systemDefault);
 
         lightTheme.setOnClickListener(setLightTheme);
         darkTheme.setOnClickListener(setDarkTheme);
-        systemDefault.setOnClickListener(setSystemDefaultTheme);
+
 
     }
 
@@ -90,18 +92,13 @@ public class SetTheme extends AppCompatActivity {
         }
     };
 
-    View.OnClickListener setSystemDefaultTheme = new View.OnClickListener() {
+    /*View.OnClickListener setSystemDefaultTheme = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-
-            //Broadcast the information here to DynamicColors.java
-//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-            /*Intent newIntent = new Intent("theme-updated");
-            newIntent.putExtra("theme", "follow-system");
-            LocalBroadcastManager.getInstance(SetTheme.this).sendBroadcast(newIntent);*/
+           //Todo add system default functionality
 
         }
-    };
+    };*/
 
     private void editSharedPreferences(String key, String value ){
 
@@ -120,7 +117,15 @@ public class SetTheme extends AppCompatActivity {
         editor.apply();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            this.finish();
+            return true;
+        }
 
+        return super.onOptionsItemSelected(item);
+    }
 
 
 }

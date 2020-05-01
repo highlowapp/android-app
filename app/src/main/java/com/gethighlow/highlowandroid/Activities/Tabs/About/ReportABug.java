@@ -1,5 +1,9 @@
 package com.gethighlow.highlowandroid.Activities.Tabs.About;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -8,11 +12,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButton;
 import com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButtonDelegate;
 import com.gethighlow.highlowandroid.CustomViews.BaseComponents.TextInput;
 import com.gethighlow.highlowandroid.R;
+import com.gethighlow.highlowandroid.model.Services.SetActivityTheme;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Services.BugReportsService;
@@ -24,6 +30,14 @@ public class ReportABug extends AppCompatActivity implements HLButtonDelegate {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        String theme = SetActivityTheme.getTheme(getApplicationContext());
+        if(theme.equals("light")){
+            setTheme(R.style.LightTheme);
+        }else{
+            setTheme(R.style.DarkTheme);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.report_a_bug_activity);
 
@@ -35,6 +49,10 @@ public class ReportABug extends AppCompatActivity implements HLButtonDelegate {
         submitButton = findViewById(R.id.submitButton);
 
         submitButton.delegate = this;
+
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(themeReceiver, new IntentFilter("theme-updated"));
+
+
     }
 
     @Override
@@ -70,11 +88,26 @@ public class ReportABug extends AppCompatActivity implements HLButtonDelegate {
     }
 
     private void alert(String title, String message) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setCancelable(true);
         alertDialog.setPositiveButton("OK", null);
         alertDialog.show();
     }
+
+    private BroadcastReceiver themeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String currentTheme = SetActivityTheme.getTheme(context);
+            if(currentTheme.equals("light")) {
+                setTheme(R.style.LightTheme);
+            } else if(currentTheme.equals("dark")){
+                setTheme(R.style.DarkTheme);
+            }
+
+        }
+    };
+
 }
