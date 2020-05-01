@@ -1,7 +1,10 @@
 package com.gethighlow.highlowandroid.Activities.Tabs.Profile;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -10,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.gethighlow.highlowandroid.CustomViews.ViewHolders.EditInterestsAdapter;
 import com.gethighlow.highlowandroid.CustomViews.ViewHolders.Delegates.InterestViewHolderDelegate;
 import com.gethighlow.highlowandroid.R;
+import com.gethighlow.highlowandroid.model.Services.SetActivityTheme;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.UserLiveData;
 import com.gethighlow.highlowandroid.model.Managers.UserManager;
@@ -36,6 +41,12 @@ public class EditInterestsActivity extends AppCompatActivity implements SearchVi
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String theme = SetActivityTheme.getTheme(getApplicationContext());
+        if(theme.equals("light")){
+            setTheme(R.style.LightTheme);
+        }else{
+            setTheme(R.style.DarkTheme);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_interests_activity);
 
@@ -47,6 +58,9 @@ public class EditInterestsActivity extends AppCompatActivity implements SearchVi
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(themeReceiver, new IntentFilter("theme-updated"));
+
 
         getInterests();
     }
@@ -89,7 +103,7 @@ public class EditInterestsActivity extends AppCompatActivity implements SearchVi
     }
 
     private void alert(String title, String message) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setCancelable(true);
@@ -189,4 +203,19 @@ public class EditInterestsActivity extends AppCompatActivity implements SearchVi
             });
         }
     }
+
+    private BroadcastReceiver themeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String currentTheme = SetActivityTheme.getTheme(context);
+            if(currentTheme.equals("light")) {
+                setTheme(R.style.LightTheme);
+            } else if(currentTheme.equals("dark")){
+                setTheme(R.style.DarkTheme);
+            }
+
+        }
+    };
+
 }

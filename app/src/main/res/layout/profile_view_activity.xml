@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Tabs.Profile.ProfileViewActivity">
+    tools:context=".Activities.Tabs.Profile.ProfileViewActivity"
+    android:background="?attr/bgColor">
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/profile_fragment"/>
+        android:id="@+id/profile_fragment"
+        android:background="?attr/bgColor"/>
 </FrameLayout>

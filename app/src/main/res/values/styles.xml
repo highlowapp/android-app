@@ -2,17 +2,98 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#FB2A57</item>
+        <item name="colorPrimaryDark">#c8042f</item>
+        <item name="colorAccent">#FA9C1D</item>
         <item name="android:textColorAlertDialogListItem">@color/colorPrimary</item>
+        <item name="textColor">#000000</item>
+        <item name="bgColor">#FFFFFF</item>
+
     </style>
+
+        <!-- This is where all the light theme colors are defined
+        (I apologize if some of the names don't make sense) -->
+        <style name="LightTheme" parent="AppTheme">
+            <item name="colorPrimary">#FB2A57</item>
+            <item name="colorPrimaryDark">#c8042f</item>
+            <item name="colorAccent">#FA9C1D</item>
+            <item name="android:colorForeground">@color/black</item>
+            <item name="textColor">#000000</item>
+            <item name="bgColor">#FFFFFF</item>
+            <item name="widgetColor">@color/gray</item>
+            <item name="logoColor">@drawable/logo_light</item>
+            <item name="leaveCommentColor">@color/white</item>
+            <item name="tabColor">@color/very_light_gray</item>
+            <item name="bgFeed">@color/very_light_gray</item>
+            <item name="commentMore">@drawable/comment_more</item>
+            <item name="bgGradient">@drawable/angled_gradient</item>
+            <item name="bgTag">@color/white</item>
+            <item name="icFriends">@drawable/friends</item>
+            <item name="profilePicBorder">@color/white</item>
+            <item name="bgProfileButton">@drawable/white_button</item>
+            <item name="highLowDivider">@color/very_light_gray</item>
+            <item name="aboutGray">@color/very_light_gray</item>
+            <item name="aboutDivider">@color/light_grey</item>
+            <item name="editProfileButtonColor">@color/colorPrimary</item>
+            <item name="editProfileTextColor">@color/black</item>
+            <item name="bgEditProfile">@color/very_light_gray</item>
+            <item name="gray2white">@color/gray</item>
+            <item name="white2darkGray">@color/white</item>
+            <item name="gray2lightGray">@color/gray</item>
+            <item name="transparent2buttonBorder">@color/transparent</item>
+            <item name="colorPrimary2transparent">@color/colorPrimary</item>
+            <item name="primaryButton2borderButtonPink">@color/colorPrimary</item>
+            <item name="grayButton2borderButtonWhite">@color/gray</item>
+            <item name="topRoundedRect">@drawable/top_rounded_rect</item>
+            <item name="gradient2colorPrimary">@drawable/gradient</item>
+        </style>
+
+        <style name="DarkTheme" parent="AppTheme">
+            <item name="colorPrimary">#FB2A57</item>
+            <item name="android:colorForeground">@color/white</item>
+            <item name="colorPrimaryDark">#c8042f</item>
+            <item name="colorAccent">#FA9C1D</item>
+            <item name="textColor">#FFFFFF</item>
+            <item name="bgColor">#000000</item>
+            <item name="widgetColor">#FFFFFF</item>
+            <item name="logoColor">@drawable/logo_triangles</item>
+            <item name="leaveCommentColor">#262626</item>
+            <item name="tabColor">#121212</item>
+            <item name="bgFeed">@color/black</item>
+            <item name="commentMore">@drawable/comment_more_white</item>
+            <item name="bgGradient">@color/black</item>
+            <item name="bgTag">@color/colorPrimary</item>
+            <item name="icFriends">@drawable/friends_white</item>
+            <item name="profilePicBorder">@color/colorPrimary</item>
+            <item name="bgProfileButton">@drawable/button_border</item>
+            <item name="highLowDivider">@color/very_dark_gray</item>
+            <item name="aboutGray">#2B2B2B</item>
+            <item name="aboutDivider">#2B2B2B</item>
+            <item name="editProfileButtonColor">@drawable/button_border_pink</item>
+            <item name="editProfileTextColor">@color/gray</item>
+            <item name="bgEditProfile">@color/black</item>
+            <item name="gray2white">@color/white</item>
+            <item name="white2darkGray">#2B2B2B</item>
+            <item name="gray2lightGray">@color/light_grey</item>
+            <item name="transparent2buttonBorder">@drawable/button_border_pink</item>
+            <item name="colorPrimary2transparent">@color/transparent</item>
+            <item name="primaryButton2borderButtonPink">@drawable/button_border_pink</item>
+            <item name="grayButton2borderButtonWhite">@drawable/button_border</item>
+            <item name="topRoundedRect">@drawable/top_rounded_rect_dark</item>
+            <item name="gradient2colorPrimary">@color/colorPrimary</item>
+        </style>
+
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:textColorAlertDialogListItem">@color/colorPrimary</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:colorAccent">#FA9C1D</item>
+        <item name="android:colorForeground">@color/black</item>
+    </style>
+
 
 </resources>

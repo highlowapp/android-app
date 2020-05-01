@@ -2,38 +2,44 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
             <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="?attr/bgColor">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:background="@color/colorPrimary">
+                android:background="?attr/bgColor">
+
                 <Button
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    android:background="@color/transparent"
-                    android:textColor="@color/white"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="?attr/editProfileButtonColor"
+                    android:textColor="?attr/bgTag"
                     android:textSize="20sp"
                     android:textAllCaps="false"
                     android:text="@string/cancel"
                     android:onClick="dismiss"/>
                 <Button
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
-                    android:background="@color/transparent"
-                    android:textColor="@color/white"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="?attr/editProfileButtonColor"
+                    android:textColor="?attr/bgTag"
                     android:textSize="20sp"
                     android:textAllCaps="false"
                     android:text="@string/done"
@@ -44,17 +50,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/edit_profile"
-                android:textColor="@color/black"
+                android:textColor="?attr/editProfileTextColor"
                 android:textAlignment="center"
                 android:textSize="20sp"
                 android:padding="10dp"
-                android:background="@color/very_light_gray"/>
+                android:background="?attr/bgEditProfile"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/name"
-                android:layout_margin="10dp"/>
+                android:textSize="18sp"
+                android:gravity="start"
+                android:paddingStart="15dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:textColor="?attr/gray2white"
+                android:background="?attr/white2darkGray"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,11 +93,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/profile_image"
-                android:layout_margin="10dp"/>
+                android:textSize="18sp"
+                android:gravity="start"
+                android:paddingStart="15dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:textColor="?attr/gray2white"
+                android:background="?attr/white2darkGray"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"/>
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:background="@color/very_light_gray"
+                android:background="?attr/aboutGray"
                 android:layout_marginHorizontal="10dp"
                 android:id="@+id/profile_image"
                 android:onClick="changeImage"
@@ -91,7 +115,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/interests"
-                android:layout_margin="10dp"/>
+                android:textSize="18sp"
+                android:gravity="start"
+                android:paddingStart="15dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:textColor="?attr/gray2white"
+                android:background="?attr/white2darkGray"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -120,8 +153,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:backgroundTint="@color/colorPrimary"
-                    android:textColor="@color/white"
+                    android:background="?attr/editProfileButtonColor"
+                    android:textColor="?attr/bgTag"
                     android:layout_marginEnd="10dp"
                     android:text="@string/edit"
                     android:id="@+id/editInterests"/>
@@ -130,7 +163,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/bio"
-                android:layout_margin="10dp"/>
+                android:textSize="18sp"
+                android:gravity="start"
+                android:paddingStart="15dp"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:textColor="?attr/gray2white"
+                android:background="?attr/white2darkGray"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"/>
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -17,6 +17,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.gethighlow.highlowandroid.CustomViews.Sections.EndlessRecyclerViewScrollListener;
 import com.gethighlow.highlowandroid.CustomViews.Adapters.FeedAdapter;
 import com.gethighlow.highlowandroid.R;
+import com.gethighlow.highlowandroid.model.Services.SetActivityTheme;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
 import com.gethighlow.highlowandroid.model.Resources.User;
@@ -68,7 +69,7 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         recyclerView.setAdapter(adapter);
         recyclerView.addOnScrollListener(scrollListener);
 
-        Drawable divider = getResources().getDrawable(R.drawable.highlow_divider, null);
+        Drawable divider = getResources().getDrawable(getHighLowDivider());
         DividerItemDecoration decoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         decoration.setDrawable(divider);
         recyclerView.addItemDecoration(decoration);
@@ -111,5 +112,15 @@ public class Feed extends Fragment implements SwipeRefreshLayout.OnRefreshListen
         highlows.clear();
         scrollListener.resetState();
         getFeed(0);
+    }
+
+    private int getHighLowDivider(){
+        String theme = SetActivityTheme.getTheme(getContext());
+        if(theme.equals("light")){
+            return R.drawable.highlow_divider;
+        }else{
+            return R.drawable.highlow_divider_dark;
+        }
+
     }
 }

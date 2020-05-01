@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="90"
-        android:background="@drawable/top_rounded_rect"
+        android:background="?attr/topRoundedRect"
         android:id="@+id/textInput"
         android:paddingHorizontal="10dp"
         android:importantForAutofill="no"
@@ -15,5 +15,5 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="10"
-        android:background="@drawable/gradient"/>
+        android:background="?attr/gradient2colorPrimary"/>
 </merge>

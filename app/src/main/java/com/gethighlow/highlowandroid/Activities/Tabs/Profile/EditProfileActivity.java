@@ -2,8 +2,11 @@ package com.gethighlow.highlowandroid.Activities.Tabs.Profile;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -29,6 +32,7 @@ import androidx.core.content.FileProvider;
 import androidx.lifecycle.Observer;
 
 import com.gethighlow.highlowandroid.R;
+import com.gethighlow.highlowandroid.model.Services.SetActivityTheme;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Managers.ImageManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.UserLiveData;
@@ -46,6 +50,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import co.lujun.androidtagview.TagContainerLayout;
 
 public class EditProfileActivity extends AppCompatActivity {
@@ -68,6 +73,13 @@ public class EditProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        String theme = SetActivityTheme.getTheme(getApplicationContext());
+        if(theme.equals("light")){
+            setTheme(R.style.LightTheme);
+        }else{
+            setTheme(R.style.DarkTheme);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_profile_activity);
 
@@ -91,6 +103,7 @@ public class EditProfileActivity extends AppCompatActivity {
         lastName.setText(currentLastName);
         bio.setText(currentBio);
 
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(themeReceiver, new IntentFilter("theme-updated"));
         UserManager.shared().getUser(null, new Consumer<UserLiveData>() {
             @Override
             public void accept(UserLiveData userLiveData) {
@@ -137,7 +150,7 @@ public class EditProfileActivity extends AppCompatActivity {
     };
 
     private void alert(String title, String message) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setCancelable(true);
@@ -145,7 +158,7 @@ public class EditProfileActivity extends AppCompatActivity {
         alertDialog.show();
     }
     private void alert(String title, String message, final Runnable onComplete) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setCancelable(true);
@@ -201,7 +214,7 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public void changeImage(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         builder.setTitle("How would you like to upload an image?");
         final String[] items = {"Take a photo", "Use existing photo", "Cancel"};
         final Activity context = this;
@@ -329,5 +342,21 @@ public class EditProfileActivity extends AppCompatActivity {
                 EditProfileActivity.this.alert(getResources().getString(R.string.an_error_occurred), getResources().getString(R.string.please_try_again));
             }
         });
+
     }
+        private BroadcastReceiver themeReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String theme = SetActivityTheme.getTheme(getApplicationContext());
+                if(theme.equals("light")){
+                    setTheme(R.style.LightTheme);
+                }else{
+                    setTheme(R.style.DarkTheme);
+                }
+            }
+
+        };
+
+
+
 }

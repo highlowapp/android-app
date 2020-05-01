@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="?attr/bgColor"
     tools:context=".Activities.Tabs.Profile.AddFriendsActivity">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/based_on_your_interests"
-        android:background="@color/light_grey"
+        android:textColor="?attr/gray2white"
+        android:background="?attr/aboutDivider"
         android:padding="3dp"
         android:id="@+id/header"/>
     <androidx.recyclerview.widget.RecyclerView

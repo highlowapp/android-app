@@ -1,5 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--This is where all the colors are referenced at (Sorry for all the messiness, I'm not very good at
+coming up with color names that makes sense lol)
+
+To apply a color to a layout you'd use a command that looks something like this:
+
+android:background="?attr/bgColor"
+
+Or for text:
+
+android:textColor="?attr/textColor"
+
+Or for a drawable you'd just reference an @drawable in "styles.xml" and apply it like this:
+
+android:src="?attr/logoColor"
+-->
+
 <resources>
+    <attr name="colorPrimary" format="color"/>
+    <attr name="colorPrimaryDark" format="color"/>
+    <attr name="colorAccent" format="color"/>
+    <attr name="textColor" format="color"/>
+    <attr name="bgColor" format="color"/>
+    <attr name="widgetColor" format="color"/>
+    <attr name="logoColor" format="reference"/>
+    <attr name="leaveCommentColor" format="color"/>
+    <attr name="tabColor" format="color"/>
+    <attr name="bgFeed" format="color"/>
+    <attr name="commentMore" format="reference"/>
+    <attr name="bgGradient" format="reference"/>
+    <attr name="bgTag" format="color"/>
+    <attr name="icFriends" format="reference"/>
+    <attr name="profilePicBorder" format="color"/>
+    <attr name="bgProfileButton" format="reference"/>
+    <attr name="highLowDivider" format="color"/>
+    <attr name="aboutGray" format="color"/>
+    <attr name="aboutDivider" format="color"/>
+    <attr name="editProfileButtonColor" format="color"/>
+    <attr name="editProfileTextColor" format="color"/>
+    <attr name="bgEditProfile" format="color"/>
+    <attr name="gray2white" format="color"/>
+    <attr name="white2darkGray" format="color"/>
+    <attr name="gray2lightGray" format="color"/>
+    <attr name="transparent2buttonBorder" format="color"/>
+    <attr name="colorPrimary2transparent" format="color"/>
+    <attr name="primaryButton2borderButtonPink" format="color"/>
+    <attr name="grayButton2borderButtonWhite" format="color"/>
+    <attr name="topRoundedRect" format="reference"/>
+    <attr name="gradient2colorPrimary" format="color"/>
+
+
+
     <declare-styleable name="TextInput">
         <attr name="inputType" format="string" />
         <attr name="title" format="string" localization="suggested" />

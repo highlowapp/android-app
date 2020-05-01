@@ -17,6 +17,7 @@ import com.gethighlow.highlowandroid.model.Services.AuthService;
 
 public class About extends Fragment {
     private TextView logOut;
+    private TextView customize;
     private TextView reportBug;
     private TextView pushNotifSettings;
     private TextView ourWebsite;
@@ -35,6 +36,7 @@ public class About extends Fragment {
         View view = inflater.inflate(R.layout.about_fragment, container, false);
 
         logOut = view.findViewById(R.id.logOut);
+        customize = view.findViewById(R.id.customize);
         reportBug = view.findViewById(R.id.reportBug);
         pushNotifSettings = view.findViewById(R.id.pushNotifSettings);
         ourWebsite = view.findViewById(R.id.ourWebsite);
@@ -43,6 +45,7 @@ public class About extends Fragment {
         termsOfService = view.findViewById(R.id.termsOfService);
 
         logOut.setOnClickListener(logOutListener);
+        customize.setOnClickListener(customizeListener);
         reportBug.setOnClickListener(reportBugListener);
         pushNotifSettings.setOnClickListener(pushNotifSettingsListener);
         ourWebsite.setOnClickListener(ourWebsiteListener);
@@ -58,7 +61,7 @@ public class About extends Fragment {
     private View.OnClickListener logOutListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(About.this.getContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(About.this.getContext(), R.style.AlertDialogCustom);
             builder.setTitle("Confirm logout");
             builder.setMessage("Are you sure you want to log out?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -72,7 +75,14 @@ public class About extends Fragment {
         }
     };
 
+    private View.OnClickListener customizeListener = new View.OnClickListener() {
 
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(About.this.getContext(), SetTheme.class );
+            About.this.startActivity(intent);
+        }
+    };
 
     private View.OnClickListener reportBugListener = new View.OnClickListener() {
         @Override

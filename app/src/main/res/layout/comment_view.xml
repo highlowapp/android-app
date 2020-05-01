@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/profile_image"
         android:layout_alignParentTop="true"
-        android:textColor="@color/black"
+        android:textColor="?attr/textColor"
         android:id="@+id/name"
         android:layout_marginStart="10dp"
         android:textSize="15sp"
@@ -47,7 +47,7 @@
         android:layout_below="@id/timestamp"
         android:layout_marginTop="5dp"
         android:layout_toEndOf="@id/profile_image"
-        android:textColor="@color/black"
+        android:textColor="?attr/textColor"
         android:textSize="17sp"
         android:id="@+id/message"
         android:width="0dp"
@@ -59,6 +59,6 @@
         android:id="@+id/moreButton"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:src="@drawable/comment_more"
+        android:src="?attr/commentMore"
         android:contentDescription="@string/more_options" />
 </merge>

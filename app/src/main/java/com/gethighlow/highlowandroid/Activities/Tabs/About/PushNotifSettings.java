@@ -5,8 +5,10 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,7 +22,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.gethighlow.highlowandroid.model.Services.SetActivityTheme;
 import com.gethighlow.highlowandroid.model.util.AlarmNotificationReceiver;
 import com.gethighlow.highlowandroid.R;
 import com.gethighlow.highlowandroid.model.util.Consumer;
@@ -44,6 +48,13 @@ public class PushNotifSettings extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String theme = SetActivityTheme.getTheme(getApplicationContext());
+        if(theme.equals("light")){
+            setTheme(R.style.LightTheme);
+        }else{
+            setTheme(R.style.DarkTheme);
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.push_notif_settings_activity);
 
@@ -108,6 +119,9 @@ public class PushNotifSettings extends AppCompatActivity {
         if (aTime != null) {
             setReminderTime(aTime);
         }
+
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(themeReceiver, new IntentFilter("theme-updated"));
+
     }
 
     private LocalTime getTimeFromSharedPref() {
@@ -208,7 +222,7 @@ public class PushNotifSettings extends AppCompatActivity {
     }
 
     private void alert(String title, String message) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setCancelable(true);
@@ -292,4 +306,19 @@ public class PushNotifSettings extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    private BroadcastReceiver themeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String currentTheme = SetActivityTheme.getTheme(context);
+            if(currentTheme.equals("light")) {
+                setTheme(R.style.LightTheme);
+            } else if(currentTheme.equals("dark")){
+                setTheme(R.style.DarkTheme);
+            }
+
+        }
+    };
+
 }

@@ -62,7 +62,7 @@ public class CommentView extends RelativeLayout {
 
 
     private void alert(String title, String message) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext());
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom);
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setCancelable(true);
@@ -73,7 +73,7 @@ public class CommentView extends RelativeLayout {
     public View.OnClickListener moreOptions = new OnClickListener() {
         @Override
         public void onClick(View view) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(CommentView.this.getContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(CommentView.this.getContext(), R.style.AlertDialogCustom);
             builder.setTitle("Choose an action to perform on this comment");
 
             String[] options = {"Edit", "Delete", "Cancel"};

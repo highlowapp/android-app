@@ -2,8 +2,11 @@ package com.gethighlow.highlowandroid.Activities.Tabs.Home;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -31,6 +34,7 @@ import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.gethighlow.highlowandroid.R;
+import com.gethighlow.highlowandroid.model.Services.SetActivityTheme;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Managers.HighLowManager;
 import com.gethighlow.highlowandroid.model.Managers.ImageManager;
@@ -66,6 +70,17 @@ public class EditHLActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
+        /* This is what it normally looks like to apply a theme to a layout
+        (Note: you have to do this BEFORE you use
+        "super.onCreate(savedInstanceState); and setContentView(R.layout.edit_hl_layout);" */
+
+        String theme = SetActivityTheme.getTheme(getApplicationContext());
+        if(theme.equals("light")){
+            setTheme(R.style.LightTheme);
+        }else{
+            setTheme(R.style.DarkTheme);
+        }
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.edit_hl_layout);
@@ -79,6 +94,9 @@ public class EditHLActivity extends AppCompatActivity {
         type = getIntent().getStringExtra("type");
 
         date = getIntent().getStringExtra("date");
+
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(themeReceiver, new IntentFilter("theme-updated"));
+
 
         if (date != null) {
             HighLowManager.shared().getHighLowByDate(date, new Consumer<HighLowLiveData>() {
@@ -173,7 +191,7 @@ public class EditHLActivity extends AppCompatActivity {
     }
 
     public void pickImage(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         builder.setTitle("How would you like to upload an image?");
         final String[] items = {"Take a photo", "Use existing photo", "Cancel"};
         final Activity context = this;
@@ -205,7 +223,7 @@ public class EditHLActivity extends AppCompatActivity {
     }
 
     private void alert(String title, String message) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setCancelable(true);
@@ -213,7 +231,7 @@ public class EditHLActivity extends AppCompatActivity {
         alertDialog.show();
     }
     private void alert(String title, String message, final Runnable onComplete) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setCancelable(true);
@@ -297,7 +315,7 @@ public class EditHLActivity extends AppCompatActivity {
     }
 
     public void done(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         builder.setTitle("Who do  you want to see this High/Low?");
 
         final String[] items = {"Public", "Private", "Who can see my High/Lows?"};
@@ -382,6 +400,20 @@ public class EditHLActivity extends AppCompatActivity {
         }
 
     }
+
+    private BroadcastReceiver themeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String currentTheme = SetActivityTheme.getTheme(context);
+            if(currentTheme.equals("light")) {
+                setTheme(R.style.LightTheme);
+            } else if(currentTheme.equals("dark")){
+                setTheme(R.style.DarkTheme);
+            }
+
+        }
+    };
 
 
     public void dismiss(View view) {

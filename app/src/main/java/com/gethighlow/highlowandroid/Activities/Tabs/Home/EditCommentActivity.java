@@ -1,8 +1,12 @@
 package com.gethighlow.highlowandroid.Activities.Tabs.Home;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -13,6 +17,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButton;
 import com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButtonDelegate;
 import com.gethighlow.highlowandroid.R;
+import com.gethighlow.highlowandroid.model.Services.SetActivityTheme;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
@@ -27,6 +32,13 @@ public class EditCommentActivity extends AppCompatActivity implements HLButtonDe
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        String theme = SetActivityTheme.getTheme(getApplicationContext());
+        if(theme.equals("light")){
+            setTheme(R.style.LightTheme);
+        }else{
+            setTheme(R.style.DarkTheme);
+        }
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.edit_comment_layout);
@@ -42,10 +54,13 @@ public class EditCommentActivity extends AppCompatActivity implements HLButtonDe
         prevMessage = getIntent().getStringExtra("prevMessage");
 
         if (prevMessage != null) message.setText(prevMessage);
+
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(themeReceiver, new IntentFilter("theme-updated"));
+
     }
 
     private void alert(String title, String message) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this, R.style.AlertDialogCustom);
         alertDialog.setTitle(title);
         alertDialog.setMessage(message);
         alertDialog.setCancelable(true);
@@ -77,4 +92,19 @@ public class EditCommentActivity extends AppCompatActivity implements HLButtonDe
             this.finish();
         }
     }
+
+    private BroadcastReceiver themeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String currentTheme = SetActivityTheme.getTheme(context);
+            if(currentTheme.equals("light")) {
+                setTheme(R.style.LightTheme);
+            } else if(currentTheme.equals("dark")){
+                setTheme(R.style.DarkTheme);
+            }
+
+        }
+    };
+
 }

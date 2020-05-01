@@ -6,5 +6,5 @@
         app:showAsAction="always"
         android:iconTint="@color/white"
         android:icon="@drawable/calendar"
-        android:id="@+id/openCalendar"/>
+        android:id="@+id/openCalendar" />
 </menu>
