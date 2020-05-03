@@ -1,5 +1,7 @@
 package com.gethighlow.highlowandroid.CustomViews.Adapters;
 
+import android.content.Context;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import com.gethighlow.highlowandroid.CustomViews.ViewHolders.ProfileHeaderViewHo
 import com.gethighlow.highlowandroid.R;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveData;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.UserLiveData;
+import com.gethighlow.highlowandroid.model.Services.SetActivityTheme;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -50,13 +53,18 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public RecyclerView.ViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int viewType) {
         View view;
         if (viewType == HEADER) {
-            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.profile_header, viewGroup, false);
+
+            view = getView(viewGroup.getContext(), viewGroup);
+
+            //view = LayoutInflater.from(context).inflate(R.layout.profile_header, viewGroup, false);
 
             profileHeaderViewHolder = new ProfileHeaderViewHolder(view);
             return profileHeaderViewHolder;
         }
         else {
-            view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.highlow_view_holder, viewGroup, false);
+            //view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.highlow_view_holder, viewGroup, false);
+
+            view = getHighLowView(viewGroup.getContext(), viewGroup);
             return new HighLowViewHolder(view);
         }
     }
@@ -77,4 +85,45 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public int getItemCount() {
         return highLows.size() + 1;
     }
+
+
+
+
+    private View getView(Context context, @NotNull ViewGroup viewGroup){
+        View view;
+        String currentTheme = SetActivityTheme.getTheme(context);
+        if(currentTheme.equals("light")) {
+            final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.LightTheme);
+            LayoutInflater localInflater = LayoutInflater.from(context).cloneInContext(theme);
+            view = localInflater.inflate(R.layout.profile_header, viewGroup, false);
+            return view;
+        } else{
+            final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.DarkTheme);
+            LayoutInflater localInflater = LayoutInflater.from(context).cloneInContext(theme);
+            view = localInflater.inflate(R.layout.profile_header, viewGroup, false);
+            return view;
+
+        }
+
+    }
+
+    private View getHighLowView(Context context, @NotNull ViewGroup viewGroup){
+        View view;
+        String currentTheme = SetActivityTheme.getTheme(context);
+        if(currentTheme.equals("light")) {
+            final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.LightTheme);
+            LayoutInflater localInflater = LayoutInflater.from(context).cloneInContext(theme);
+            view = localInflater.inflate(R.layout.highlow_view_holder, viewGroup, false);
+            return view;
+        } else{
+            final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.DarkTheme);
+            LayoutInflater localInflater = LayoutInflater.from(context).cloneInContext(theme);
+            view = localInflater.inflate(R.layout.highlow_view_holder, viewGroup, false);
+            return view;
+
+        }
+
+    }
+
 }
+

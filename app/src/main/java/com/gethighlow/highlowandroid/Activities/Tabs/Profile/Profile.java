@@ -1,10 +1,15 @@
 package com.gethighlow.highlowandroid.Activities.Tabs.Profile;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +34,8 @@ import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.HighLowLiveDa
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.UserLiveData;
 import com.gethighlow.highlowandroid.model.Managers.UserManager;
 import com.gethighlow.highlowandroid.model.Resources.User;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -138,7 +146,8 @@ public class Profile extends Fragment implements SwipeRefreshLayout.OnRefreshLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.profile_fragment, container, false);
+//        View view = inflater.inflate(R.layout.profile_fragment, container, false);
+        View view = getView(getContext(), inflater, container);
 
         recyclerView = view.findViewById(R.id.recyclerView);
         refreshLayout = view.findViewById(R.id.refresher);
@@ -169,6 +178,7 @@ public class Profile extends Fragment implements SwipeRefreshLayout.OnRefreshLis
         recyclerView.addOnScrollListener(scrollListener);
 
         refreshLayout.setOnRefreshListener(this);
+
 
         getProfile();
 
@@ -211,4 +221,23 @@ public class Profile extends Fragment implements SwipeRefreshLayout.OnRefreshLis
         }
 
     }
+
+
+    private View getView(Context context, LayoutInflater inflater, ViewGroup container){
+        View view;
+        String currentTheme = SetActivityTheme.getTheme(context);
+        if(currentTheme.equals("light")) {
+            final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.LightTheme);
+            LayoutInflater localInflater = inflater.cloneInContext(theme);
+            view = localInflater.inflate(R.layout.profile_fragment, container, false);
+            return view;
+        } else{
+            final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.DarkTheme);
+            LayoutInflater localInflater = inflater.cloneInContext(theme);
+            view = localInflater.inflate(R.layout.profile_fragment, container, false);
+            return view;
+        }
+
+    }
+
 }

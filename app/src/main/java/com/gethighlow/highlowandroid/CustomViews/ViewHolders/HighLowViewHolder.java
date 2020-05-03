@@ -62,6 +62,7 @@ public class HighLowViewHolder extends RecyclerView.ViewHolder /*implements Swip
         LocalDate localDate = LocalDate.parse(highLowLiveData.getDate(), toDate);
         DateTimeFormatter newFormatter = DateTimeFormatter.ofPattern("'Posted on' MMM d, uuuu");
         date.setText(localDate.format(newFormatter));
+
     }
 
     private void setUser(User user) {
@@ -81,9 +82,4 @@ public class HighLowViewHolder extends RecyclerView.ViewHolder /*implements Swip
 
         userName.setText(user.name());
     }
-
-    /*@Override
-    public void onRefresh() {
-        this.setHighLow();
-    }*/
 }
