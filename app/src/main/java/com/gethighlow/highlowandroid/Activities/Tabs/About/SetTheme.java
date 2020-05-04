@@ -45,6 +45,15 @@ public class SetTheme extends AppCompatActivity {
         darkTheme.setOnClickListener(setDarkTheme);
         autoTheme.setOnClickListener(setAutoTheme);
 
+        /**@Caleb can you please run this code on an Android Emulator with
+         * API level lower than 29 to make sure this works properly? */
+        if (android.os.Build.VERSION.SDK_INT >= 29){
+            autoTheme.setVisibility(View.VISIBLE);
+        } else{
+            autoTheme.setVisibility(View.INVISIBLE);
+        }
+
+
 
     }
 
