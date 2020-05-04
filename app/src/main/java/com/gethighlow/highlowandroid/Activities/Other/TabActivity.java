@@ -233,7 +233,7 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.openCalendar) {
             LocalDate currDate = LocalDate.now();
-            DatePickerDialog datePickerDialog = new DatePickerDialog(this, dateChangeListener, currDate.getYear(), currDate.getMonth().getValue() - 1, currDate.getDayOfMonth());
+            DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.DatePickerTheme, dateChangeListener, currDate.getYear(), currDate.getMonth().getValue() - 1, currDate.getDayOfMonth());
             datePickerDialog.show();
         }
 

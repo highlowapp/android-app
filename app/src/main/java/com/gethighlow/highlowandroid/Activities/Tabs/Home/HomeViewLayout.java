@@ -79,7 +79,7 @@ public class HomeViewLayout extends LinearLayout implements SwipeRefreshLayout.O
 
 //        setColor(context);
 
-        this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
+        //this.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.white));
 
 
         highLowView = findViewById(R.id.highlowview);

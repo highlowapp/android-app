@@ -80,6 +80,7 @@ public class ProfileHeaderViewHolder extends RecyclerView.ViewHolder {
     public void setUser(UserLiveData user) {
         if (user != null) {
             user.observe(lifecycleOwner, userLiveDataObserver);
+            this.currentUser = user.getUser();
         }
     }
 

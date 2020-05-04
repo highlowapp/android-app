@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Tabs.Home.Home">
+    tools:context=".Activities.Tabs.Home.Home"
+    android:background="?attr/bgColor">
 
     <com.gethighlow.highlowandroid.thehayro.view.InfiniteViewPager
         android:layout_width="match_parent"
