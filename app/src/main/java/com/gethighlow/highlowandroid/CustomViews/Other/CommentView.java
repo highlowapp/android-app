@@ -1,11 +1,15 @@
 package com.gethighlow.highlowandroid.CustomViews.Other;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,6 +22,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.gethighlow.highlowandroid.Activities.Tabs.Home.EditCommentActivity;
 import com.gethighlow.highlowandroid.CustomViews.Other.Delegates.CommentViewDelegate;
 import com.gethighlow.highlowandroid.R;
+import com.gethighlow.highlowandroid.model.Services.SetActivityTheme;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.gethighlow.highlowandroid.model.Managers.ImageManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.CommentLiveData;
@@ -44,8 +49,23 @@ public class CommentView extends RelativeLayout {
     }
 
     public void setup(Context context, @Nullable AttributeSet attributeSet) {
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        inflater.inflate(R.layout.comment_view, this, true);
+
+        String currentTheme = SetActivityTheme.getTheme(context);
+        if(currentTheme.equals("light")) {
+            final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.LightTheme);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater localInflater = inflater.cloneInContext(theme);
+            localInflater.inflate(R.layout.comment_view, this, true);
+        } else if(currentTheme.equals("dark")){
+            final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.DarkTheme);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater localInflater = inflater.cloneInContext(theme);
+            localInflater.inflate(R.layout.comment_view, this, true);
+        }
+
+
+//        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//        inflater.inflate(R.layout.comment_view, this, true);
         name = findViewById(R.id.name);
         profileImage = findViewById(R.id.profile_image);
         timestamp = findViewById(R.id.timestamp);
@@ -53,6 +73,9 @@ public class CommentView extends RelativeLayout {
         moreButton = findViewById(R.id.moreButton);
 
         moreButton.setOnClickListener(moreOptions);
+
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(themeReceiver, new IntentFilter("theme-updated"));
+
     }
 
     public void attachToLiveData(CommentLiveData commentLiveData) {
@@ -162,4 +185,37 @@ public class CommentView extends RelativeLayout {
             }
         });
     }
+
+
+    private BroadcastReceiver themeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String currentTheme = SetActivityTheme.getTheme(context);
+
+            if(currentTheme.equals("light")) {
+                String layoutTheme = "light";
+                setLayout(context, layoutTheme);
+            } else if(currentTheme.equals("dark")){
+                String layoutTheme = "dark";
+                setLayout(context, layoutTheme);
+            }
+
+        }
+    };
+
+    private void setLayout(Context context, String layoutTheme){
+        if(layoutTheme.equals("light")) {
+            final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.LightTheme);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater localInflater = inflater.cloneInContext(theme);
+            localInflater.inflate(R.layout.comment_view, this, true);
+        } else if(layoutTheme.equals("dark")){
+            final ContextThemeWrapper theme = new ContextThemeWrapper(context, R.style.DarkTheme);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater localInflater = inflater.cloneInContext(theme);
+            localInflater.inflate(R.layout.comment_view, this, true);
+        }
+    }
+
 }

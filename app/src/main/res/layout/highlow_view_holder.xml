@@ -24,10 +24,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/posted_on"
+        android:textColor="?attr/gray2lightGray"
         android:id="@+id/highlowDate"/>
     <com.gethighlow.highlowandroid.CustomViews.Other.HighLowView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/highlowview"/>
+        android:id="@+id/highlowview" />
 
 </LinearLayout>

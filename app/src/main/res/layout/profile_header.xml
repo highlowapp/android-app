@@ -8,7 +8,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:background="@color/white"/>
+        android:background="?attr/bgColor"/>
     <com.makeramen.roundedimageview.RoundedImageView
         android:layout_marginTop="50dp"
         android:layout_width="125dp"
