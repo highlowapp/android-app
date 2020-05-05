@@ -89,7 +89,13 @@
                 android:color="?attr/textColor"/>
         </LinearLayout>
 
-        <!--<LinearLayout
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?attr/aboutDivider"
+            android:layout_marginHorizontal="10dp"/>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -101,16 +107,16 @@
                 android:layout_width="0dp"
                 android:layout_weight="0.9"
                 android:layout_height="wrap_content"
-                android:text="System Default"
+                android:text="@string/auto"
                 android:textSize="20sp"
                 android:textColor="?attr/colorPrimary"/>
 
             <androidx.appcompat.widget.AppCompatRadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/systemDefault"
+                android:id="@+id/autoTheme"
                 android:color="?attr/textColor"/>
-        </LinearLayout>-->
+        </LinearLayout>
 
 
     </LinearLayout>
