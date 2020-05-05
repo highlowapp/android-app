@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.gethighlow.highlowandroid.R;
 import com.gethighlow.highlowandroid.model.Services.SetActivityTheme;
@@ -24,6 +25,7 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 public class SetTheme extends AppCompatActivity {
     private SwitchCompat darkThemeSwitch;
     private AppCompatRadioButton lightTheme, darkTheme, autoTheme;
+    private LinearLayout autoThemeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +43,17 @@ public class SetTheme extends AppCompatActivity {
         darkTheme = findViewById(R.id.darkTheme);
         autoTheme = findViewById(R.id.autoTheme);
 
+        autoThemeContainer = findViewById(R.id.autoThemeContainer);
+
         lightTheme.setOnClickListener(setLightTheme);
         darkTheme.setOnClickListener(setDarkTheme);
         autoTheme.setOnClickListener(setAutoTheme);
 
-        /**@Caleb can you please run this code on an Android Emulator with
-         * API level lower than 29 to make sure this works properly? */
+
         if (android.os.Build.VERSION.SDK_INT >= 29){
-            autoTheme.setVisibility(View.VISIBLE);
+            autoThemeContainer.setVisibility(View.VISIBLE);
         } else{
-            autoTheme.setVisibility(View.INVISIBLE);
+            autoThemeContainer.setVisibility(View.INVISIBLE);
         }
 
 
