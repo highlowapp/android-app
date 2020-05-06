@@ -385,7 +385,9 @@ public class EditHLActivity extends AppCompatActivity {
                 public void accept(HighLow highLow) {
                     HighLowManager.shared().saveHighLowForDate(highLow.getDate(), highLow);
                     Intent newIntent = new Intent("highlow-updated");
-                    newIntent.putExtra("date", date);
+                    if(date != null) {
+                        newIntent.putExtra("date", date);
+                    }
                     LocalBroadcastManager.getInstance(EditHLActivity.this).sendBroadcast(newIntent);
                     loader.setVisibility(View.GONE);
                     EditHLActivity.this.finish();
