@@ -14,9 +14,9 @@ public class SetActivityTheme {
     public static String getTheme(Context context){
         int currentNightMode = context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        //Make "auto" the default theme
+        String currentTheme = getCurrentTheme(context);
 
-        String currentTheme = sharedPref.getString("current-theme", "light");
 
         if (currentTheme.equals("light")) {
 
@@ -44,10 +44,19 @@ public class SetActivityTheme {
             context.setTheme(R.style.LightTheme);
         } else if(theme.equals("dark")){
             context.setTheme(R.style.DarkTheme);
-        } /*else if(theme.equals("auto")){
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
-*/
+    }
+
+    //Code that makes "auto" the default theme
+    private static String getCurrentTheme(Context context){
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        if (android.os.Build.VERSION.SDK_INT >= 29){
+            String currentTheme = sharedPref.getString("current-theme", "auto");
+            return currentTheme;
+        } else{
+            String currentTheme = sharedPref.getString("current-theme", "light");
+            return currentTheme;
+        }
     }
 
 }
