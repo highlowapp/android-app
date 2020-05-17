@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class HighLowService {
     private static final HighLowService ourInstance = new HighLowService();
@@ -22,6 +23,7 @@ public class HighLowService {
         Map<String, String> params = new HashMap<String, String>();
         params.put("high", high);
         params.put("private", (isPrivate) ? "true": "false");
+        params.put("request_id", UUID.randomUUID().toString());
         if (date != null) {
             params.put("date", date);
         }
@@ -54,6 +56,7 @@ public class HighLowService {
         Map<String, String> params = new HashMap<String, String>();
         params.put("low", low);
         params.put("private", (isPrivate) ? "true": "false");
+        params.put("request_id", UUID.randomUUID().toString());
         if (date != null) {
             params.put("date", date);
         }
@@ -178,6 +181,7 @@ public class HighLowService {
     public void comment(String highlowid, String message, final Consumer<HighLow> onSuccess, final Consumer<String> onError) {
         Map<String, String> params = new HashMap<String, String>();
         params.put("message", message);
+        params.put("request_id", UUID.randomUUID().toString());
         APIService.shared().authenticatedRequest("/highlow/comment/" + highlowid, 1, params, new Consumer<String>() {
             @Override
             public void accept(String response) {
