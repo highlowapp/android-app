@@ -51,6 +51,8 @@ import com.gethighlow.highlowandroid.model.Services.HighLowService;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.util.List;
 
 public class HighLowView extends RelativeLayout implements HLButtonDelegate, CommentViewDelegate{
@@ -168,6 +170,12 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
 
         editHigh.setOnClickListener(editHighListener);
         editLow.setOnClickListener(editLowListener);
+        if(highImage != null) {
+            highImage.setOnClickListener(expandHighImage);
+        }
+        if(lowImage != null){
+            lowImage.setOnClickListener(expandLowImage);
+        }
         showAllCommentsView.setOnClickListener(showAllCommentsListener);
         sendButton.setOnClickListener(sendCommentListener);
 
@@ -393,6 +401,127 @@ public class HighLowView extends RelativeLayout implements HLButtonDelegate, Com
             });
         }
     }
+
+
+    //We can't just pass a bitmap image via intent because the files are way to big so instead
+    //we need to create an image file out of the bitmap in order to access it later
+    public String createHighImageFromBitmap(Context context, Bitmap bitmap) {
+
+        String highFileName = "highImage" + System.currentTimeMillis();
+
+        try {
+
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            FileOutputStream fo = context.openFileOutput(highFileName, Context.MODE_PRIVATE);
+            fo.write(bytes.toByteArray());
+
+            //Remember to close the file output
+            fo.close();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            highFileName = null;
+
+        }
+        return highFileName;
+    }
+
+
+    public String createLowImageFromBitmap(Context context, Bitmap bitmap) {
+
+        String lowFileName = "lowImage" + System.currentTimeMillis();
+
+        try {
+
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            FileOutputStream fo = context.openFileOutput(lowFileName, Context.MODE_PRIVATE);
+            fo.write(bytes.toByteArray());
+
+            //Remember to close the file output
+            fo.close();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+            lowFileName = null;
+
+        }
+        return lowFileName;
+    }
+
+    private View.OnClickListener expandHighImage = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+
+
+            String highImageUrl = highLow.getHighImage();
+
+            if (highImageUrl != null && !highImageUrl.equals("") && !highImageUrl.equals("NULL")) {
+                ImageManager.shared().getImage("https://storage.googleapis.com/highlowfiles/highs/" + highImageUrl, new Consumer<Bitmap>() {
+                    @Override
+                    public void accept(Bitmap img) {
+
+
+                        String filename = createHighImageFromBitmap(getContext(), img);
+
+
+                        Intent intent = new Intent(getContext(), ExpandHighImage.class);
+                        intent.putExtra("highImageFilename", filename);
+                        getContext().startActivity(intent);
+
+
+                    }
+                }, new Consumer<String>() {
+                    @Override
+                    public void accept(String error) {
+                        Log.d("Error:", error);
+                    }
+
+                });
+            }
+        }
+
+
+    };
+
+
+    private View.OnClickListener expandLowImage = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+
+
+            String lowImageUrl = highLow.getLowImage();
+
+            if (lowImageUrl != null && !lowImageUrl.equals("") && !lowImageUrl.equals("NULL")) {
+                ImageManager.shared().getImage("https://storage.googleapis.com/highlowfiles/lows/" + lowImageUrl, new Consumer<Bitmap>() {
+                    @Override
+                    public void accept(Bitmap img) {
+
+
+                        String filename = createLowImageFromBitmap(getContext(), img);
+
+
+                        Intent intent = new Intent(getContext(), ExpandLowImage.class);
+                        intent.putExtra("lowImageFilename", filename);
+                        getContext().startActivity(intent);
+
+
+                    }
+                }, new Consumer<String>() {
+                    @Override
+                    public void accept(String error) {
+                        Log.d("Error:", error);
+                    }
+
+                });
+            }
+        }
+
+
+    };
 
     public void loadHighLow(HighLow highLow) {
 
