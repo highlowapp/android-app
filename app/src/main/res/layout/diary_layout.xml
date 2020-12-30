@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:id="@+id/rectangle_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/diary_cardview"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            custom:cardElevation="5dp"
+            android:layout_marginBottom="3dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            custom:cardBackgroundColor="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="165dp"
+            android:layout_marginTop="15dp"
+            android:text="Diary"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:gravity="center_horizontal" />
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:id="@+id/rectangle_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/diaryRecyclerView">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/no_diary_notifier"
+            android:layout_gravity="center"
+            android:text="This is where your diary entries show up"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+
+    <!--<View
+        android:id="@+id/rectangle_1"
+        android:layout_width="match_parent"
+        android:layout_height="98dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp"
+        android:background="@drawable/rectangle_1"
+        android:elevation="10dp"
+        />-->
+
+    <!--<TextView
+        android:id="@+id/today"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="165dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="60dp"
+        android:hint="Today"
+        android:textSize="18dp"
+        android:textColorHint="@color/black"
+        android:gravity="top" />-->
+
+
+<!--    <LinearLayout
+        android:layout_marginTop="110dp"
+        android:layout_height="223dp"
+        android:layout_width="wrap_content">
+        &lt;!&ndash; A CardView that contains a TextView &ndash;&gt;
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="317dp"
+            android:layout_height="210dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginHorizontal="45dp"
+            android:background="@color/white"
+            custom:cardCornerRadius="25dp"
+            custom:cardElevation="5dp">
+            <TextView
+                android:id="@+id/info_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:text="This is the card view"
+                android:textSize="18sp" />
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>-->
+
+
+
+</RelativeLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/HighLow.iml" filepath="$PROJECT_DIR$/HighLow.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HighLowAndroid.iml" filepath="$PROJECT_DIR$/HighLowAndroid.iml" group="HighLowAndroid" />
+      <module fileurl="file://$PROJECT_DIR$/HighLowRefactored-HighLowAndroid.iml" filepath="$PROJECT_DIR$/HighLowRefactored-HighLowAndroid.iml" group="HighLowAndroid" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="HighLowAndroid/app" />
+      <module fileurl="file://$PROJECT_DIR$/aztec/aztec.iml" filepath="$PROJECT_DIR$/aztec/aztec.iml" group="HighLowAndroid/aztec" />
+    </modules>
+  </component>
+</project>

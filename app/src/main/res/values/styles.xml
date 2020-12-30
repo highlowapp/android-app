@@ -104,6 +104,15 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="BottomNavigationViewLight" parent="Theme.MaterialComponents.Light">
+        <item name="colorPrimary">#FB2A57</item>
+        <item name="colorPrimaryDark">#c8042f</item>
+        <item name="colorAccent">#FA9C1D</item>
+        <item name="android:textColorAlertDialogListItem">@color/colorPrimary</item>
+        <item name="textColor">#000000</item>
+        <item name="bgColor">#FFFFFF</item>
+    </style>
+
     <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:colorAccent">#FA9C1D</item>
         <item name="android:colorForeground">@color/black</item>
