@@ -16,6 +16,7 @@ import androidx.lifecycle.MutableLiveData;
 
 public class ActivityLiveData extends MutableLiveData<Activity> {
     private Activity activity;
+
     /* LiveData-specific stuff */
     public ActivityLiveData(Activity activity) {
         super();
@@ -44,46 +45,6 @@ public class ActivityLiveData extends MutableLiveData<Activity> {
         return activity;
     }
 
-
-    public Activity create(JSONObject data, String type, String date, Consumer<Activity> onSuccess, Consumer<String> onError) {
-        final Activity activity = this.getValue();
-        assert activity != null;
-        ActivityService.shared().createActivity(data, type, date, new Consumer<Activity>() {
-            @Override
-            public void accept(Activity activity) {
-                //Update our value
-                ActivityLiveData.this.setValue(activity);
-
-                //Call onSuccess
-                onSuccess.accept(activity);
-            }
-        }, onError); //Note that we simply pass the onError function through
-        return activity;
-    }
-
-
-    public Activity get(Consumer<Activity> onSuccess, Consumer<String> onError) {
-        final Activity activity = this.getValue();
-        assert activity != null;
-        ActivityService.shared().getActivity(activity.getActivityId(), new Consumer<Activity>() {
-            @Override
-            public void accept(Activity activity) {
-                //Update our value
-                ActivityLiveData.this.setValue(activity);
-
-                //Call onSuccess
-                onSuccess.accept(activity);
-            }
-        }, onError); //Note that we simply pass the onError function through
-        return activity;
-    }
-
-    public void getDiaryEntries(int page, Consumer<List<ActivityLiveData>> onSuccess, Consumer<String> onError) {
-        Activity activity = getValue();
-        if (activity == null) { onError.accept("does-not-exist"); }
-        activity.getDiaryEntries(page, onSuccess, onError);
-    }
-
     public String getActivityId(){
         Activity activity = getValue();
         if(activity == null) return null;
@@ -108,7 +69,7 @@ public class ActivityLiveData extends MutableLiveData<Activity> {
         return activity.getActivityImage();
     }
 
-    public Activity update(JSONObject data, String type, String date, Consumer<Activity> onSuccess, Consumer<String> onError) {
+    public Activity update(JSONObject data, Consumer<Activity> onSuccess, Consumer<String> onError) {
         final Activity activity = this.getValue();
         assert activity != null;
         ActivityService.shared().updateActivity(activity.getActivityId(), data, new Consumer<Activity>() {

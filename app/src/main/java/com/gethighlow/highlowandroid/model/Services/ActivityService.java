@@ -1,6 +1,9 @@
 package com.gethighlow.highlowandroid.model.Services;
 
+import android.util.Log;
+
 import com.android.volley.Request;
+import com.gethighlow.highlowandroid.model.Managers.ActivityManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.ActivityLiveData;
 import com.gethighlow.highlowandroid.model.Resources.Activity;
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
@@ -23,11 +26,8 @@ public class ActivityService {
 
     private Gson gson = new Gson();
 
-
-
-
      /*String activityId, String uid, String type, String title, String timestamp, String date, Boolean flagged,*/
-    public void createActivity(JSONObject data, String type, String date, final Consumer<Activity> onSuccess, Consumer<String> onError){
+    public void createActivity(JSONObject data, String type, String date, final Consumer<ActivityLiveData> onSuccess, Consumer<String> onError){
 
         Map<String, String> params = new HashMap<String, String>();
         params.put("data", data.toString());
@@ -46,16 +46,11 @@ public class ActivityService {
                 if (error != null) {
                     onError.accept(error);
                 } else {
-                    onSuccess.accept(activity);
+                    onSuccess.accept( ActivityManager.shared().saveActivity(activity) );
                 }
 
             }
-        }, new Consumer<String>() {
-            @Override
-            public void accept(String error) {
-                onError.accept("network-error");
-            }
-        });
+        }, onError);
     }
 
 
@@ -74,12 +69,7 @@ public class ActivityService {
                     onSuccess.accept(activity);
                 }
             }
-        }, new Consumer<String>() {
-            @Override
-            public void accept(String error) {
-                onError.accept("network-error");
-            }
-        });
+        }, onError);
     }
 
 
@@ -104,12 +94,7 @@ public class ActivityService {
                     onSuccess.accept(userActivitiesResponse);
                 }
             }
-        }, new Consumer<String>() {
-            @Override
-            public void accept(String error) {
-                onError.accept("network-error");
-            }
-        });
+        }, onError);
     }
 
 
@@ -130,12 +115,7 @@ public class ActivityService {
                     onSuccess.accept(activity);
                 }
             }
-        }, new Consumer<String>() {
-            @Override
-            public void accept(String error) {
-                onError.accept("network-error");
-            }
-        });
+        }, onError);
     }
     public void deleteActivity(String activityId, final Consumer<Activity> onSuccess, final Consumer<String> onError) {
         APIService.shared().authenticatedRequest("/user/activities/" + activityId, Request.Method.DELETE, null, new Consumer<String>() {
@@ -150,12 +130,7 @@ public class ActivityService {
                     onSuccess.accept(activity);
                 }
             }
-        }, new Consumer<String>() {
-            @Override
-            public void accept(String error) {
-                onError.accept("network-error");
-            }
-        });
+        }, onError);
     }
 
 
@@ -174,12 +149,7 @@ public class ActivityService {
                 }
 
             }
-        }, new Consumer<String>() {
-            @Override
-            public void accept(String error) {
-                onError.accept("network-error");
-            }
-        });
+        }, onError);
     }
 
 
@@ -198,12 +168,7 @@ public class ActivityService {
                 }
 
             }
-        }, new Consumer<String>() {
-            @Override
-            public void accept(String error) {
-                onError.accept("network-error");
-            }
-        });
+        }, onError);
     }
 
 
@@ -226,12 +191,7 @@ public class ActivityService {
                 }
 
             }
-        }, new Consumer<String>() {
-            @Override
-            public void accept(String error) {
-                onError.accept("network-error");
-            }
-        });
+        }, onError);
     }
 
 
@@ -253,12 +213,7 @@ public class ActivityService {
                 }
 
             }
-        }, new Consumer<String>() {
-            @Override
-            public void accept(String error) {
-                onError.accept("network-error");
-            }
-        });
+        }, onError);
     }
 
 
@@ -279,12 +234,7 @@ public class ActivityService {
                 }
 
             }
-        }, new Consumer<String>() {
-            @Override
-            public void accept(String error) {
-                onError.accept("network-error");
-            }
-        });
+        }, onError);
     }
 
     public void getSharingPolicy(String activityId, final Consumer<SharingPolicyResponse> onSuccess, final Consumer<String> onError) {
@@ -303,12 +253,7 @@ public class ActivityService {
 
 
             }
-        }, new Consumer<String>() {
-            @Override
-            public void accept(String error) {
-                onError.accept("network-error");
-            }
-        });
+        }, onError);
     }
 
     public void setSharingPolicy(String activityId, String category, List<String> uids, final Consumer<Activity> onSuccess, final Consumer<String> onError) {
@@ -334,11 +279,6 @@ public class ActivityService {
                 }
 
             }
-        }, new Consumer<String>() {
-            @Override
-            public void accept(String error) {
-                onError.accept("network-error");
-            }
-        });
+        }, onError);
     }
 }

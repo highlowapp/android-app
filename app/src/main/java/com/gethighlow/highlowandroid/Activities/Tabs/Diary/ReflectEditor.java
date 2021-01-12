@@ -1,10 +1,10 @@
 package com.gethighlow.highlowandroid.Activities.Tabs.Diary;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -17,11 +17,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import androidx.appcompat.widget.Toolbar;
-
 
 import com.gethighlow.highlowandroid.R;
-import com.gethighlow.highlowandroid.model.Managers.ActivityManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.ActivityLiveData;
 import com.gethighlow.highlowandroid.model.Resources.Activity;
 import com.gethighlow.highlowandroid.model.Services.ActivityService;
@@ -31,7 +28,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.threeten.bp.format.DateTimeFormatter;
 
 
 import java.io.File;
@@ -48,7 +44,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.lifecycle.Observer;
 
 public class ReflectEditor extends AppCompatActivity {
 
@@ -64,25 +60,31 @@ public class ReflectEditor extends AppCompatActivity {
     private int READ_STORAGE_REQUEST = 81;
     private int WRITE_STORAGE_REQUEST = 83;
 
+    private Observer<Activity> onActivityUpdate = new Observer<Activity>() {
+        @Override
+        public void onChanged(Activity activity) {
+
+            //Update the webview with the activity
+
+        }
+    };
+
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     public void onCreate(Bundle savedInstanceState){
 
         super.onCreate(savedInstanceState);
 
-
-
-
-        /*getActivity();*/
-
-
-
-
-        
+        //Create the reflect editor webview
         this.reflectEditorWebview = new WebView(this.getApplicationContext());
+
+        //Set javascript enabled for the webview settings
         WebSettings webSettings = reflectEditorWebview.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
+        //Load the file url
         reflectEditorWebview.loadUrl("file:///android_asset/Reflect_Editor/index.html");
+
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.reflect_editor_navigation);
 
@@ -91,25 +93,32 @@ public class ReflectEditor extends AppCompatActivity {
         toolbar.
         setSupportActionBar(toolbar);*/
         setContentView(reflectEditorWebview);
-/*
-        this.setType("highlow");
-*/
 
-
-
+        //Set ourselves as the webview client
         reflectEditorWebview.setWebViewClient(new WebViewClient() {
 
 
             @Override
             public void onPageFinished(WebView view, String url) {
+
+                //Unless it was a javascript url we finished loading...
                 if(!url.startsWith("javascript")){
+
+                    //Get the type from the intent
                     Intent intent = getIntent();
                     String type = intent.getStringExtra("type");
+
+                    //If the type is 'highlow'...
                     if(type.equals("highlow")){
+
+                        //Set the type in the editor
                         ReflectEditor.this.setType("highlow");
-                    } /*else if(type.equals("audio")){
-            this.setType("audio");
-                    }*/ else if(type.equals("diary")){
+                    }
+
+                    //If the type is 'diary'...
+                    else if(type.equals("diary")){
+
+                        //Set that type in the editor
                         ReflectEditor.this.setType("diary");
                     }
                 }
@@ -117,16 +126,33 @@ public class ReflectEditor extends AppCompatActivity {
             }
         });
 
-        /*reflectEditorWebview.loadUrl("javascript:setType(highlow)");*/
+        //Create a javascript interface
+        WebAppInterface webAppInterface = new WebAppInterface(this);
+
+        //Add the javascript interface so the app can communicate
+        reflectEditorWebview.addJavascriptInterface(webAppInterface, "Android");
 
 
+        try {
 
-        reflectEditorWebview.addJavascriptInterface(new WebAppInterface(this), "Android");
+            //Create the JSONArray with the template data
+            //TODO: Change the template data based on the type of activity being created
+            JSONArray data = new JSONArray("[{'type':'h1','content':'High','editable':false},{'type':'img'},{'type':'p','content':'','editable':true},{'type':'h1','content':'Low','editable':false},{'type':'img'},{'type':'p','content':'','editable':true}]");
+
+            //Finally, run the 'save' method on the interface once to create an activity
+            webAppInterface.saveActivity(data);
+
+        } catch (JSONException e) {
+
+            //TODO: Create an alert here
+            e.printStackTrace();
+
+        }
 
 
     }
 
-
+    //The Web App Interface
     public class WebAppInterface {
         Context mContext;
 
@@ -136,53 +162,76 @@ public class ReflectEditor extends AppCompatActivity {
         }
 
 
-        @RequiresApi(api = Build.VERSION_CODES.O)
         @JavascriptInterface
-        public void save(JSONArray blocks) throws JSONException {
+        public void saveActivity(JSONArray blocks) {
             try {
-                JSONObject block = new JSONObject();
-                block.put("blocks", blocks);
+
+                //Create a new JSONObject with the blocks
+                JSONObject data = new JSONObject();
+                data.put("blocks", blocks);
+
+                //If we have an activityLiveData to work with...
                 if (activityLiveData != null) {
-                    String activityId = activityLiveData.getActivityId();
 
-
-                    ActivityService.shared().updateActivity(activityId, block, new Consumer<Activity>() {
+                    //Update that activity with our new data
+                    activityLiveData.update(data, new Consumer<Activity>() {
                         @Override
                         public void accept(Activity activity) {
 
-                            ReflectEditor.this.activity = activity;
+                            //We don't really need to do much here, since the LiveData will automatically update everything else
 
                         }
                     }, new Consumer<String>() {
                         @Override
-                        public void accept(String error) {
+                        public void accept(String s) {
+
+                            //If an error occurred, show an alert
                             ReflectEditor.this.alert(getResources().getString(R.string.an_error_occurred), getResources().getString(R.string.please_try_again));
 
                         }
                     });
+
                 } else {
 
-                    /*String date = localDate.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));*/
+                    //Set the activity title
+                    data.put("title", "Untitled Entry");
+
+                    //Get the current date in the correct format
                     String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
-                    ActivityService.shared().createActivity(block, "highlow", currentDate, new Consumer<Activity>() {
+                    //Create an activity using the new data and the current date
+                    ActivityService.shared().createActivity(data, "highlow", currentDate, new Consumer<ActivityLiveData>() {
                         @Override
-                        public void accept(Activity activity) {
+                        public void accept(ActivityLiveData activity) {
 
-                            ReflectEditor.this.activity = activity;
+                            Log.d("Activity", activity.toString());
+
+                            //Set the liveData
+                            ReflectEditor.this.activityLiveData = activity;
+
+                            //Observe the liveData
+                            ReflectEditor.this.activityLiveData.observe(ReflectEditor.this, ReflectEditor.this.onActivityUpdate);
+
+                            //For debugging purposes; log the activityId of the newly created activity
                             String activityId = activity.getActivityId();
-                            Log.i("activityId: ", activityId);
 
                         }
                     }, new Consumer<String>() {
                         @Override
                         public void accept(String error) {
+
+                            //If there was an error, show an alert
                             ReflectEditor.this.alert(getResources().getString(R.string.an_error_occurred), getResources().getString(R.string.please_try_again));
 
                         }
                     });
                 }
-            } catch (JSONException e){}
+            } catch (JSONException e){
+
+                //If there was an error, show an alert
+                ReflectEditor.this.alert(getResources().getString(R.string.an_error_occurred), getResources().getString(R.string.please_try_again));
+
+            }
 
         }
 
@@ -200,9 +249,6 @@ public class ReflectEditor extends AppCompatActivity {
             getApplicationContext().startActivity(intent);*/
 
         }
-
-        /** I'm not sure if I did all of this correctly,
-         * do you mind looking over all of this to see if it looks correct?**/
 
         @JavascriptInterface
         public void chooseImage(JSONArray blockIdArray) throws JSONException {

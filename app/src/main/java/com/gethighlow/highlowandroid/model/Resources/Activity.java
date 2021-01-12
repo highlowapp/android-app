@@ -6,6 +6,7 @@ import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.ActivityLiveD
 import com.gethighlow.highlowandroid.model.Responses.UserActivitiesResponse;
 import com.gethighlow.highlowandroid.model.Services.ActivityService;
 import com.gethighlow.highlowandroid.model.util.Consumer;
+import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONException;
@@ -16,12 +17,17 @@ import java.util.List;
 
 public class Activity {
     private String error;
+
+    @SerializedName("activity_id")
     private String activityId;
+
     private String uid;
     private String type;
     private String title;
     private String timestamp;
-    JSONObject data = new JSONObject();
+
+    private JsonObject data = new JsonObject();
+
     private String date;
     private Boolean flagged = false;
 
@@ -32,7 +38,7 @@ public class Activity {
 
 
     public String toString() {
-        return "{\n\tactivityId: " + (activityId == null ? "null":activityId) + "\n\tuid: " + (uid == null ? "null":uid) + "\n\ttype: " + (type == null ? "null": type) + "\n\ttitle: " + (title == null ? "null":title) + "\n\ttimestamp: " + (timestamp == null ? "null": timestamp) + "\n\tdate: " + (date == null ? "null": date) +"\n\tflagged: " + (flagged == null ? "null": flagged);
+        return "{\n\tactivityId: " + (activityId == null ? "null":activityId) + "\n\tuid: " + (uid == null ? "null":uid) + "\n\ttype: " + (type == null ? "null": type) + "\n\ttitle: " + (title == null ? "null":title) + "\n\ttimestamp: " + (timestamp == null ? "null": timestamp) + "\n\tdate: " + (date == null ? "null": date) +"\n\tflagged: " + (flagged == null ? "null": flagged) + "\n\tdata: " + (data == null ? "null": data.toString());
     }
 
 
@@ -71,6 +77,8 @@ public class Activity {
     public Boolean getFlagged(){
         return flagged;
     }
+
+    public JsonObject getData() { return data; }
 
     public List<ActivityComment> getComments(){
         return comments;
