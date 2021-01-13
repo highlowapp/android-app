@@ -6,6 +6,7 @@ import com.android.volley.Request;
 import com.gethighlow.highlowandroid.model.Managers.ActivityManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.ActivityLiveData;
 import com.gethighlow.highlowandroid.model.Resources.Activity;
+import com.gethighlow.highlowandroid.model.Responses.ActivitiesResponse;
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Responses.SharingPolicyResponse;
 import com.gethighlow.highlowandroid.model.Responses.UserActivitiesResponse;
@@ -14,6 +15,8 @@ import com.google.gson.Gson;
 
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,9 +56,6 @@ public class ActivityService {
         }, onError);
     }
 
-
-
-
     public void getActivity(String activityId, final Consumer<Activity> onSuccess, final Consumer<String> onError) {
         APIService.shared().authenticatedRequest("/user/activities/" + activityId, Request.Method.GET, null, new Consumer<String>() {
             @Override
@@ -74,7 +74,7 @@ public class ActivityService {
 
 
 
-    public void getDiaryEntries(int page, final Consumer<UserActivitiesResponse> onSuccess, final Consumer<String> onError) {
+    public void getDiaryEntries(int page, final Consumer<List<ActivityLiveData>> onSuccess, final Consumer<String> onError) {
         Map<String, String> params = new HashMap<>();
         params.put("page", String.valueOf(page));
         APIService.shared().authenticatedRequest("/user/diaryEntries", Request.Method.GET, params, new Consumer<String>() {
@@ -82,16 +82,19 @@ public class ActivityService {
             public void accept(String response) {
                 UserActivitiesResponse userActivitiesResponse = gson.fromJson(response, UserActivitiesResponse.class);
 
-
-                String activityId = userActivitiesResponse.getActivityId();
-
                 String error = userActivitiesResponse.getError();
 
                 if (error != null) {
                     onError.accept(error);
 
                 } else {
-                    onSuccess.accept(userActivitiesResponse);
+                    List<ActivityLiveData> activityLiveDataList = new ArrayList<ActivityLiveData>();
+
+                    for (Activity activity: userActivitiesResponse.getActivities()) {
+                        activityLiveDataList.add( ActivityManager.shared().saveActivity(activity) );
+                    }
+
+                    onSuccess.accept(activityLiveDataList);
                 }
             }
         }, onError);

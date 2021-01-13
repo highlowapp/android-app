@@ -7,6 +7,7 @@ import com.gethighlow.highlowandroid.model.Responses.SharingPolicyResponse;
 import com.gethighlow.highlowandroid.model.Services.ActivityService;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import org.json.JSONObject;
 
@@ -63,11 +64,13 @@ public class ActivityLiveData extends MutableLiveData<Activity> {
         return activity.getType();
     }
 
-    public String getActivityImage() {
+    public JsonObject getData() {
         Activity activity = getValue();
         if (activity == null) return null;
-        return activity.getActivityImage();
+        return activity.getData();
     }
+
+
 
     public Activity update(JSONObject data, Consumer<Activity> onSuccess, Consumer<String> onError) {
         final Activity activity = this.getValue();

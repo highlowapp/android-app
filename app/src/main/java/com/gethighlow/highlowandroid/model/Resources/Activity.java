@@ -161,29 +161,6 @@ public class Activity {
         }, onError);
     }
 
-
-
-    public void getDiaryEntries(int page, final Consumer<List<ActivityLiveData>> onSuccess, Consumer<String> onError){
-
-        ActivityService.shared().getDiaryEntries(page, new Consumer<UserActivitiesResponse>() {
-            @Override
-            public void accept(UserActivitiesResponse response) {
-                List<Activity> activities = response.getActivities();
-
-                List<ActivityLiveData> liveDataList = new ArrayList<ActivityLiveData>();
-
-                for(Activity activity : activities) {
-                    liveDataList.add(ActivityManager.shared().saveActivity(activity));
-                }
-
-
-                onSuccess.accept(liveDataList);
-
-            }
-
-        }, onError);
-    }
-
     public void updateDataWithActivity(Activity activity){
         update("activityId", activity.getActivityId());
         update("uid", activity.getUid());

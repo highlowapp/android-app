@@ -19,11 +19,14 @@ import android.webkit.WebViewClient;
 
 
 import com.gethighlow.highlowandroid.R;
+import com.gethighlow.highlowandroid.model.Managers.ActivityManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.ActivityLiveData;
 import com.gethighlow.highlowandroid.model.Resources.Activity;
 import com.gethighlow.highlowandroid.model.Services.ActivityService;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,7 +38,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 
 import androidx.annotation.RequiresApi;
@@ -54,6 +59,7 @@ public class ReflectEditor extends AppCompatActivity {
     private Boolean hasEdited = false;
     private String filePath;
     private LocalDate localDate;
+    private WebAppInterface webAppInterface;
 
     private int GALLERY_REQUEST_CODE = 80;
     private int CAMERA_REQUEST_CODE = 82;
@@ -71,7 +77,7 @@ public class ReflectEditor extends AppCompatActivity {
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
@@ -88,10 +94,6 @@ public class ReflectEditor extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.reflect_editor_navigation);
 
-        /*Toolbar toolbar = new Toolbar(this);
-        toolbar.setMinimumHeight(45);
-        toolbar.
-        setSupportActionBar(toolbar);*/
         setContentView(reflectEditorWebview);
 
         //Set ourselves as the webview client
@@ -102,21 +104,21 @@ public class ReflectEditor extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
 
                 //Unless it was a javascript url we finished loading...
-                if(!url.startsWith("javascript")){
+                if (!url.startsWith("javascript")) {
 
                     //Get the type from the intent
                     Intent intent = getIntent();
                     String type = intent.getStringExtra("type");
 
                     //If the type is 'highlow'...
-                    if(type.equals("highlow")){
+                    if (type.equals("highlow")) {
 
                         //Set the type in the editor
                         ReflectEditor.this.setType("highlow");
                     }
 
                     //If the type is 'diary'...
-                    else if(type.equals("diary")){
+                    else if (type.equals("diary")) {
 
                         //Set that type in the editor
                         ReflectEditor.this.setType("diary");
@@ -127,29 +129,94 @@ public class ReflectEditor extends AppCompatActivity {
         });
 
         //Create a javascript interface
-        WebAppInterface webAppInterface = new WebAppInterface(this);
+        webAppInterface = new WebAppInterface(this);
 
         //Add the javascript interface so the app can communicate
         reflectEditorWebview.addJavascriptInterface(webAppInterface, "Android");
 
+        //Get the intent
+        Intent intent = getIntent();
 
+        //Get the activityId
+        String activityId = intent.getStringExtra("activityId");
+
+        //If the activityId is null, create an activity
+        if (activityId == null) {
+
+            //Get the type
+            String type = intent.getStringExtra("type");
+
+            //If the type is null, show an error
+            if (type == null) {
+                alert(getString(R.string.an_error_occurred), getString(R.string.please_try_again));
+                return;
+            }
+
+            //Otherwise, create the activity with the type
+            createActivity(type);
+        }
+
+        //If the activityId is not null, get the corresponding activity and load it in the webview
+        else {
+            ActivityManager.shared().getActivity(activityId, new Consumer<ActivityLiveData>() {
+                @Override
+                public void accept(ActivityLiveData activityLiveData) {
+
+                    //Set the new activityLiveData
+                    ReflectEditor.this.activityLiveData = activityLiveData;
+
+                    //Load the new data into the webView
+                    ReflectEditor.this.setBlocks( activityLiveData.getData() );
+
+                }
+            }, new Consumer<String>() {
+                @Override
+                public void accept(String s) {
+
+                    //Show an alert
+                    ReflectEditor.this.alert(getString(R.string.an_error_occurred), getString(R.string.please_try_again));
+
+                }
+            });
+        }
+
+    }
+
+    private void setBlocks(JsonObject data) {
+
+        //Get the blocks as a JsonObject
+        JsonArray blocks = data.getAsJsonArray("blocks");
+
+        //Convert the JsonObject to a string
+        String blocksString = blocks.toString();
+
+        //Now, load those blocks into the webview
+        reflectEditorWebview.loadUrl("javascript:setBlocks(" + blocksString + ");");
+
+    }
+
+    //The block templates for various entry types
+    private Map<String, String> templates = new HashMap<String, String>() {{
+        put("highlow", "[{'type':'h1','content':'High','editable':false},{'type':'img'},{'type':'p','content':'','editable':true},{'type':'h1','content':'Low','editable':false},{'type':'img'},{'type':'p','content':'','editable':true}]");
+        put("diary", "[{'type':'h1', 'content': '', 'editable': true}]");
+    }};
+
+    //For creating activities
+    public void createActivity(String type) {
         try {
 
+            //Get the template string
+            String template = templates.get(type);
+
             //Create the JSONArray with the template data
-            //TODO: Change the template data based on the type of activity being created
-            JSONArray data = new JSONArray("[{'type':'h1','content':'High','editable':false},{'type':'img'},{'type':'p','content':'','editable':true},{'type':'h1','content':'Low','editable':false},{'type':'img'},{'type':'p','content':'','editable':true}]");
+            JSONArray data = new JSONArray(template);
 
             //Finally, run the 'save' method on the interface once to create an activity
             webAppInterface.saveActivity(data);
 
         } catch (JSONException e) {
-
-            //TODO: Create an alert here
             e.printStackTrace();
-
         }
-
-
     }
 
     //The Web App Interface
@@ -178,7 +245,7 @@ public class ReflectEditor extends AppCompatActivity {
                         @Override
                         public void accept(Activity activity) {
 
-                            //We don't really need to do much here, since the LiveData will automatically update everything else
+                            //We don't really need to do much here, since the user was the one who updated the activity. The changes will already be visible to them.
 
                         }
                     }, new Consumer<String>() {
@@ -204,16 +271,11 @@ public class ReflectEditor extends AppCompatActivity {
                         @Override
                         public void accept(ActivityLiveData activity) {
 
-                            Log.d("Activity", activity.toString());
-
                             //Set the liveData
                             ReflectEditor.this.activityLiveData = activity;
 
-                            //Observe the liveData
-                            ReflectEditor.this.activityLiveData.observe(ReflectEditor.this, ReflectEditor.this.onActivityUpdate);
-
-                            //For debugging purposes; log the activityId of the newly created activity
-                            String activityId = activity.getActivityId();
+                            //Set the blocks
+                            ReflectEditor.this.setBlocks( activity.getData() );
 
                         }
                     }, new Consumer<String>() {
@@ -266,14 +328,6 @@ public class ReflectEditor extends AppCompatActivity {
 
     }
 
-
-
-    public void setBlocks(JSONArray blocks){
-        /*JSONArray blocks = new JSONArray();
-        blocks.put(activity);*/
-        ReflectEditor.this.reflectEditorWebview.loadUrl("javascript:document.setBlocks(" + blocks + ")");
-    }
-
     public void updateBlocks(String blockId, JSONArray blocks){
         ReflectEditor.this.reflectEditorWebview.loadUrl("javascript:document.updateBlocks(" + blockId + "," + blocks + ")");
     }
@@ -301,13 +355,10 @@ public class ReflectEditor extends AppCompatActivity {
 
     public void setType(String type){
 
-        /*WebView reflectEditorWebview = new WebView(this.getApplicationContext());*/
-        /*WebSettings webSettings = reflectEditorWebview.getSettings();
-        webSettings.setJavaScriptEnabled(true);*/
-
-        /*reflectEditorWebview.loadUrl("file:///android_asset/Reflect_Editor/index.html");*/
-
+        //Run the JS function to set the type
         reflectEditorWebview.loadUrl("javascript:setType('" + type + "')");
+
+        //Set our content view
         setContentView(reflectEditorWebview);
     }
 

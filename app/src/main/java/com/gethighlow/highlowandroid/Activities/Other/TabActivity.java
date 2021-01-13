@@ -317,16 +317,20 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
             @Override
             public void onClick(View v) {
 
+                //Set it to the diary tab
                 setTab(R.id.navigation_diary);
 
+                //Create the intent to open the ReflectEditor
                 Intent intent = new Intent(getApplicationContext(), ReflectEditor.class);
-                intent.putExtra("type", "highlow");
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                getApplicationContext().startActivity(intent);
 
-                /*Intent intent = new Intent(getApplicationContext(), Diary.class);
+                //Add the type
+                intent.putExtra("type", "highlow");
+
+                //Add the FLAG_ACTIVITY_NEW_TASK flag
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                getApplicationContext().startActivity(intent);*/
+
+                //Start an activity with the intent
+                getApplicationContext().startActivity(intent);
             }
         });
 

@@ -141,12 +141,13 @@ public class Diary extends Fragment {
 
             if (activities.size() == 0 || page + 1 > activities.size() / 10) {
                 final int currentPos = activities.size();
-                /*activity.getDiaryEntries(page, new Consumer<List<ActivityLiveData>>() {
+                ActivityService.shared().getDiaryEntries(page, new Consumer<List<ActivityLiveData>>() {
                     @Override
                     public void accept(List<ActivityLiveData> activityLiveDataList) {
                         activities.addAll(activityLiveDataList);
                         adapter.notifyItemRangeInserted(currentPos + 1, 10);
 
+                        //TODO: Continue working on diary display
                         if (activities.size() == 0) {
 
                         } else {
@@ -160,7 +161,7 @@ public class Diary extends Fragment {
                         refreshLayout.setRefreshing(false);
                         Diary.this.alert(getResources().getString(R.string.an_error_occurred), getResources().getString(R.string.please_try_again));
                     }
-                });*/
+                });
             }
         }
     }
