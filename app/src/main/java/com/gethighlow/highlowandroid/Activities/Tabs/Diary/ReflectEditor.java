@@ -81,6 +81,9 @@ public class ReflectEditor extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
+        //Show the back button
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //Create the reflect editor webview
         this.reflectEditorWebview = new WebView(this.getApplicationContext());
 
@@ -96,6 +99,9 @@ public class ReflectEditor extends AppCompatActivity {
 
         setContentView(reflectEditorWebview);
 
+        //Set debugging enabled
+        WebView.setWebContentsDebuggingEnabled(true);
+
         //Set ourselves as the webview client
         reflectEditorWebview.setWebViewClient(new WebViewClient() {
 
@@ -103,26 +109,16 @@ public class ReflectEditor extends AppCompatActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
 
+                Log.w("Info", url);
+
                 //Unless it was a javascript url we finished loading...
                 if (!url.startsWith("javascript")) {
 
-                    //Get the type from the intent
-                    Intent intent = getIntent();
-                    String type = intent.getStringExtra("type");
+                    //Call our onLoad function
+                    onLoad(url);
 
-                    //If the type is 'highlow'...
-                    if (type.equals("highlow")) {
+                } else {
 
-                        //Set the type in the editor
-                        ReflectEditor.this.setType("highlow");
-                    }
-
-                    //If the type is 'diary'...
-                    else if (type.equals("diary")) {
-
-                        //Set that type in the editor
-                        ReflectEditor.this.setType("diary");
-                    }
                 }
 
             }
@@ -134,17 +130,36 @@ public class ReflectEditor extends AppCompatActivity {
         //Add the javascript interface so the app can communicate
         reflectEditorWebview.addJavascriptInterface(webAppInterface, "Android");
 
-        //Get the intent
+
+
+    }
+
+    //Everything that happens to set up the webview after it has been loaded
+    private void onLoad(String url) {
+
+        //Get the type from the intent
         Intent intent = getIntent();
+        String type = intent.getStringExtra("type");
+
+        //If the type is 'highlow'...
+        if (type.equals("highlow")) {
+
+            //Set the type in the editor
+            ReflectEditor.this.setType("highlow");
+        }
+
+        //If the type is 'diary'...
+        else if (type.equals("diary")) {
+
+            //Set that type in the editor
+            //ReflectEditor.this.setType("diary");
+        }
 
         //Get the activityId
         String activityId = intent.getStringExtra("activityId");
 
         //If the activityId is null, create an activity
         if (activityId == null) {
-
-            //Get the type
-            String type = intent.getStringExtra("type");
 
             //If the type is null, show an error
             if (type == null) {
@@ -481,7 +496,11 @@ public class ReflectEditor extends AppCompatActivity {
     }
 
 
-
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 
 
     private void alert(String title, String message) {

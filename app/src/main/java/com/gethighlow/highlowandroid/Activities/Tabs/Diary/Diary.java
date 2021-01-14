@@ -1,10 +1,13 @@
 
 package com.gethighlow.highlowandroid.Activities.Tabs.Diary;
 
+import com.gethighlow.highlowandroid.CustomViews.Adapters.DiaryEntryClickListener;
 import com.gethighlow.highlowandroid.model.Resources.Activity;
 
 import android.app.Application.ActivityLifecycleCallbacks;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Address;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
@@ -28,6 +31,7 @@ import com.gethighlow.highlowandroid.model.Resources.HighLow;
 import com.gethighlow.highlowandroid.model.Responses.UserActivitiesResponse;
 import com.gethighlow.highlowandroid.model.Services.ActivityService;
 import com.gethighlow.highlowandroid.model.Services.SetActivityTheme;
+import com.gethighlow.highlowandroid.model.ViewModels.DiaryViewModel;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 
 import java.util.ArrayList;
@@ -37,23 +41,106 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class Diary extends Fragment {
     private Profile.OnFragmentInteractionListener mListener;
+
     private RecyclerView recyclerView;
     private DiaryAdapter adapter;
-    private ActivityLiveData activity;
-    private ArrayList<ActivityLiveData> activities = new ArrayList<ActivityLiveData>();
     private EndlessRecyclerViewScrollListener scrollListener;
+
     private SwipeRefreshLayout refreshLayout;
-    private LinearLayoutManager layoutManager;
+
+    private GridLayoutManager layoutManager;
+
+    private DiaryViewModel viewModel;
+
     private TextView noDiary;
     private TextView title;
     private ImageView typeImage;
 
+    private DiaryEntryClickListener diaryEntryClickListener = new DiaryEntryClickListener() {
+        @Override
+        public void onItemTapped(ActivityLiveData item) {
+
+            //When an item is pressed, we want to open a new Reflect Editor window
+            Intent reflectEditorIntent = new Intent( getContext(), ReflectEditor.class);
+
+            //Set the type
+            reflectEditorIntent.putExtra("type", item.getType() );
+
+            //Set the activityId
+            reflectEditorIntent.putExtra("activityId", item.getActivityId() );
+
+            //Present the intent
+            getContext().startActivity(reflectEditorIntent);
+
+        }
+
+        @Override
+        public void onMoreButtonTapped(ActivityLiveData item) {
+
+            //When a more button is pressed, we want to make an alert that gives them the appropriate options
+            //Create the dialog builder
+            AlertDialog.Builder builder = new AlertDialog.Builder( getContext() );
+
+            //Set the title
+            builder.setTitle("Options");
+
+            //Create a sequence of options
+            CharSequence options[] = new CharSequence[] { "Edit Permissions", "Delete" };
+
+            //Use those options in the dialog
+            builder.setItems(options, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                    //If they selected "Edit Permissions"...
+                    if ( options[i].toString().equals("Edit Permissions") ) {
+
+                        //TODO: Bring up the sharing screen
+
+                    }
+
+                    //If they selected "Delete"...
+                    else if ( options[i].toString().equals("Delete") ) {
+
+                        //Delete the item
+                        Diary.this.viewModel.deleteEntry(item);
+
+                    }
+
+                }
+            });
+
+            //Now, get the dialog
+            AlertDialog dialog = builder.create();
+
+            //And finally, show the dialog
+            dialog.show();
+
+        }
+    };
+
+    private Observer<List<ActivityLiveData>> onEntriesUpdate = new Observer<List<ActivityLiveData>>() {
+        @Override
+        public void onChanged(List<ActivityLiveData> activityLiveData) {
+
+            //When the entries list changes, we want to reload the adapter with the updated data
+            adapter.setActivities(activityLiveData);
+
+            //If the number of activities is greater than 0, don't show the "No diary entries" message; otherwise, show it
+            if (activityLiveData.size() > 0) noDiary.setVisibility(View.GONE);
+            else noDiary.setVisibility(View.VISIBLE);
+
+        }
+    };
 
 
     public Diary() {
@@ -63,56 +150,43 @@ public class Diary extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
-//        Context context = getApplicationContext();
-//        String theme = SetActivityTheme.getTheme(context);
-//
-//        if(theme.equals("light")){
-//            setTheme(R.style.LightTheme);
-//        }else{
-//            setTheme(R.style.DarkTheme);
-//        }
-
-
         super.onCreate(savedInstanceState);
-
-
-
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View result = inflater.inflate(R.layout.diary_layout, container, false);
+        //Inflate the diary layout
+        View diaryLayoutView = inflater.inflate(R.layout.diary_fragment, container, false);
 
-        recyclerView = (RecyclerView) result.findViewById(R.id.diaryRecyclerView);
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        noDiary = result.findViewById(R.id.no_diary_notifier);
-        title = result.findViewById(R.id.diary_title);
-        typeImage = result.findViewById(R.id.diary_image);
+        //Get the recyclerView
+        recyclerView = (RecyclerView) diaryLayoutView.findViewById(R.id.diaryRecyclerView);
 
-        if(activity != null) {
-            noDiary.setVisibility(View.GONE);
-            getDiaryEntries(0);
-        } else{
-            noDiary.setVisibility(View.VISIBLE);
-        }
+        //Create our layout manager
+        layoutManager = new GridLayoutManager( getContext(), 2 );
 
+        //Set the layout manager
+        recyclerView.setLayoutManager(layoutManager);
 
+        //Get the view that tells us if we don't have any diary entries
+        noDiary = diaryLayoutView.findViewById(R.id.no_diary_notifier);
 
+        //Instantiate the new diary view model
+        viewModel = new ViewModelProvider(this).get( DiaryViewModel.class );
 
+        //Get the entries and observe them
+        viewModel.getEntries().observe(getViewLifecycleOwner(), onEntriesUpdate);
 
-        adapter = new DiaryAdapter(this, activities);
+        //Create the adapter
+        adapter = new DiaryAdapter(this, null, diaryEntryClickListener );
+
+        //Set the adapter
         recyclerView.setAdapter(adapter);
-        return result;
-    }
 
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
+        //Return the layout view
+        return diaryLayoutView;
     }
-
 
     private View getView(Context context, LayoutInflater inflater, ViewGroup container){
         View view;
@@ -135,58 +209,7 @@ public class Diary extends Fragment {
 
     public void getDiaryEntries(int page) {
 
-        if (activity.equals(null)) {
-            return;
-        } else {
-
-            if (activities.size() == 0 || page + 1 > activities.size() / 10) {
-                final int currentPos = activities.size();
-                ActivityService.shared().getDiaryEntries(page, new Consumer<List<ActivityLiveData>>() {
-                    @Override
-                    public void accept(List<ActivityLiveData> activityLiveDataList) {
-                        activities.addAll(activityLiveDataList);
-                        adapter.notifyItemRangeInserted(currentPos + 1, 10);
-
-                        //TODO: Continue working on diary display
-                        if (activities.size() == 0) {
-
-                        } else {
-
-                        }
-                        refreshLayout.setRefreshing(false);
-                    }
-                }, new Consumer<String>() {
-                    @Override
-                    public void accept(String error) {
-                        refreshLayout.setRefreshing(false);
-                        Diary.this.alert(getResources().getString(R.string.an_error_occurred), getResources().getString(R.string.please_try_again));
-                    }
-                });
-            }
-        }
     }
-
-    private void setTitle(){
-        title.setText(activity.getTitle());
-    }
-
-    private void setTypeImage(){
-        String type = activity.getType();
-        if(type.equals("highlow")){
-            typeImage.setImageResource(R.drawable.logo_light);
-        }else if(type.equals("audio")){
-            typeImage.setImageResource(R.drawable.ic_audio_entry);
-        }else if(typeImage.equals("diary")){
-            typeImage.setImageResource(R.drawable.ic_diary_entry);
-        }
-    }
-
-
-    public void getHighLow(){
-
-    }
-
-
 
     private void alert(String title, String message) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getContext(), R.style.AlertDialogCustom);

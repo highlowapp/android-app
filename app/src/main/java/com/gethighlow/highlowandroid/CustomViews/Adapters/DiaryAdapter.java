@@ -29,21 +29,31 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class DiaryAdapter extends RecyclerView.Adapter<DiaryViewHolder> {
     Context context;
-    private ArrayList<ActivityLiveData> activities;
+    private List<ActivityLiveData> activities;
     public Diary diary;
     private UserLiveData user;
 
+    private DiaryEntryClickListener diaryEntryClickListener;
 
 
     private LifecycleOwner lifecycleOwner;
 
-    public DiaryAdapter(LifecycleOwner lifecycleOwner, ArrayList<ActivityLiveData> activities) {
+    public DiaryAdapter(LifecycleOwner lifecycleOwner, List<ActivityLiveData> activities, DiaryEntryClickListener diaryEntryClickListener) {
         this.context = context;
         this.lifecycleOwner = lifecycleOwner;
         this.activities = activities;
+        this.diaryEntryClickListener = diaryEntryClickListener;
     }
 
+    public void setActivities(List<ActivityLiveData> activities) {
 
+        //Update the activities
+        this.activities = activities;
+
+        //Notify the data set changed
+        this.notifyDataSetChanged();
+
+    }
 
 
     @NotNull
@@ -56,12 +66,15 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull DiaryViewHolder holder, int position) {
         holder.attachToLifecycleOwner(lifecycleOwner);
-        holder.setDiaryEntry(activities.get(position));
+        holder.setDiaryEntryClickListener(diaryEntryClickListener);
+
+        if (activities != null) holder.setDiaryEntry(activities.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return activities.size();
+        if (activities != null) return activities.size();
+        return 0;
     }
 
 }

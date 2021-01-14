@@ -9,19 +9,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:background="@color/home_gray_light">
+        android:background="@color/white">
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/activityHomeRecyclerView"/>
+            android:id="@+id/diaryRecyclerView"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_highlows"
             android:textColor="?attr/textColor"
             android:layout_margin="10dp"
-            android:id="@+id/activityHomeNotice"/>
+            android:id="@+id/no_diary_notifier"/>
     </LinearLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
