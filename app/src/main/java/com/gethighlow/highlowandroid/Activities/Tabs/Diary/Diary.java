@@ -135,6 +135,9 @@ public class Diary extends Fragment {
             //When the entries list changes, we want to reload the adapter with the updated data
             adapter.setActivities(activityLiveData);
 
+            //Finish refreshing
+            refreshLayout.setRefreshing(false);
+
             //If the number of activities is greater than 0, don't show the "No diary entries" message; otherwise, show it
             if (activityLiveData.size() > 0) noDiary.setVisibility(View.GONE);
             else noDiary.setVisibility(View.VISIBLE);
@@ -162,6 +165,17 @@ public class Diary extends Fragment {
 
         //Get the recyclerView
         recyclerView = (RecyclerView) diaryLayoutView.findViewById(R.id.diaryRecyclerView);
+
+        //Get the refresh layout
+        refreshLayout = diaryLayoutView.findViewById(R.id.diary_refresher);
+
+        //Set the onRefreshListener
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Diary.this.viewModel.loadEntries(0);
+            }
+        });
 
         //Create our layout manager
         layoutManager = new GridLayoutManager( getContext(), 2 );
