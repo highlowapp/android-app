@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:id="@+id/popupWindowView"
+    android:background="@drawable/create_activity_popup_rect"
+    android:paddingRight="25dp"
+    android:paddingLeft="25dp"
+    android:layout_marginRight="0dp"
+    android:layout_alignParentTop="true"
+    android:layout_height="wrap_content">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal" android:layout_width="wrap_content"
+        android:background="@color/white"
+        android:paddingRight="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:id="@+id/create_high_low_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="0dp"
+                android:layout_alignParentLeft="true"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+
+                android:src="@drawable/logo_light"
+                android:id="@+id/create_high_low_img"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="10dp"
+                />
+            <TextView
+                android:id="@+id/createHighLowText"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="false"
+                android:layout_below="@id/create_high_low_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="0dp"
+                android:paddingTop="5dp"
+                android:text="High/Low"
+
+                />
+            <!-- Continue for other items-->
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/create_audio_entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp">
+            <ImageView
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="0dp"
+                android:layout_alignParentLeft="true"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+
+                android:src="@drawable/ic_audio_entry"
+                android:id="@+id/create_audio_entry_img"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="10dp"
+                />
+            <TextView
+                android:id="@+id/createAudioEntryText"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="false"
+                android:layout_below="@id/create_audio_entry_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="0dp"
+                android:paddingTop="5dp"
+                android:text="Audio Entry"
+
+                />
+            <!-- Continue for other items-->
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal" android:layout_width="wrap_content"
+        android:background="@color/white"
+        android:paddingRight="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="25dp"
+        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:id="@+id/create_entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="0dp"
+                android:layout_alignParentLeft="true"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+
+
+                android:src="@drawable/ic_text"
+                android:id="@+id/create_entry_img"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="10dp"
+                />
+            <TextView
+                android:id="@+id/createEntryText"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="false"
+                android:layout_below="@id/create_entry_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="0dp"
+                android:paddingTop="5dp"
+                android:text="Entry"
+
+                />
+            <!-- Continue for other items-->
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/create_diary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp">
+            <ImageView
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="0dp"
+                android:layout_alignParentLeft="true"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+
+                android:src="@drawable/ic_book"
+                android:id="@+id/create_diary_img"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="15dp"
+                />
+            <TextView
+                android:id="@+id/createDiaryEntryText"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="false"
+                android:layout_below="@id/create_diary_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="0dp"
+                android:paddingTop="5dp"
+                android:text="Diary"
+
+                />
+            <!-- Continue for other items-->
+
+        </RelativeLayout>
+    </LinearLayout>
+
+
+
+</LinearLayout>

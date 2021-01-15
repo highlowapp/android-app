@@ -12,13 +12,25 @@
         android:title="@string/title_profile" />
 
     <item
+        android:id="@+id/action_invisible"
+        android:title=""
+        android:enabled="false"
+        />
+
+    <item
+        android:id="@+id/navigation_diary"
+        android:icon="@drawable/ic_book"
+        android:title="Diary"
+        />
+
+    <item
         android:id="@+id/navigation_feed"
         android:icon="@drawable/ic_feed_black_24dp"
         android:title="@string/title_feed" />
 
-    <item
+    <!--<item
         android:id="@+id/navigation_about"
         android:icon="@drawable/ic_info_black_24dp"
-        android:title="@string/title_about" />
+        android:title="@string/title_about" />-->
 
 </menu>

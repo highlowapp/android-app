@@ -30,6 +30,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+/*import com.gethighlow.highlowandroid.Activities.Tabs.Diary.ActivityHome;*/
 import com.gethighlow.highlowandroid.Activities.Tabs.Home.EditHLActivity;
 import com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButton;
 import com.gethighlow.highlowandroid.CustomViews.BaseComponents.HLButtonDelegate;
@@ -47,6 +48,7 @@ import com.gethighlow.highlowandroid.model.Resources.HighLow;
 import com.gethighlow.highlowandroid.model.Resources.User;
 import com.gethighlow.highlowandroid.model.Services.AuthService;
 import com.gethighlow.highlowandroid.model.Services.HighLowService;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.format.DateTimeFormatter;

@@ -36,12 +36,18 @@
         <activity
             android:name=".Activities.Other.TutorialActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+
+
+
         <activity android:name=".Activities.Tabs.Profile.EditInterestsActivity" />
         <activity android:name=".Activities.Tabs.About.PushNotifSettings" />
         <activity android:name=".Activities.Tabs.About.SetTheme"/>
+        <activity android:name=".Activities.Tabs.Diary.Diary"/>
+        <activity android:name=".Activities.Tabs.Diary.ReflectEditor"/>
         <activity android:name=".Activities.Tabs.About.ReportABug" />
         <activity android:name=".Activities.Tabs.Profile.AddFriendsActivity" />
         <activity android:name=".Activities.Tabs.Profile.ProfileViewActivity" />
+        <!--<activity android:name=".Activities.Tabs.Home.ActivityHome" />-->
         <activity android:name=".CustomViews.Other.ZoomActivity" />
         <activity android:name=".CustomViews.Other.ExpandHighImage" />
 
