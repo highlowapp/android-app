@@ -6,13 +6,17 @@ import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.ActivityLiveD
 import com.gethighlow.highlowandroid.model.Responses.UserActivitiesResponse;
 import com.gethighlow.highlowandroid.model.Services.ActivityService;
 import com.gethighlow.highlowandroid.model.util.Consumer;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Activity {
@@ -172,6 +176,44 @@ public class Activity {
         update("flagged", activity.getFlagged());
     }
 
+    public static String getTitleForActivity(Activity activity) {
+        try {
+            //Get the data
+            JsonObject data = activity.getData();
+
+            //If it's a diary entry or a high/low...
+            if (activity.getType().equals("diary") || activity.getType().equals("highlow")) {
+
+                //Get the blocks
+                JsonArray blocks = data.getAsJsonArray("blocks");
+
+                //For each block
+                for (JsonElement block: blocks) {
+
+                    //Get the element as a JsonObject
+                    JsonObject blockObj = block.getAsJsonObject();
+
+                    //Get block type
+                    String type = blockObj.get("type").toString();
+
+                    //If the type is not 'image'...
+                    if (!type.equals("img") && blockObj.get("editable").getAsBoolean()) {
+
+                        //Return the content
+                        return blockObj.get("content").toString();
+
+                    }
+
+
+                }
+
+            }
+        } catch (Exception ignored) {
+        }
+
+        //If all else fails, return the date as a string
+        return new SimpleDateFormat("MM/dd/yyyy").format( new Date() );
+    }
 
 }
 

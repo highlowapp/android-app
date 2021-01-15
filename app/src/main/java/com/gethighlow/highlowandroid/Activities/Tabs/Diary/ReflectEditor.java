@@ -43,6 +43,7 @@ import java.util.Locale;
 import java.util.Map;
 
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -65,6 +66,10 @@ public class ReflectEditor extends AppCompatActivity {
     private int CAMERA_REQUEST_CODE = 82;
     private int READ_STORAGE_REQUEST = 81;
     private int WRITE_STORAGE_REQUEST = 83;
+
+    private String type = "diary";
+
+    private String currentImageBlockId; //This is used to keep track of an image block that the user chooses to upload to
 
     private Observer<Activity> onActivityUpdate = new Observer<Activity>() {
         @Override
@@ -92,7 +97,7 @@ public class ReflectEditor extends AppCompatActivity {
         webSettings.setJavaScriptEnabled(true);
 
         //Load the file url
-        reflectEditorWebview.loadUrl("file:///android_asset/Reflect_Editor/index.html");
+        reflectEditorWebview.loadUrl("file:///android_asset/Reflect/index.html");
 
 
         BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.reflect_editor_navigation);
@@ -140,6 +145,9 @@ public class ReflectEditor extends AppCompatActivity {
         //Get the type from the intent
         Intent intent = getIntent();
         String type = intent.getStringExtra("type");
+
+        //Set the type
+        this.type = type;
 
         //If the type is 'highlow'...
         if (type.equals("highlow")) {
@@ -218,20 +226,13 @@ public class ReflectEditor extends AppCompatActivity {
 
     //For creating activities
     public void createActivity(String type) {
-        try {
 
             //Get the template string
             String template = templates.get(type);
 
-            //Create the JSONArray with the template data
-            JSONArray data = new JSONArray(template);
-
             //Finally, run the 'save' method on the interface once to create an activity
-            webAppInterface.saveActivity(data);
+            webAppInterface.saveActivity(template);
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     //The Web App Interface
@@ -245,15 +246,25 @@ public class ReflectEditor extends AppCompatActivity {
 
 
         @JavascriptInterface
-        public void saveActivity(JSONArray blocks) {
+        public void saveActivity(String blocks) {
+
             try {
+
+                //Get the blocks as a JSONArray
+                JSONArray blocksArr = new JSONArray(blocks);
 
                 //Create a new JSONObject with the blocks
                 JSONObject data = new JSONObject();
-                data.put("blocks", blocks);
+                data.put("blocks", blocksArr);
 
                 //If we have an activityLiveData to work with...
                 if (activityLiveData != null) {
+
+                    //Get the title
+                    String title = Activity.getTitleForActivity( activityLiveData.getValue() );
+
+                    //Add the title to the data
+                    data.put("title", title);
 
                     //Update that activity with our new data
                     activityLiveData.update(data, new Consumer<Activity>() {
@@ -282,7 +293,7 @@ public class ReflectEditor extends AppCompatActivity {
                     String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
 
                     //Create an activity using the new data and the current date
-                    ActivityService.shared().createActivity(data, "highlow", currentDate, new Consumer<ActivityLiveData>() {
+                    ActivityService.shared().createActivity(data, ReflectEditor.this.type, currentDate, new Consumer<ActivityLiveData>() {
                         @Override
                         public void accept(ActivityLiveData activity) {
 
@@ -328,17 +339,14 @@ public class ReflectEditor extends AppCompatActivity {
         }
 
         @JavascriptInterface
-        public void chooseImage(JSONArray blockIdArray) throws JSONException {
-            try {
-                JSONObject blockIdObject = new JSONObject();
-                blockIdObject.put("blockIdObject", blockIdArray);
-                String blockId = blockIdObject.toString();
-                pickImage();
-                String url = activity.getActivityImage();
-                JSONObject jsonObject = new JSONObject(url);
-                JSONArray imgBlock = jsonObject.getJSONArray("url");
-                updateBlocks(blockId, imgBlock);
-            } catch (JSONException e) {}
+        public void chooseImage(String blockId) throws JSONException {
+
+            //Update our currentBlockId
+            currentImageBlockId = blockId;
+
+            //Open the image picker
+            pickImage();
+
         }
 
     }
@@ -406,48 +414,97 @@ public class ReflectEditor extends AppCompatActivity {
 
 
     public void pickImage(){
+
+        //Create the alert dialog builder
         AlertDialog.Builder builder = new AlertDialog.Builder(ReflectEditor.this, R.style.AlertDialogCustom);
+
+        //Set the title
         builder.setTitle("How would you like to upload an image?");
+
+        //List the options
         final String[] items = {"Take a photo", "Use existing photo", "Cancel"};
         final Context context = ReflectEditor.this;
+
+        //Set the items
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
+                //If they chose to use an existing photo...
                 if (items[i].equals("Use existing photo")) {
+
+                    //If we have the permissions to do so...
                     if (ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+                        //Show the gallery
                         gallery();
-                    } else {
+
+                    }
+
+                    //Otherwise...
+                    else {
+
+                        //Request the permissions
                         ActivityCompat.requestPermissions(ReflectEditor.this,
                                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                                 READ_STORAGE_REQUEST);
 
                     }
-                } else if (items[i].equals("Take a photo")) {
+
+                }
+
+                //If they chose to take a photo...
+                else if (items[i].equals("Take a photo")) {
+
+                    //If we have the permissions to do so...
                     if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+
+                        //Open the camera
                         camera();
-                    } else {
+
+                    }
+
+                    //Otherwise...
+                    else {
+
+                        //Request the permissions
                         ActivityCompat.requestPermissions(ReflectEditor.this,
                                 new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                                 WRITE_STORAGE_REQUEST);
+
                     }
+
                 }
             }
         });
 
+        //Show the dialog
         builder.create().show();
     }
 
     private void gallery() {
+
+        //Create a picker intent
         Intent picker = new Intent(Intent.ACTION_PICK);
+
+        //Set the type
         picker.setType("image/*");
+
+        //Set the allowed MIME types
         String[] mimeTypes = {"image/jpeg", "image/png"};
         picker.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+
+        //Start an activity for that result
         startActivityForResult(picker, GALLERY_REQUEST_CODE);
+
     }
 
     private void camera() {
+
+        //Create a camera intent
         Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
+        //Create a photo file
         File photo = null;
         try {
             photo = createImageFile();
@@ -456,9 +513,16 @@ public class ReflectEditor extends AppCompatActivity {
             alert(getResources().getString(R.string.an_error_occurred), getResources().getString(R.string.please_try_again));
         }
 
+        //If the file was successfully created...
         if (photo != null) {
+
+            //Get the URI for the foto
             Uri photoUri = FileProvider.getUriForFile(this, "com.gethighlow.highlowandroid.fileprovider", photo);
+
+            //Set that URI as the camera's output
             camera.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+
+            //Start an activity for that result
             startActivityForResult(camera, CAMERA_REQUEST_CODE);
         }
     }
@@ -466,6 +530,7 @@ public class ReflectEditor extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
         if (requestCode == READ_STORAGE_REQUEST) {
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -512,4 +577,12 @@ public class ReflectEditor extends AppCompatActivity {
         alertDialog.show();
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        //TODO: Get the image and update the image block
+
+    }
 }
