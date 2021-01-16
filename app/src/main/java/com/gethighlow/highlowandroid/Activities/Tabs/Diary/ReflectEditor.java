@@ -14,11 +14,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 
@@ -432,7 +434,7 @@ public class ReflectEditor extends AppCompatActivity {
         builder.setTitle("How would you like to upload an image?");
 
         //List the options
-        final String[] items = {"Take a photo", "Use existing photo", "Cancel"};
+        final String[] items = {"Take a photo", "Use existing photo", "Enter Image URL", "Cancel"};
         final Context context = ReflectEditor.this;
 
         //Set the items
@@ -483,6 +485,14 @@ public class ReflectEditor extends AppCompatActivity {
                                 WRITE_STORAGE_REQUEST);
 
                     }
+
+                }
+
+                //If they chose to use a URL
+                else if (items[i].equals("Enter Image URL")) {
+
+                    //Present a new dialog to choose a URL
+                    setImageWithUrl();
 
                 }
             }
@@ -587,10 +597,66 @@ public class ReflectEditor extends AppCompatActivity {
         alertDialog.show();
     }
 
+
+    private void setImageWithUrl() {
+
+        //Create an AlertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        //Set the title
+        builder.setTitle("Enter a URL below");
+
+        //Create an input
+        final EditText input = new EditText(this);
+
+        //Set the input type
+        input.setInputType(InputType.TYPE_TEXT_VARIATION_URI);
+
+        //Set the dialog view
+        builder.setView(input);
+
+        //Create an OK button
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                //Get the url
+                String url = input.getText().toString();
+
+                //Send the url to the image block
+                reflectEditorWebview.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        reflectEditorWebview.loadUrl("javascript:updateBlock('" + currentImageBlockId + "', { url: '" + url + "' });");
+                    }
+                });
+
+            }
+        });
+
+        //Create a cancel button
+        builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                //Cancel the dialog
+                dialogInterface.cancel();
+
+            }
+        });
+
+        //Show the alert
+        builder.create().show();
+
+    }
+
+
     private void uploadActivityImageBitmap(Bitmap bitmap) {
 
         //Start loading
         progressLoaderView.startLoading();
+
+        //Set the title
         progressLoaderView.setTitle("Uploading...");
 
         //Make a request
