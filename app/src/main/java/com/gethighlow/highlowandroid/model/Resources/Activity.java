@@ -200,7 +200,7 @@ public class Activity {
                     if (!type.equals("img") && blockObj.get("editable").getAsBoolean()) {
 
                         //Return the content
-                        return blockObj.get("content").toString();
+                        return blockObj.get("content").getAsString().replaceAll("&nbsp;", " ");
 
                     }
 
