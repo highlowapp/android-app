@@ -6,18 +6,23 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 
 
+import com.gethighlow.highlowandroid.CustomViews.Other.ProgressLoaderView;
 import com.gethighlow.highlowandroid.R;
 import com.gethighlow.highlowandroid.model.Managers.ActivityManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.ActivityLiveData;
@@ -28,12 +33,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -61,6 +69,7 @@ public class ReflectEditor extends AppCompatActivity {
     private String filePath;
     private LocalDate localDate;
     private WebAppInterface webAppInterface;
+    private ProgressLoaderView progressLoaderView;
 
     private int GALLERY_REQUEST_CODE = 80;
     private int CAMERA_REQUEST_CODE = 82;
@@ -86,11 +95,13 @@ public class ReflectEditor extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.reflect_editor_webview);
+
         //Show the back button
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Create the reflect editor webview
-        this.reflectEditorWebview = new WebView(this.getApplicationContext());
+        this.reflectEditorWebview = findViewById(R.id.reflect_editor_webview);
 
         //Set javascript enabled for the webview settings
         WebSettings webSettings = reflectEditorWebview.getSettings();
@@ -99,10 +110,11 @@ public class ReflectEditor extends AppCompatActivity {
         //Load the file url
         reflectEditorWebview.loadUrl("file:///android_asset/Reflect/index.html");
 
+        //Create a loader view
+        progressLoaderView = (ProgressLoaderView) findViewById(R.id.progressLoaderView);
 
-        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.reflect_editor_navigation);
-
-        setContentView(reflectEditorWebview);
+        //Set the loader view container
+        progressLoaderView.setView(reflectEditorWebview);
 
         //Set debugging enabled
         WebView.setWebContentsDebuggingEnabled(true);
@@ -381,8 +393,6 @@ public class ReflectEditor extends AppCompatActivity {
         //Run the JS function to set the type
         reflectEditorWebview.loadUrl("javascript:setType('" + type + "')");
 
-        //Set our content view
-        setContentView(reflectEditorWebview);
     }
 
     private void getActivity(){
@@ -577,12 +587,93 @@ public class ReflectEditor extends AppCompatActivity {
         alertDialog.show();
     }
 
+    private void uploadActivityImageBitmap(Bitmap bitmap) {
+
+        //Start loading
+        progressLoaderView.startLoading();
+        progressLoaderView.setTitle("Uploading...");
+
+        //Make a request
+        ActivityService.shared().uploadImage(bitmap, new Consumer<String>() {
+            @Override
+            public void accept(String url) {
+
+                //Stop showing the loading screen
+                progressLoaderView.stopLoading();
+
+                //Now that we have the url, we can update the image block
+                reflectEditorWebview.loadUrl("javascript:updateBlock('" + currentImageBlockId + "', { url: '" + url + "' });");
+
+            }
+        }, new Consumer<String>() {
+            @Override
+            public void accept(String s) {
+
+                //Stop loading
+                progressLoaderView.stopLoading();
+
+                //Alert the user of the error
+                alert(getResources().getString(R.string.an_error_occurred), getResources().getString(R.string.please_try_again));
+
+            }
+        });
+
+    }
+
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        //TODO: Get the image and update the image block
+        //Check that we got an "OK" result
+        if (resultCode == android.app.Activity.RESULT_OK) {
 
+            //If we just received an image from the gallery...
+            if (requestCode == GALLERY_REQUEST_CODE) {
+
+                try {
+
+                    //Get the URI of the image
+                    Uri selectedImage = data.getData();
+
+                    //Create a file descriptor
+                    ParcelFileDescriptor parcelFileDescriptor = getContentResolver().openFileDescriptor(selectedImage, "r", null);
+
+                    //Create an input stream for the file
+                    FileInputStream inputStream = new FileInputStream(parcelFileDescriptor.getFileDescriptor());
+
+                    //Create a File instance
+                    File file = new File(getCacheDir(), "activity_img");
+
+                    //Create an output stream to the file
+                    FileOutputStream fileOutputStream = new FileOutputStream(file);
+
+                    //Copy the input contents to the file's output stream
+                    IOUtils.copy(inputStream, fileOutputStream);
+
+                    //Get the image bitmap
+                    Bitmap imgBitmap = BitmapFactory.decodeFile( getCacheDir() + "/activity_img" );
+
+                    //Close the streams
+                    fileOutputStream.close();
+                    inputStream.close();
+
+                    //Now, upload the bitmap
+                    uploadActivityImageBitmap(imgBitmap);
+
+                } catch(Exception e) {
+                    alert(getString(R.string.an_error_occurred), getString(R.string.please_try_again));
+                }
+
+            } else if (requestCode == CAMERA_REQUEST_CODE) {
+
+                //Get the image bitmap
+                Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+
+                //Upload the bitmap
+                uploadActivityImageBitmap(bitmap);
+
+            }
+        }
     }
 }

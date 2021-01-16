@@ -1,5 +1,6 @@
 package com.gethighlow.highlowandroid.model.Services;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -8,6 +9,7 @@ import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.ActivityLiveD
 import com.gethighlow.highlowandroid.model.Resources.Activity;
 import com.gethighlow.highlowandroid.model.Responses.ActivitiesResponse;
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
+import com.gethighlow.highlowandroid.model.Responses.MediaUrlResponse;
 import com.gethighlow.highlowandroid.model.Responses.SharingPolicyResponse;
 import com.gethighlow.highlowandroid.model.Responses.UserActivitiesResponse;
 import com.gethighlow.highlowandroid.model.util.Consumer;
@@ -283,5 +285,41 @@ public class ActivityService {
 
             }
         }, onError);
+    }
+
+    public void uploadImage(Bitmap image, final Consumer<String> onSuccess, final Consumer<String> onError) {
+
+        //Create an empty params object
+        Map<String, String> params = new HashMap<String, String>();
+
+        //Make the request
+        APIService.shared().makeMultipartRequest("/user/activities/addImage", Request.Method.POST, params, image, new Consumer<String>() {
+            @Override
+            public void accept(String response) {
+
+                //Get the string as a media url response
+                MediaUrlResponse mediaUrlResponse = gson.fromJson(response, MediaUrlResponse.class);
+
+                //Check for an error
+                String error = mediaUrlResponse.getError();
+
+                //If there was an error...
+                if (error != null) {
+
+                    //Call onError and return
+                    onError.accept(error);
+                    return;
+
+                }
+
+                //Get the url from the response
+                String url = mediaUrlResponse.getUrl();
+
+                //Call onSuccess with the url
+                onSuccess.accept(url);
+
+            }
+        }, onError);
+
     }
 }
