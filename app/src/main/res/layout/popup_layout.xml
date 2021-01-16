@@ -1,31 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:id="@+id/popupWindowView"
     android:background="@drawable/create_activity_popup_rect"
     android:paddingRight="25dp"
     android:paddingLeft="25dp"
-    android:layout_marginRight="0dp"
+    android:layout_marginEnd="30dp"
+    android:layout_marginStart="30dp"
     android:layout_alignParentTop="true"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:minWidth="1000dp">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal" android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:background="@color/white"
-        android:paddingRight="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_alignParentTop="true"
         android:layout_height="wrap_content">
         <RelativeLayout
             android:id="@+id/create_high_low_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:gravity="center">
             <ImageView
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="0dp"
-                android:layout_alignParentLeft="true"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
 
@@ -43,10 +46,8 @@
                 android:layout_below="@id/create_high_low_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="0dp"
                 android:paddingTop="5dp"
                 android:text="High/Low"
-
                 />
             <!-- Continue for other items-->
 
@@ -54,14 +55,13 @@
 
         <RelativeLayout
             android:id="@+id/create_audio_entry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp">
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content">
             <ImageView
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="0dp"
-                android:layout_alignParentLeft="true"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
 
@@ -89,24 +89,22 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:orientation="horizontal" android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:background="@color/white"
-        android:paddingRight="0dp"
-        android:layout_marginRight="0dp"
         android:layout_marginBottom="25dp"
-        android:layout_alignParentTop="true"
         android:layout_height="wrap_content">
 
         <RelativeLayout
             android:id="@+id/create_entry"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
             android:layout_height="wrap_content">
             <ImageView
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="0dp"
-                android:layout_alignParentLeft="true"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
 
@@ -127,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:paddingRight="0dp"
                 android:paddingTop="5dp"
-                android:text="Entry"
+                android:text="Diary Entry"
 
                 />
             <!-- Continue for other items-->
@@ -136,14 +134,13 @@
 
         <RelativeLayout
             android:id="@+id/create_diary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="25dp">
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content">
             <ImageView
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="0dp"
-                android:layout_alignParentLeft="true"
                 android:layout_width="75dp"
                 android:layout_height="75dp"
 

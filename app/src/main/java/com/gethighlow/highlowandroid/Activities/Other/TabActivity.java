@@ -302,6 +302,7 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
 
     public void showPopup(View v) {
 
+        //Create a tooltip
         SimpleTooltip tooltip = new SimpleTooltip.Builder(this)
                 .anchorView(v)
                 .gravity((Gravity.TOP))
@@ -312,7 +313,10 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
                 .focusable(true)
                 .build();
 
+        //Get the createHighLow button
         RelativeLayout createHighLow = tooltip.findViewById(R.id.create_high_low_btn);
+
+        //Set the onclicklistener
         createHighLow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -334,6 +338,34 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
             }
         });
 
+        //Get the createDiaryEntry button
+        RelativeLayout createDiaryEntry = tooltip.findViewById(R.id.create_entry);
+
+        //Set the onclicklistener
+        createDiaryEntry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //Set it to the diary tab
+                setTab(R.id.navigation_diary);
+
+                //Create the intent to open the ReflectEditor
+                Intent intent = new Intent(getApplicationContext(), ReflectEditor.class);
+
+                //Add the type
+                intent.putExtra("type", "diary");
+
+                //Add the FLAG_ACTIVITY_NEW_TASK flag
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                //Start an activity with the intent
+                getApplicationContext().startActivity(intent);
+
+            }
+        });
+
+
+        //Show the tooltip
         tooltip.show();
 
     }
