@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -164,10 +165,42 @@ public class Diary extends Fragment {
         View diaryLayoutView = inflater.inflate(R.layout.diary_fragment, container, false);
 
         //Get the recyclerView
-        recyclerView = (RecyclerView) diaryLayoutView.findViewById(R.id.diaryRecyclerView);
+        recyclerView = diaryLayoutView.findViewById(R.id.diaryRecyclerView);
 
         //Get the refresh layout
         refreshLayout = diaryLayoutView.findViewById(R.id.diary_refresher);
+
+        //Instantiate the new diary view model
+        viewModel = new ViewModelProvider(this).get( DiaryViewModel.class );
+
+        //Get the entries and observe them
+        viewModel.getEntries().observe(getViewLifecycleOwner(), onEntriesUpdate);
+
+        //Create our layout manager
+        layoutManager = new GridLayoutManager( getContext(), 2 );
+
+        //Set the layout manager
+        recyclerView.setLayoutManager(layoutManager);
+
+        //Create the adapter
+        adapter = new DiaryAdapter(this, null, diaryEntryClickListener );
+
+        //Set the adapter
+        recyclerView.setAdapter(adapter);
+
+        //Create an onScrollListener
+        scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+
+                //Load the next page
+                viewModel.loadEntries(page);
+
+            }
+        };
+
+        //Set the onScrollListener
+        recyclerView.addOnScrollListener(scrollListener);
 
         //Set the onRefreshListener
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -177,26 +210,8 @@ public class Diary extends Fragment {
             }
         });
 
-        //Create our layout manager
-        layoutManager = new GridLayoutManager( getContext(), 2 );
-
-        //Set the layout manager
-        recyclerView.setLayoutManager(layoutManager);
-
         //Get the view that tells us if we don't have any diary entries
         noDiary = diaryLayoutView.findViewById(R.id.no_diary_notifier);
-
-        //Instantiate the new diary view model
-        viewModel = new ViewModelProvider(this).get( DiaryViewModel.class );
-
-        //Get the entries and observe them
-        viewModel.getEntries().observe(getViewLifecycleOwner(), onEntriesUpdate);
-
-        //Create the adapter
-        adapter = new DiaryAdapter(this, null, diaryEntryClickListener );
-
-        //Set the adapter
-        recyclerView.setAdapter(adapter);
 
         //Return the layout view
         return diaryLayoutView;
