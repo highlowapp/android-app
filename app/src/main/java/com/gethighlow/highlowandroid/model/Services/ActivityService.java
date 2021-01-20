@@ -7,6 +7,7 @@ import com.android.volley.Request;
 import com.gethighlow.highlowandroid.model.Managers.ActivityManager;
 import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.ActivityLiveData;
 import com.gethighlow.highlowandroid.model.Resources.Activity;
+import com.gethighlow.highlowandroid.model.Resources.SharingPolicy;
 import com.gethighlow.highlowandroid.model.Responses.ActivitiesResponse;
 import com.gethighlow.highlowandroid.model.Responses.GenericResponse;
 import com.gethighlow.highlowandroid.model.Responses.MediaUrlResponse;
@@ -14,6 +15,7 @@ import com.gethighlow.highlowandroid.model.Responses.SharingPolicyResponse;
 import com.gethighlow.highlowandroid.model.Responses.UserActivitiesResponse;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 
 import org.json.JSONObject;
 
@@ -242,12 +244,12 @@ public class ActivityService {
         }, onError);
     }
 
-    public void getSharingPolicy(String activityId, final Consumer<SharingPolicyResponse> onSuccess, final Consumer<String> onError) {
+    public void getSharingPolicy(String activityId, final Consumer<SharingPolicy> onSuccess, final Consumer<String> onError) {
         APIService.shared().authenticatedRequest("/user/activities/" + activityId + "/sharing", Request.Method.GET, null, new Consumer<String>() {
 
             @Override
             public void accept(String response) {
-                SharingPolicyResponse sharingPolicyResponse = gson.fromJson(response, SharingPolicyResponse.class);
+                SharingPolicy sharingPolicyResponse = gson.fromJson(response, SharingPolicy.class);
 
                 String error = sharingPolicyResponse.getError();
                 if (error != null) {
@@ -266,7 +268,11 @@ public class ActivityService {
         params.put("category", category);
         if(category.equals("uids")){
             if(uids != null){
-                params.put("uids", uids.toString());
+
+                JsonArray uidsJson = gson.toJsonTree(uids).getAsJsonArray();
+
+                params.put("uids[]", uidsJson.getAsString());
+
             }
         }
         params.put("request_id", UUID.randomUUID().toString());

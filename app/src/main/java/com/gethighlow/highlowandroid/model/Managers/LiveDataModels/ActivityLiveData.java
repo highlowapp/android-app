@@ -2,6 +2,7 @@ package com.gethighlow.highlowandroid.model.Managers.LiveDataModels;
 
 import com.gethighlow.highlowandroid.model.Resources.Activity;
 import com.gethighlow.highlowandroid.model.Resources.HighLow;
+import com.gethighlow.highlowandroid.model.Resources.SharingPolicy;
 import com.gethighlow.highlowandroid.model.Resources.User;
 import com.gethighlow.highlowandroid.model.Responses.SharingPolicyResponse;
 import com.gethighlow.highlowandroid.model.Services.ActivityService;
@@ -139,12 +140,12 @@ public class ActivityLiveData extends MutableLiveData<Activity> {
     }
 
 
-    public Activity getSharingPolicy(Consumer<SharingPolicyResponse> onSuccess, Consumer<String> onError) {
+    public Activity getSharingPolicy(Consumer<SharingPolicy> onSuccess, Consumer<String> onError) {
         final Activity activity = this.getValue();
         assert activity != null;
-        ActivityService.shared().getSharingPolicy(activity.getActivityId(), new Consumer<SharingPolicyResponse>() {
+        ActivityService.shared().getSharingPolicy(activity.getActivityId(), new Consumer<SharingPolicy>() {
             @Override
-            public void accept(SharingPolicyResponse response){
+            public void accept(SharingPolicy response){
                 onSuccess.accept(response);
                 ActivityLiveData.this.setValue(activity);
             }

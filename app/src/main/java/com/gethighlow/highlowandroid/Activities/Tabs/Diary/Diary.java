@@ -105,7 +105,7 @@ public class Diary extends Fragment {
                     //If they selected "Edit Permissions"...
                     if ( options[i].toString().equals("Edit Permissions") ) {
 
-                        //TODO: Bring up the sharing screen
+                        showSharingOptions(item);
 
                     }
 
@@ -234,7 +234,19 @@ public class Diary extends Fragment {
 
     }
 
+    private void showSharingOptions(ActivityLiveData activityLiveData) {
 
+        //Create the intent
+        Intent intent = new Intent(getContext(), SharingOptionsActivity.class);
+
+        //Add the activity id extra
+        intent.putExtra("activityId", activityLiveData.getActivityId());
+
+        //Present the sharing options activity
+        startActivity(intent);
+
+
+    }
 
     public void getDiaryEntries(int page) {
 

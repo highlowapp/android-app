@@ -16,6 +16,9 @@ import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -51,8 +54,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -100,7 +105,7 @@ public class ReflectEditor extends AppCompatActivity {
         setContentView(R.layout.reflect_editor_webview);
 
         //Show the back button
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull( getSupportActionBar() ).setDisplayHomeAsUpEnabled(true);
 
         //Create the reflect editor webview
         this.reflectEditorWebview = findViewById(R.id.reflect_editor_webview);
@@ -741,5 +746,58 @@ public class ReflectEditor extends AppCompatActivity {
 
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        //Create the menu inflater
+        MenuInflater inflater = getMenuInflater();
+
+        //Inflate the menu
+        inflater.inflate(R.menu.reflect_menu, menu);
+
+        //Return true
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        //If it's the share item
+        if (item.getItemId() == R.id.share) {
+
+            //Show the sharing options screen
+            showSharingOptions();
+
+        }
+
+        //If it's the back button
+        else if (item.getItemId() == android.R.id.home) {
+
+            //Go back
+            onBackPressed();
+
+        }
+
+        return true;
+    }
+
+    private void showSharingOptions() {
+
+        //Only run if the activity has been loaded
+        if (activityLiveData != null) {
+
+            //Create the intent
+            Intent intent = new Intent(this, SharingOptionsActivity.class);
+
+            //Add the activity id extra
+            intent.putExtra("activityId", activityLiveData.getActivityId());
+
+            //Present the sharing options activity
+            startActivity(intent);
+
+        }
+
     }
 }
