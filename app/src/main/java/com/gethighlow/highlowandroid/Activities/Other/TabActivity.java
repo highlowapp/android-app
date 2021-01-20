@@ -84,8 +84,7 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
         put(R.id.navigation_home, "Home");
         put(R.id.navigation_profile, "Profile");
         put(R.id.navigation_diary, "Diary");
-        put(R.id.navigation_feed, "Feed");
-        /*put(R.id.navigation_about, "About");*/
+        put(R.id.navigation_about, "About");
     }};
 
     private ActionBar actionBar;
@@ -131,7 +130,8 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
         fragments.put(R.id.navigation_home, new Home());
         fragments.put(R.id.navigation_profile, new Profile());
         fragments.put(R.id.navigation_diary, new Diary());
-        fragments.put(R.id.navigation_feed, new Feed());
+        fragments.put(R.id.navigation_about, new About());
+
         /*fragments.put(R.id.navigation_about, new About());*/
 
         addActivityButton = findViewById(R.id.addActivityButton);
