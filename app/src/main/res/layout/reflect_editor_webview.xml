@@ -1,18 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rootView">
 
     <WebView
         android:id="@+id/reflect_editor_webview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/formattingToolbar"
         />
 
     <com.gethighlow.highlowandroid.CustomViews.Other.ProgressLoaderView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/progressLoaderView"/>
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/formattingToolbar">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_format_bold_24"
+            android:layout_margin="5dp"
+            android:id="@+id/bold"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_format_italic_24"
+            android:layout_margin="5dp"
+            android:id="@+id/italics"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_format_underlined_24"
+            android:layout_margin="5dp"
+            android:id="@+id/underline"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_strikethrough_s_24"
+            android:layout_margin="5dp"
+            android:id="@+id/strikethrough"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_title_24"
+            android:layout_margin="5dp"
+            android:id="@+id/header1"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_subtitle_24"
+            android:layout_margin="5dp"
+            android:id="@+id/header2"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_image_24"
+            android:layout_margin="5dp"
+            android:id="@+id/image"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_format_quote_24"
+            android:layout_margin="5dp"
+            android:id="@+id/quote"/>
+
+    </androidx.appcompat.widget.Toolbar>
 
 </RelativeLayout>

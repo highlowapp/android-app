@@ -3,19 +3,20 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">#FB2A57</item>
-        <item name="colorPrimaryDark">#c8042f</item>
+        <item name="colorPrimaryDark">@color/very_light_gray</item>
         <item name="colorAccent">#FA9C1D</item>
         <item name="android:textColorAlertDialogListItem">@color/colorPrimary</item>
         <item name="textColor">#000000</item>
         <item name="bgColor">#FFFFFF</item>
-
+        <item name="actionBarStyle">@style/HLActionBar</item>
+        <item name="actionBarTheme">@style/ActionBarTheme</item>
     </style>
 
     <!-- This is where all the light theme colors are defined
     (I apologize if some of the names don't make sense) -->
     <style name="LightTheme" parent="AppTheme">
         <item name="colorPrimary">#FB2A57</item>
-        <item name="colorPrimaryDark">#c8042f</item>
+        <item name="colorPrimaryDark">@color/very_light_gray</item>
         <item name="colorAccent">#FA9C1D</item>
         <item name="android:colorForeground">@color/black</item>
         <item name="textColor">#000000</item>
@@ -46,6 +47,7 @@
         <item name="grayButton2borderButtonWhite">@color/gray</item>
         <item name="topRoundedRect">@drawable/top_rounded_rect</item>
         <item name="gradient2colorPrimary">@drawable/gradient</item>
+        <item name="android:actionBarStyle">@style/HLActionBar</item>
     </style>
 
     <style name="DarkTheme" parent="AppTheme">
@@ -120,5 +122,26 @@
         <item name="android:colorForeground">@color/black</item>
     </style>
 
+    <style name="ActionBarTheme">
+        <item name="colorControlNormal">@color/black</item>
+    </style>
 
+
+    <style name="HLActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="background">@color/white</item>
+        <item name="titleEnabled">true</item>
+        <item name="displayOptions">showTitle|showHome|showCustom</item>
+        <item name="titleTextStyle">@style/TitleTextStyle</item>
+        <item name="colorControlNormal">@color/black</item>
+        <item name="subtitleTextStyle">@style/TitleTextStyle</item>
+        <item name="elevation">4dp</item>
+        <item name="android:statusBarColor">@color/very_light_gray</item>
+        <item name="drawerArrowStyle">@style/TitleTextStyle</item>
+    </style>
+
+    <style name="TitleTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="textColor">@color/black</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="color">@color/black</item>
+    </style>
 </resources>
