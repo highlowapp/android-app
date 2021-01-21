@@ -43,7 +43,8 @@
         <activity android:name=".Activities.Tabs.Diary.Diary" />
         <activity android:name=".Activities.Tabs.Diary.ReflectEditor"
             android:label="Edit Entry"
-            android:parentActivityName=".Activities.Other.TabActivity"/>
+            android:parentActivityName=".Activities.Other.TabActivity"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".Activities.Tabs.About.ReportABug" />
         <activity android:name=".Activities.Tabs.Profile.AddFriendsActivity" />
         <activity android:name=".Activities.Tabs.Profile.ProfileViewActivity" /> <!-- <activity android:name=".Activities.Tabs.Home.ActivityHome" /> -->

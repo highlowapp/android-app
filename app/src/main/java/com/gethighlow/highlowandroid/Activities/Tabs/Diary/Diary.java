@@ -245,7 +245,6 @@ public class Diary extends Fragment {
         //Present the sharing options activity
         startActivity(intent);
 
-
     }
 
     public void getDiaryEntries(int page) {

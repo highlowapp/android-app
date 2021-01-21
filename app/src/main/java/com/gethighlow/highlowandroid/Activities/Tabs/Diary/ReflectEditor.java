@@ -15,10 +15,14 @@ import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewTreeObserver;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -62,6 +66,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
@@ -77,6 +82,19 @@ public class ReflectEditor extends AppCompatActivity {
     private LocalDate localDate;
     private WebAppInterface webAppInterface;
     private ProgressLoaderView progressLoaderView;
+
+    //Toolbar
+    private Toolbar formattingToolbar;
+
+    //Toolbar items
+    private ImageView bold;
+    private ImageView italics;
+    private ImageView underline;
+    private ImageView strikethrough;
+    private ImageView header1;
+    private ImageView header2;
+    private ImageView image;
+    private ImageView quote;
 
     private int GALLERY_REQUEST_CODE = 80;
     private int CAMERA_REQUEST_CODE = 82;
@@ -109,6 +127,27 @@ public class ReflectEditor extends AppCompatActivity {
 
         //Create the reflect editor webview
         this.reflectEditorWebview = findViewById(R.id.reflect_editor_webview);
+
+        //Get the formatting toolbar and its items
+        formattingToolbar = findViewById(R.id.formattingToolbar);
+        bold = findViewById(R.id.bold);
+        italics = findViewById(R.id.italics);
+        underline = findViewById(R.id.underline);
+        strikethrough = findViewById(R.id.strikethrough);
+        header1 = findViewById(R.id.header1);
+        header2 = findViewById(R.id.header2);
+        image = findViewById(R.id.image);
+        quote = findViewById(R.id.quote);
+
+        //Set the item onClick listener
+        bold.setOnClickListener(onFormattingOptionTapped);
+        italics.setOnClickListener(onFormattingOptionTapped);
+        underline.setOnClickListener(onFormattingOptionTapped);
+        strikethrough.setOnClickListener(onFormattingOptionTapped);
+        header1.setOnClickListener(onFormattingOptionTapped);
+        header2.setOnClickListener(onFormattingOptionTapped);
+        image.setOnClickListener(onFormattingOptionTapped);
+        quote.setOnClickListener(onFormattingOptionTapped);
 
         //Set javascript enabled for the webview settings
         WebSettings webSettings = reflectEditorWebview.getSettings();
@@ -154,7 +193,61 @@ public class ReflectEditor extends AppCompatActivity {
         //Add the javascript interface so the app can communicate
         reflectEditorWebview.addJavascriptInterface(webAppInterface, "Android");
 
+        //Listen for the keyboard opening
+        View rootView = findViewById(R.id.rootView);
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
 
+                //Get the height difference
+                int heightDiff = rootView.getRootView().getHeight() - rootView.getHeight();
+
+                //If the difference is more than 200dp...
+                if (heightDiff > dpToPx(ReflectEditor.this, 200)) {
+
+                    //The keyboard is on, so we display the toolbar
+                    formattingToolbar.setVisibility(View.VISIBLE);
+
+                } else {
+
+                    //Otherwise, hide the toolbar
+                    formattingToolbar.setVisibility(View.GONE);
+
+                }
+
+            }
+        });
+
+    }
+
+    public static float dpToPx(Context context, float valueInDp) {
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, valueInDp, metrics);
+    }
+
+    private View.OnClickListener onFormattingOptionTapped = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+
+            Log.w("Debug", "Called");
+
+            //Run a command depending on which item was pressed
+            if (view == bold) runJSCommand("document.execCommand('bold');"); //For some reason, bold doesn't seem to be working - it seems to be a webview bug
+            else if (view == italics) runJSCommand("document.execCommand('italic');");
+            else if (view == underline) runJSCommand("document.execCommand('underline');");
+            else if (view == strikethrough) runJSCommand("document.execCommand('strikethrough');");
+            else if (view == header1) createH1Block();
+            else if (view == header2) createH2Block();
+            else if (view == image) createImageBlock();
+            else if (view == quote) createQuoteBlock();
+
+        }
+    };
+
+    private void runJSCommand(String command) {
+
+        //Run the command in the webview
+        reflectEditorWebview.loadUrl("javascript:" + command);
 
     }
 
@@ -375,19 +468,19 @@ public class ReflectEditor extends AppCompatActivity {
     }
 
     public void createH1Block(){
-        ReflectEditor.this.reflectEditorWebview.loadUrl("javascript:document.createH1Block()");
+        ReflectEditor.this.reflectEditorWebview.loadUrl("javascript:createH1Block()");
     }
 
     public void createH2Block(){
-        ReflectEditor.this.reflectEditorWebview.loadUrl("javascript:document.createH2Block()");
+        ReflectEditor.this.reflectEditorWebview.loadUrl("javascript:createH2Block()");
     }
 
     public void createImageBlock(){
-        ReflectEditor.this.reflectEditorWebview.loadUrl("javascript:document.createImageBlock()");
+        ReflectEditor.this.reflectEditorWebview.loadUrl("javascript:createImageBlock()");
     }
 
     public void createQuoteBlock(){
-        ReflectEditor.this.reflectEditorWebview.loadUrl("javascript:document.createQuoteBlock()");
+        ReflectEditor.this.reflectEditorWebview.loadUrl("javascript:createQuoteBlock()");
     }
 
     public void enablePremiumFeatures(){
