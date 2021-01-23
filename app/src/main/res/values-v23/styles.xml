@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="HLActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="background">@color/white</item>
+        <item name="titleEnabled">true</item>
+        <item name="displayOptions">showTitle|showHome|showCustom</item>
+        <item name="titleTextStyle">@style/TitleTextStyle</item>
+        <item name="subtitleTextStyle">@style/TitleTextStyle</item>
+        <item name="elevation">4dp</item>
+        <item name="android:statusBarColor">@color/very_light_gray</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>
