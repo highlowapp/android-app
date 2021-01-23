@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.text.InputType;
@@ -29,6 +30,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 
 import com.gethighlow.highlowandroid.CustomViews.Other.ProgressLoaderView;
@@ -39,6 +41,7 @@ import com.gethighlow.highlowandroid.model.Resources.Activity;
 import com.gethighlow.highlowandroid.model.Services.ActivityService;
 import com.gethighlow.highlowandroid.model.util.Consumer;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -95,6 +98,8 @@ public class ReflectEditor extends AppCompatActivity {
     private ImageView header2;
     private ImageView image;
     private ImageView quote;
+    private CircularProgressIndicator savingIndicator;
+    private TextView errorMessage;
 
     private int GALLERY_REQUEST_CODE = 80;
     private int CAMERA_REQUEST_CODE = 82;
@@ -138,6 +143,8 @@ public class ReflectEditor extends AppCompatActivity {
         header2 = findViewById(R.id.header2);
         image = findViewById(R.id.image);
         quote = findViewById(R.id.quote);
+        savingIndicator = findViewById(R.id.savingIndicator);
+        errorMessage = findViewById(R.id.errorMessage);
 
         //Set the item onClick listener
         bold.setOnClickListener(onFormattingOptionTapped);
@@ -148,6 +155,15 @@ public class ReflectEditor extends AppCompatActivity {
         header2.setOnClickListener(onFormattingOptionTapped);
         image.setOnClickListener(onFormattingOptionTapped);
         quote.setOnClickListener(onFormattingOptionTapped);
+
+        //Hide the indicator
+        hideIndicator();
+
+        //Set the progress indicator color
+        savingIndicator.setIndicatorColor( getResources().getColor(R.color.colorPrimary) );
+
+        //Set the progress indicator to indeterminate
+        savingIndicator.setIndeterminate(true);
 
         //Set javascript enabled for the webview settings
         WebSettings webSettings = reflectEditorWebview.getSettings();
@@ -219,6 +235,40 @@ public class ReflectEditor extends AppCompatActivity {
         });
 
     }
+
+
+
+    private void showIndicator() {
+
+        //Hide the error message
+        errorMessage.setVisibility(View.GONE);
+
+        //Show the indicator
+        savingIndicator.setVisibility(View.VISIBLE);
+
+    }
+
+    private void hideIndicator() {
+
+        //Hide the indicator
+        savingIndicator.setVisibility(View.GONE);
+
+        //Hide the error message
+        errorMessage.setVisibility(View.GONE);
+
+    }
+
+    private void showErrorMessage() {
+
+        //Show the error message
+        errorMessage.setVisibility(View.VISIBLE);
+
+        //Hide the indicator
+        savingIndicator.setVisibility(View.GONE);
+
+    }
+
+
 
     public static float dpToPx(Context context, float valueInDp) {
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
@@ -362,6 +412,15 @@ public class ReflectEditor extends AppCompatActivity {
 
             try {
 
+                //Show the indicator
+               reflectEditorWebview.post(new Runnable() {
+                   @Override
+                   public void run() {
+                       showIndicator();
+                   }
+               });
+
+
                 //Get the blocks as a JSONArray
                 JSONArray blocksArr = new JSONArray(blocks);
 
@@ -383,15 +442,18 @@ public class ReflectEditor extends AppCompatActivity {
                         @Override
                         public void accept(Activity activity) {
 
-                            //We don't really need to do much here, since the user was the one who updated the activity. The changes will already be visible to them.
+                            Log.w("Debug", "YES");
+
+                            //Hide the saving indicator
+                            hideIndicator();
 
                         }
                     }, new Consumer<String>() {
                         @Override
                         public void accept(String s) {
 
-                            //If an error occurred, show an alert
-                            ReflectEditor.this.alert(getResources().getString(R.string.an_error_occurred), getResources().getString(R.string.please_try_again));
+                            //If an error occurred, show the error message
+                            showErrorMessage();
 
                         }
                     });
