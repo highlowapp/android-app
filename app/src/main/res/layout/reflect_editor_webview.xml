@@ -23,61 +23,90 @@
         android:layout_alignParentBottom="true"
         android:id="@+id/formattingToolbar">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_format_bold_24"
-            android:layout_margin="5dp"
-            android:id="@+id/bold"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_format_bold_24"
+                android:layout_margin="5dp"
+                android:id="@+id/bold"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_format_italic_24"
-            android:layout_margin="5dp"
-            android:id="@+id/italics"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_format_italic_24"
+                android:layout_margin="5dp"
+                android:id="@+id/italics"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_format_underlined_24"
-            android:layout_margin="5dp"
-            android:id="@+id/underline"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_format_underlined_24"
+                android:layout_margin="5dp"
+                android:id="@+id/underline"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_strikethrough_s_24"
-            android:layout_margin="5dp"
-            android:id="@+id/strikethrough"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_strikethrough_s_24"
+                android:layout_margin="5dp"
+                android:id="@+id/strikethrough"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_title_24"
-            android:layout_margin="5dp"
-            android:id="@+id/header1"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_title_24"
+                android:layout_margin="5dp"
+                android:id="@+id/header1"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_subtitle_24"
-            android:layout_margin="5dp"
-            android:id="@+id/header2"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_subtitle_24"
+                android:layout_margin="5dp"
+                android:id="@+id/header2"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_image_24"
-            android:layout_margin="5dp"
-            android:id="@+id/image"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_image_24"
+                android:layout_margin="5dp"
+                android:id="@+id/image"/>
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_format_quote_24"
-            android:layout_margin="5dp"
-            android:id="@+id/quote"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_format_quote_24"
+                android:layout_margin="5dp"
+                android:id="@+id/quote"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="0.9"
+                android:layout_height="match_parent"/>
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:layout_marginEnd="10dp"
+                app:indicatorSize="20dp"
+                android:id="@+id/savingIndicator"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Saving Error!"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="10dp"
+                android:textColor="@color/red"
+                android:id="@+id/errorMessage"/>
+
+
+        </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>
 
