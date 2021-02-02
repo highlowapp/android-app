@@ -33,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.gethighlow.highlowandroid.Activities.Other.UpsellActivity;
 import com.gethighlow.highlowandroid.CustomViews.Other.ProgressLoaderView;
 import com.gethighlow.highlowandroid.R;
 import com.gethighlow.highlowandroid.model.Managers.ActivityManager;
@@ -506,9 +507,11 @@ public class ReflectEditor extends AppCompatActivity {
 
         @JavascriptInterface
         public void showPremium(){
-            //TODO create ShowPremium.class
-            /*Intent intent = new Intent(getApplicationContext(), ShowPremium.class);
-            getApplicationContext().startActivity(intent);*/
+
+            Log.w("Debug", "WORKING");
+            Intent intent = new Intent(getApplicationContext(), UpsellActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplicationContext().startActivity(intent);
 
         }
 
