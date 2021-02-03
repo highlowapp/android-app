@@ -19,6 +19,7 @@ import com.gethighlow.highlowandroid.model.Managers.ImageManager;
 import com.gethighlow.highlowandroid.model.Managers.UserManager;
 import com.gethighlow.highlowandroid.model.Services.APIService;
 import com.gethighlow.highlowandroid.model.Services.AuthService;
+import com.gethighlow.highlowandroid.model.util.PremiumStatusListener;
 import com.revenuecat.purchases.Purchases;
 
 public class MainActivity extends Activity {
@@ -51,9 +52,6 @@ public class MainActivity extends Activity {
         UserManager.shared().attachToContext(this);
         HighLowManager.shared().attachToContext(this);
         ImageManager.shared().attachToContext(this);
-
-        Purchases.setDebugLogsEnabled(true);
-        Purchases.configure(this, "YGfUbzNDybIfScxtFhNVJrUMHcApwIxz");
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("com.gethighlow.SharedPref", Context.MODE_PRIVATE);
         String accessToken = sharedPreferences.getString("access", "none");
@@ -111,6 +109,14 @@ public class MainActivity extends Activity {
         SharedPreferences sharedPreferences = getSharedPreferences("com.gethighlow.SharedPref", Context.MODE_PRIVATE);
         boolean hasAgreed = sharedPreferences.getBoolean("hasAgreed", false);
         boolean hasSeenPitch = sharedPreferences.getBoolean("hasSeenPitch", false);
+
+        Purchases.setDebugLogsEnabled(true);
+
+        //Configure purchases with the current user's uid
+        Purchases.configure(this, "YGfUbzNDybIfScxtFhNVJrUMHcApwIxz", AuthService.shared().getUid());
+
+        //Set our UpdatedPurchaserInfoListener
+        Purchases.getSharedInstance().setUpdatedPurchaserInfoListener( PremiumStatusListener.shared() );
 
         if (!hasAgreed) {
             showAgreements();
