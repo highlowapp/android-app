@@ -41,10 +41,15 @@ import com.gethighlow.highlowandroid.model.Managers.LiveDataModels.ActivityLiveD
 import com.gethighlow.highlowandroid.model.Resources.Activity;
 import com.gethighlow.highlowandroid.model.Services.ActivityService;
 import com.gethighlow.highlowandroid.model.util.Consumer;
+import com.gethighlow.highlowandroid.model.util.PremiumStatusListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.revenuecat.purchases.EntitlementInfo;
+import com.revenuecat.purchases.PurchaserInfo;
+import com.revenuecat.purchases.Purchases;
+import com.revenuecat.purchases.interfaces.UpdatedPurchaserInfoListener;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
@@ -116,6 +121,28 @@ public class ReflectEditor extends AppCompatActivity {
         public void onChanged(Activity activity) {
 
             //Update the webview with the activity
+
+        }
+    };
+
+    private Consumer<PurchaserInfo> onPremiumStatusChanged = new Consumer<PurchaserInfo>() {
+        @Override
+        public void accept(PurchaserInfo purchaserInfo) {
+
+            //Get the premium entitlement info
+            EntitlementInfo premiumEntitlement = purchaserInfo.getEntitlements().get("Premium");
+
+            Log.w("Debug", "Premium status changed");
+
+            //If they have premium...
+            if (premiumEntitlement != null && premiumEntitlement.isActive()) {
+
+                Log.w("Debug", "Enabling Premium Features");
+
+                //Enable the premium features
+                enablePremiumFeatures();
+
+            }
 
         }
     };
@@ -366,6 +393,9 @@ public class ReflectEditor extends AppCompatActivity {
             });
         }
 
+        //Set our premium listener
+        PremiumStatusListener.shared().addSubscriber(onPremiumStatusChanged);
+
     }
 
     private void setBlocks(JsonObject data) {
@@ -550,7 +580,8 @@ public class ReflectEditor extends AppCompatActivity {
 
     public void enablePremiumFeatures(){
 
-        ReflectEditor.this.reflectEditorWebview.loadUrl("javascript:document.enablePremiumFeatures()");
+        ReflectEditor.this.reflectEditorWebview.loadUrl("javascript:enablePremiumFeatures()");
+
     }
 
     public void setType(String type){
@@ -956,6 +987,15 @@ public class ReflectEditor extends AppCompatActivity {
             startActivity(intent);
 
         }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        //Deregister our premium status listener
+        PremiumStatusListener.shared().removeSubscriber(onPremiumStatusChanged);
 
     }
 }
