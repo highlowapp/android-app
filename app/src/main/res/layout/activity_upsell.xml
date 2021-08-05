@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/mountains"
+        android:scaleType="fitEnd"
+        android:layout_alignParentBottom="true"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginTop="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your Journey Awaits"
+                android:textSize="30sp"
+                android:textColor="@color/colorPrimary"
+                android:layout_gravity="center_horizontal"/>
+
+            <TextView
+                android:layout_marginTop="40dp"
+                android:paddingHorizontal="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:textAlignment="center"
+                android:text="With High/Low Premium, you get unlimited diary blocks, unlimited time for audio diaries and meditation sessions, and access to exclusive content!"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="40dp">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.15"/>
+
+                <LinearLayout
+                    android:id="@+id/monthly_purchase"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="12dp"
+                    android:orientation="vertical"
+                    android:background="@color/colorPrimary"
+                    android:layout_weight="0.45">
+
+                    <TextView
+                        android:id="@+id/monthlyTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Monthly"
+                        android:textColor="@color/white"
+                        android:textAlignment="center"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingVertical="20dp"
+                        android:background="#11000000"/>
+
+                    <TextView
+                        android:id="@+id/monthlyPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$3.49 / mo"
+                        android:textColor="@color/white"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="17sp"
+                        android:layout_marginVertical="20dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/annual_purchase"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="12dp"
+                    android:orientation="vertical"
+                    android:background="@color/very_light_gray"
+                    android:layout_weight="0.45">
+
+                    <TextView
+                        android:id="@+id/annualTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Yearly"
+                        android:textColor="@color/gray"
+                        android:textAlignment="center"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingVertical="20dp"
+                        android:background="#11000000"/>
+
+                    <TextView
+                        android:id="@+id/annualPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="$24.99 / yr"
+                        android:textColor="@color/gray"
+                        android:layout_gravity="center_horizontal"
+                        android:textSize="17sp"
+                        android:layout_marginVertical="20dp"/>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.15"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Includes 7-day free trial. Cancel before ___ and nothing will be billed."
+                android:textColor="@color/colorPrimary"
+                android:textAlignment="center"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="40dp"
+                android:id="@+id/freeTrialNotice"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Continue"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginVertical="40dp"
+                android:id="@+id/continueWithPurchase"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/compliance_notice_billing"
+                android:textAlignment="center"
+                android:layout_marginHorizontal="20dp"
+                android:textColor="@color/colorPrimary"
+                android:linksClickable="true"
+                android:id="@+id/complianceNotice"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

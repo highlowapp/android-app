@@ -108,6 +108,7 @@ public class ActivityService {
 
     public void updateActivity(String activityId, JSONObject data, final Consumer<Activity> onSuccess, final Consumer<String> onError) {
         Map<String, String> params = new HashMap<String, String>();
+        Log.i("Debug", data.toString());
         params.put("data", data.toString());
         params.put("request_id", UUID.randomUUID().toString());
         APIService.shared().authenticatedRequest("/user/activities/" + activityId, Request.Method.POST, params, new Consumer<String>() {

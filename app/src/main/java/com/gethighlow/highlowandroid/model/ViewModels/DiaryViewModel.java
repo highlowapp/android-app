@@ -1,5 +1,7 @@
 package com.gethighlow.highlowandroid.model.ViewModels;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -103,6 +105,7 @@ public class DiaryViewModel extends ViewModel {
             public void accept(String s) {
 
                 //Not sure what to do yet if there's an error...we might not be able to show an alert since this isn't an activity or fragment
+                Log.i("Debug", s);
 
             }
         });

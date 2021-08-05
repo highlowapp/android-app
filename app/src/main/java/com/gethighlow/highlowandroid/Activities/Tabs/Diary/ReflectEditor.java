@@ -404,7 +404,10 @@ public class ReflectEditor extends AppCompatActivity {
         JsonArray blocks = data.getAsJsonArray("blocks");
 
         //Convert the JsonObject to a string
-        String blocksString = blocks.toString();
+        String blocksString;
+
+        if (blocks != null) blocksString = blocks.toString();
+        else blocksString = "[]";
 
         //Now, load those blocks into the webview
         reflectEditorWebview.loadUrl("javascript:setBlocks(" + blocksString + ");");
@@ -482,6 +485,8 @@ public class ReflectEditor extends AppCompatActivity {
                     }, new Consumer<String>() {
                         @Override
                         public void accept(String s) {
+
+                            Log.i("Debug", s);
 
                             //If an error occurred, show the error message
                             showErrorMessage();

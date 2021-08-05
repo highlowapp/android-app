@@ -36,6 +36,7 @@ import io.github.douglasjunior.androidSimpleTooltip.OverlayView;
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltip;
 import io.github.douglasjunior.androidSimpleTooltip.SimpleTooltipUtils;
 
+import com.gethighlow.highlowandroid.Activities.Tabs.Diary.AudioEntryActivity;
 import com.gethighlow.highlowandroid.Activities.Tabs.Diary.Diary;
 import com.gethighlow.highlowandroid.Activities.Tabs.Diary.ReflectEditor;
 import com.gethighlow.highlowandroid.Activities.Tabs.Feed.Feed;
@@ -364,6 +365,31 @@ public class TabActivity extends AppCompatActivity implements Home.OnFragmentInt
             }
         });
 
+        //Get the createAudioEntry button
+        RelativeLayout createAudioEntry = tooltip.findViewById(R.id.create_audio_entry);
+
+        //Set the onclicklistener
+        createAudioEntry.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //Set it to the diary tab
+                setTab(R.id.navigation_diary);
+
+                //Create the intent to open the ReflectEditor
+                Intent intent = new Intent(getApplicationContext(), AudioEntryActivity.class);
+
+                //Add the type
+                intent.putExtra("type", "diary");
+
+                //Add the FLAG_ACTIVITY_NEW_TASK flag
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                //Start an activity with the intent
+                getApplicationContext().startActivity(intent);
+
+            }
+        });
 
         //Show the tooltip
         tooltip.show();

@@ -236,6 +236,7 @@ public class APIService implements APIConfig {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.i("Debug", error.getLocalizedMessage());
                 onError.accept("network-error");
             }
         }) {
